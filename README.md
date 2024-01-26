@@ -22,7 +22,7 @@ Change where it says license to your license and rebuild the bs_api then restart
 You can check the documentation (https://gitscorz.github.io/bluesky-documentation/).
 
 ## Support
- discord coming soon
+ **Discord** https://discord.gg/G5SqY5y6XE
 
 ## Credits
 
