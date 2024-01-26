@@ -159,7 +159,7 @@ QUEUE.Connect = function(self, source, playerName, setKickReason, deferrals)
         end
 
         for _, id in ipairs(GetPlayerIdentifiers(source)) do
-            if string.match(id, "steam:") then
+            if string.match(id, "license:") then
                 steamIdentifier = id
                 break
             end
@@ -288,7 +288,7 @@ RegisterServerEvent('Core:Server:SessionStarted')
 AddEventHandler('Core:Server:SessionStarted', function()
     local src = source
     for _, id in ipairs(GetPlayerIdentifiers(src)) do
-        if string.match(id, "steam:") then
+        if string.match(id, "license:") then
             local steamIdentifier = id
             local pos, ply = QUEUE.Queue:Get(steamIdentifier)
 
