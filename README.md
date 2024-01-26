@@ -1,4 +1,4 @@
-Blue Sky
+**Blue Sky**
 
 
 A custom framework for FiveM that works with components.
