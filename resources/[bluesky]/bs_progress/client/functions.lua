@@ -111,7 +111,7 @@ function Process(action, start, tick, finish)
             isProp = false
 
             SendNUIMessage({
-                action = 'start',
+                action = 'progress',
                 duration = action.duration,
                 label = action.label,
                 cancellable = action.canCancel

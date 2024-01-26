@@ -14,9 +14,6 @@ client_scripts {
 
 files {
     'html/index.html',
-    'html/css/style.css',
-    'html/js/script.js',
-
-    'html/css/bootstrap.min.css',
-    'html/js/jquery.min.js',
+    'html/style.css',
+    'html/script.js'
 }
