@@ -30,7 +30,6 @@ AddEventHandler('Core:Shared:Ready', function()
             return ;
         end
         RetrieveComponents()
-        RegisterStatuses()
     end)
 end)
 
@@ -179,7 +178,7 @@ RegisterNetEvent('Characters:Client:Spawn')
 AddEventHandler('Characters:Client:Spawn', function()
     spawned = true
     isEnabled = true
-    
+    RegisterStatuses()
     for k, v in pairs(STATUS:GetRegistered()) do
         Callbacks:ServerCallback('Status:Get', { name = v.name, type = v.type, max = v.max }, function(val)
             waiting = false
