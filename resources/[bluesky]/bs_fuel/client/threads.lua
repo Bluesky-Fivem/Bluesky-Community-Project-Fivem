@@ -79,7 +79,7 @@ function RunThreads()
                     end
     
                     local vehCOords = GetEntityCoords(veh)
-                    DrawMarker(20, vehCOords.x, vehCOords.y, vehCOords.z + 1.5, 0, 0, 0, 0, 0, GetEntityHeading(veh), 1.0, 1.0, 1.0, 58, 170, 249, 155, false, false, 2, false, false, false, false)
+                    --DrawMarker(20, vehCOords.x, vehCOords.y, vehCOords.z + 1.5, 0, 0, 0, 0, 0, GetEntityHeading(veh), 1.0, 1.0, 1.0, 58, 170, 249, 155, false, false, 2, false, false, false, false)
     
                     if IsControlJustReleased(0, 38) then
                         Callbacks:ServerCallback('Fuel:Check', {}, function(cash)
@@ -120,12 +120,7 @@ function RunThreads()
                                     UI.Action:Hide()
                                     actionShowing = false
             
-                                    Citizen.CreateThread(function()
-                                        while _fueling do
-                                            Print3DText(GetOffsetFromEntityInWorldCoords(veh, 0, 0, 1.2), current)
-                                            Citizen.Wait(0)
-                                        end
-                                    end)
+                                    
                                 end, function()
                                     local c = DecorGetFloat(veh, 'VEH_FUEL')
             

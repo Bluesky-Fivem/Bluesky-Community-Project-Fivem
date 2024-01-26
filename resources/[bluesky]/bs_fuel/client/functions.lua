@@ -1,25 +1,6 @@
 local _multi = 1
 
-function Print3DText(coords, text)
-    local onScreen, _x, _y = World3dToScreen2d(coords.x, coords.y, coords.z)
 
-    if onScreen then
-        SetTextScale(0.35, 0.35)
-        SetTextFont(4)
-        SetTextProportional(1)
-        SetTextColour(250, 250, 250, 255)		-- You can change the text color here
-        SetTextDropshadow(1, 1, 1, 1, 255)
-        SetTextEdge(2, 0, 0, 0, 150)
-        SetTextDropShadow()
-        SetTextOutline()
-        SetTextEntry("STRING")
-        SetTextCentre(1)
-        AddTextComponentString(text)
-        SetDrawOrigin(coords.x, coords.y, coords.z, 0)
-        DrawText(0.0, 0.0)
-        ClearDrawOrigin()
-    end
-end
 
 function Round(num, numDecimalPlaces)
 	local mult = 10^(numDecimalPlaces or 0)
