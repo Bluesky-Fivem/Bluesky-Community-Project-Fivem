@@ -4,11 +4,9 @@ import { ThemeProvider } from "@mui/material";
 import Hud from "./hud";
 import Balance from "./balance";
 import Interaction from "./interaction";
-import Phone from "./phone";
 import Radio from "./radio";
 import Theme from "./Theme";
-import Peek from "./peek";
-import Newspaper from "./newspaper";
+
 
 export default function App() {
   return (
@@ -26,10 +24,7 @@ export default function App() {
         <Hud />
         <Balance />
         <Interaction />
-        <Phone />
         <Radio />
-        <Peek />
-        <Newspaper />
       </div>
     </ThemeProvider>
   );
