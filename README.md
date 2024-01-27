@@ -22,8 +22,8 @@ Change where it says license to your license and rebuild the bs_api then restart
 You can check the documentation (https://gitscorz.github.io/bluesky-documentation/).
 
 ## Support
- discord coming soon
+ **Discord** https://discord.gg/G5SqY5y6XE
 
 ## Credits
 
-This is a framework that was originally created by **Discworld** & **Alzar** https://github.com/Alzar for BlueSky-Development (https://github.com/BlueSky-Development)'s roleplay server, it was later retooled for PixelWorldRP which then later rebranded to React RP.
+This is a framework that was originally created by **Discworld** & **Alzar** & **Dr Nick** for BlueSky-Development's roleplay server, it was later retooled for PixelWorldRP which then later rebranded to React RP.
