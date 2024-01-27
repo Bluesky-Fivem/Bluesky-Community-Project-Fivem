@@ -4,8 +4,6 @@ function RetrieveComponents()
   Logger = exports['bs_base']:FetchComponent('Logger')
   UI = exports['bs_base']:FetchComponent('UI')
   Keybinds = exports['bs_base']:FetchComponent('Keybinds')
-  Peek = exports['bs_base']:FetchComponent('Peek')
-  RegisterPeekZones()
 end
 
 AddEventHandler('Core:Shared:Ready', function()
@@ -14,7 +12,6 @@ AddEventHandler('Core:Shared:Ready', function()
     'Logger',
     'UI',
     'Keybinds',
-    'Peek'
   }, function(error)
     if #error > 0 then return end
     RetrieveComponents()

@@ -73,19 +73,3 @@ RegisterNUICallback('hud:radio:close', function(frequency, cb)
   Radio:Close()
 end)
 
---## PEEK ##--
-RegisterNUICallback('peek:close', function(data, cb)
-  cb('ok')
-  Peek:Close()
-end)
-
-RegisterNUICallback('peek:triggerEvent', function(event, cb)
-  cb('ok')
-  Peek:SelectOption(event)
-end)
-
---## NEWSPAPER ##--
-RegisterNUICallback('newspaper:close', function(event, cb)
-  cb('ok')
-  News:Close()
-end)
