@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "./static/css/main.96d405c3.css",
+    "main.js": "./static/js/main.1ecb7d45.js",
+    "static/media/background.png": "./static/media/background.ba19dbd29e2b3bd60d1b.png",
+    "static/media/BebasNeueProRegular.otf": "./static/media/BebasNeueProRegular.3d7bd366b716cd7e6929.otf",
+    "static/media/a_RubricaXtCn-Regular.ttf": "./static/media/a_RubricaXtCn-Regular.513a6b0d2baa2b266371.ttf",
+    "static/media/tablet.svg": "./static/media/tablet.d923315bf7b5a64ba743.svg",
+    "static/media/amity.svg": "./static/media/amity.88f7d54bd9f3ab44fcc9.svg",
+    "static/media/logo.svg": "./static/media/logo.bcf4b92fd0e1463862b9.svg",
+    "index.html": "./index.html",
+    "static/media/searchIcon.svg": "./static/media/searchIcon.e9ad747f489587eaa19a.svg",
+    "static/media/sortIcon.svg": "./static/media/sortIcon.4912ea990b9429a2040a.svg",
+    "main.96d405c3.css.map": "./static/css/main.96d405c3.css.map",
+    "main.1ecb7d45.js.map": "./static/js/main.1ecb7d45.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.96d405c3.css",
+    "static/js/main.1ecb7d45.js"
+  ]
+}
