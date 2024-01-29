@@ -84,16 +84,18 @@ RegisterNUICallback('PlayCharacter', function(data, cb)
         cData.spawn = data.spawn
         TriggerEvent('Characters:Client:SetData', cData, function()
             exports['bs_base']:FetchComponent('Spawn'):SpawnToWorld(cData, function()
-                TriggerEvent('Characters:Client:Spawn')
-                TriggerServerEvent('Characters:Server:Spawn')
+                TriggerServerEvent("Characters:Server:Spawning")
 
-                SendNUIMessage({ type = 'APP_HIDE' })
-                SendNUIMessage({
-                    type = 'SET_STATE',
-                    data = { state = 'STATE_CHARACTERS' }
-                })
-                SendNUIMessage({ type = 'LOADING_HIDE' })
             end)
         end)
     end)
+end)
+
+RegisterNetEvent("Characters:Client:Spawned", function()
+	TriggerEvent("Characters:Client:Spawn")
+	TriggerServerEvent("Characters:Server:Spawn")
+	SetNuiFocus(false)
+	SendNUIMessage({ type = "APP_HIDE" })
+	SendNUIMessage({ type = "LOADING_HIDE" })
+	LocalPlayer.state.loggedIn = true -- state bag
 end)

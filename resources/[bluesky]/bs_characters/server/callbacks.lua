@@ -207,6 +207,11 @@ function RegisterCallbacks()
 end
 
 function RegisterMiddleware() 
+
+    Middleware:Add("Characters:Spawning", function(source)
+		TriggerClientEvent("Characters:Client:Spawned", source)
+	end, 100000)
+
     Middleware:Add('Characters:Logout', function(source)
         local player = Fetch:Source(source)
         if player ~= nil then
@@ -252,3 +257,7 @@ function GeneratePhoneNumber()
 
     return string.format('%s%s%s', areaCode, numBase2, numBase3)
 end
+
+RegisterServerEvent('Characters:Server:Spawning', function()
+    Middleware:TriggerEvent("Characters:Spawning", source)
+end)

@@ -51,6 +51,14 @@ STATUS = {
             end
         end,
     },
+    Set = {
+        All = function(self, data)
+
+        end,
+        Single = function(self, name, data)
+
+        end,
+    },
 }
 
 AddEventHandler('Proxy:Shared:RegisterReady', function()
@@ -66,5 +74,28 @@ AddEventHandler('Status:Server:Update', function(data)
         if status == nil then status = {} end
         status[data.status] = data.value
         char:SetData('Status', status)
+    end
+end)
+
+RegisterServerEvent('Status:Server:GetData')
+AddEventHandler('Status:Server:GetData', function(data)
+    local player = Fetch:Source(source)
+    local char = player:GetData('Character')
+
+    if char ~= nil then
+        local status = char:GetData('Status')
+        if status == nil then status = {} end
+        if status[data.name] ~= nil then
+            TriggerClientEvent('Status:Client:SetStatusData', source, data, status[data.name])
+            --cb(status[data.name])
+        else
+            status[data.name] = data.max
+            char:SetData('Status', status)
+            TriggerClientEvent('Status:Client:SetStatusData', source, data, data.max)
+            --cb(data.max)
+        end
+    else
+        TriggerClientEvent('Status:Client:SetStatusData', source, data, data.max)
+        --cb(data.max)
     end
 end)

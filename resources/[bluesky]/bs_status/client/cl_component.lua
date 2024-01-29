@@ -141,12 +141,14 @@ STATUS = {
     end
 }
 
-local spawned = false
+
 
 Citizen.CreateThread(function()
+    local times = GlobalState["OS:Time"]
+	fuckoff = times
     while true do
-        Citizen.Wait(0) -- Wait 5 mins before we start ticks
-        if spawned then
+        Citizen.Wait(300000) -- Wait 5 mins before we start ticks
+        if LocalPlayer.state.loggedIn and fuckoff == times then
             if isEnabled then
                 for k, v in pairs(_statuses) do
                     if _recentCd[v.name] == nil or _recentCd[v.name] > 10 then
@@ -179,6 +181,11 @@ AddEventHandler('Characters:Client:Spawn', function()
     spawned = true
     isEnabled = true
     RegisterStatuses()
+
+    for k, v in pairs(_statuses) do
+        STATUS.Set:Single(PlayerPedId(), v.name, v.max)
+    end
+
     for k, v in pairs(STATUS:GetRegistered()) do
         Callbacks:ServerCallback('Status:Get', { name = v.name, type = v.type, max = v.max }, function(val)
             waiting = false
@@ -199,7 +206,6 @@ end)
 
 RegisterNetEvent('Characters:Client:Logout')
 AddEventHandler('Characters:Client:Logout', function()
-    spawned = false
     isEnabled = true
     UI.Hud:Hide()
 end)

@@ -7,14 +7,17 @@ function RegisterCallbacks()
             local status = char:GetData('Status')
             if status == nil then status = {} end
             if status[data.name] ~= nil then
-                cb(status[data.name])
+                TriggerClientEvent('Status:Client:SetStatusData', source, data, status[data.name])
+                --cb(status[data.name])
             else
                 status[data.name] = data.max
                 char:SetData('Status', status)
-                cb(data.max)
+                TriggerClientEvent('Status:Client:SetStatusData', source, data, data.max)
+                --cb(data.max)
             end
         else
-            cb(data.max)
+            --cb(data.max)
+            TriggerClientEvent('Status:Client:SetStatusData', source, data, data.max)
         end
     end)
 end
