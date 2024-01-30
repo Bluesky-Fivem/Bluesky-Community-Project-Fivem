@@ -20,31 +20,7 @@ UI = {
     end
   end,
 
-  Hud = {
-    Show = function(self)
-      UI:SendUIMessage('status:visible', true)
-    end,
-    Hide = function(self)
-      UI:SendUIMessage('status:visible', false)
-    end,
-    --- @param data table The data you wish to send along with this action
-    Update = function(self, data)
-      UI:SendUIMessage('status:updateData', data)
-    end,
-  },
-
-  Vehicle = {
-    Show = function(self)
-      UI:SendUIMessage('vehicle:visible', true)
-    end,
-    Hide = function(self)
-      UI:SendUIMessage('vehicle:visible', false)
-    end,
-    --- @param data table The data you wish to send along with this action
-    Update = function(self, data)
-      UI:SendUIMessage('vehicle:updateData', data)
-    end,
-  },
+  
 
   Balance = {
     ShowCash = function(self, currentCash)

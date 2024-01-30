@@ -83,7 +83,7 @@ VEHICLE = {
                 SetVehicleEngineOn(veh, false, true, true)
                 SetVehicleUndriveable(veh, true)
                 if _keys[GetVehicleNumberPlateText(veh)] then
-                    UI.Action:Show('{key}F9{/key} To Turn Engine On')
+                    UI.Action:Show('[F9] To Turn Engine On')
                     _actionShowing = true
                 end
             end
@@ -107,7 +107,7 @@ VEHICLE = {
             TriggerEvent('Vehicle:Client:Ignition', false)
 
             if not _actionShowing then
-                UI.Action:Show('{key}F9{/key} To Turn Engine On')
+                UI.Action:Show('[F9] To Turn Engine On')
                 _actionShowing = true
             end
         end,
@@ -449,11 +449,11 @@ function StartHotwireThread(veh)
                 if not _actionShowing then
                     _actionShowing = true
                     if canAttemptHotwire and canSearchForKey then
-                        UI.Action:Show('{key}Z{/key} Hotwire | {key}G{/key} Search For Key')
+                        UI.Action:Show('[Z] Hotwire | [G] Search For Key')
                     elseif canAttemptHotwire and not canSearchForKey then
-                        UI.Action:Show('{key}Z{/key} Hotwire')
+                        UI.Action:Show('[Z] Hotwire')
                     else
-                        UI.Action:Show('{key}G{/key} Search For Key')
+                        UI.Action:Show('[G] Search For Key')
                     end
                 end
 

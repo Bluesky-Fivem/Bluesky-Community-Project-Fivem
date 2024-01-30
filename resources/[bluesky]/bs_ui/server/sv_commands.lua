@@ -22,12 +22,7 @@ AddEventHandler('Core:Shared:Ready', function()
 end)
 
 function RegisterChatCommands()
-  Chat:RegisterCommand('hud', function(source, args, rawCommand)
-    TriggerClientEvent('UI:Client:ChangeHudState', source)
-  end, {
-    help = 'Turns on/off the HUD.',
-  }, 0)
-
+  
   Chat:RegisterCommand('cash', function(source, args, rawCommand)
     local char = Fetch:Source(source):GetData('Character')
     local src = char:GetData('Source')

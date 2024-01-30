@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[65],{505:function(o,a,e){"use strict";e.r(a),e.d(a,"Categories",(function(){return t}));var l=e(80),n=e(100),r=e(179),c=e(1025),t=[{label:"Services",color:l.a[500]},{label:"Want-To-Buy",color:n.a[500]},{label:"Want-To-Sell",color:r.a[500]},{label:"Help Wanted",color:c.a[500]}]}}]);
