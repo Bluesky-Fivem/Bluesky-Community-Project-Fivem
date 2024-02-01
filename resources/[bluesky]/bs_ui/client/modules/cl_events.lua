@@ -24,9 +24,7 @@ end)
 --   isHudVisible = not isHudVisible
 -- end)
 
-AddEventHandler('Status:Client:Update', function(status, value)
-  UI.Hud:Update({ id = status, value = value })
-end)
+
 
 RegisterNetEvent('UI:Client:ShowCash')
 AddEventHandler('UI:Client:ShowCash', function(cash)
