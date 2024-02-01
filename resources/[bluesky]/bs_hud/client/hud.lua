@@ -214,22 +214,6 @@ function GetLocation()
     }
 end
 
-function StreamCustomMap()
-    if not _streamed then 
-        CreateThread(function()
-            RequestStreamedTextureDict("circlemap", false)
-            while not HasStreamedTextureDictLoaded("circlemap") do
-                Wait(100)
-            end
-            AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circlemap", "radarmasksm")
-            SetMinimapClipType(1)
-            SetMinimapComponentPosition('minimap', 'L', 'B', posX, posY, width, height)
-            SetMinimapComponentPosition('minimap_mask', 'L', 'B', posX, posY, width, height)
-            SetMinimapComponentPosition('minimap_blur', 'L', 'B', -0.016, 0.012, 0.256, 0.337)
-            _streamed = true
-        end)
-    end
-end
 
 function GetDirection(heading)
     if ((heading >= 0 and heading < 45) or (heading >= 315 and heading < 360)) then

@@ -11,7 +11,7 @@ end)
 AddEventHandler('Characters:Client:Spawn', function()
     Hud:Show()
     Logged = true
-    StreamCustomMap()
+
 end)
 
 RegisterNetEvent('Characters:Client:Logout')
