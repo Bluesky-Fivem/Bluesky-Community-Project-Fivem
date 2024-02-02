@@ -62,11 +62,13 @@ function DeathTimer()
     while isDead do
         Wait(1000)
         deathTime = deathTime - 1
-        if deathTime <= 0 then
+        while deathTime <= 0 do
+            Wait(0)
             if IsControlPressed(0, 38) then
-                Wait(5000)
-                TriggerEvent('hospital:client:Revive')
-                hold = 5
+                if hold < 1 then 
+                    TriggerEvent('hospital:client:Revive')
+                    hold = 5
+                end
             end
             if IsControlPressed(0, 38) then
                 if hold - 1 >= 0 then
@@ -131,9 +133,9 @@ CreateThread(function()
 
             if isDead then
                 if deathTime > 0 then
-                    DrawTxt(0.93, 1.44, 1.0,1.0,0.6, "RESPAWN IN: ~r~" .. math.ceil(deathTime) .. "~w~ SECONDS", 255, 255, 255, 255)
+                    DrawTxt(0.89, 1.42, 1.0,1.0,0.6, "Dead: ~r~" .. math.ceil(deathTime) .. "~w~ seconds remaining", 255, 255, 255, 255)
                 else
-                   DrawTxt(0.865, 1.44, 1.0, 1.0, 0.6, "~w~ PRESS ~r~[E] ("..hold..")~w~ TO RESPAWN", 255, 255, 255, 255)
+                   DrawTxt(0.89, 1.42, 1.0,1.0,0.6, "~w~ HOLD ~r~[E] ("..hold..")~w~ TO RESPAWN ~w~OR WAIT FOR ~r~EMS", 255, 255, 255, 255)
                 end
         
 
