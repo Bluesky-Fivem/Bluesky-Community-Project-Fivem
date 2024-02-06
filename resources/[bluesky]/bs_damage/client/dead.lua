@@ -1,6 +1,6 @@
 local deadAnimDict = 'dead'
 local deadAnim = 'dead_a'
-local hold = 5
+local dick = 5
 deathTime = 60
 
 -- Functions
@@ -58,27 +58,27 @@ function DeathTimer()
     local player = PlayerPedId()
     local pos = GetEntityCoords(player)
     local heading = GetEntityHeading(player)
-    hold = 5
+    dick = 5
     while isDead do
         Wait(1000)
         deathTime = deathTime - 1
         while deathTime <= 0 do
             Wait(0)
             if IsControlPressed(0, 38) then
-                if hold < 1 then 
+                if dick < 1 then 
                     TriggerEvent('hospital:client:Revive')
-                    hold = 5
+                    dick = 5
                 end
             end
             if IsControlPressed(0, 38) then
-                if hold - 1 >= 0 then
-                    hold = hold - 1
+                if dick - 1 >= 0 then
+                    dick = dick - 1
                 else
-                    hold = 0
+                    dick = 0
                 end
             end
             if IsControlReleased(0, 38) then
-                hold = 5
+                dick = 5
             end
         end
     end
@@ -135,7 +135,7 @@ CreateThread(function()
                 if deathTime > 0 then
                     DrawTxt(0.89, 1.42, 1.0,1.0,0.6, "Dead: ~r~" .. math.ceil(deathTime) .. "~w~ seconds remaining", 255, 255, 255, 255)
                 else
-                   DrawTxt(0.89, 1.42, 1.0,1.0,0.6, "~w~ HOLD ~r~[E] ("..hold..")~w~ TO RESPAWN ~w~OR WAIT FOR ~r~EMS", 255, 255, 255, 255)
+                   DrawTxt(0.89, 1.42, 1.0,1.0,0.6, "~w~ HOLD ~r~[E] ("..dick..")~w~ TO RESPAWN ~w~OR WAIT FOR ~r~EMS", 255, 255, 255, 255)
                 end
         
 
