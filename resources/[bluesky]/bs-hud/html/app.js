@@ -508,96 +508,96 @@ document.onkeyup = function (data) {
 
 function closeMenu() {
     $("#openmenu").fadeOut(550);
-    $.post("https://qb-hud/closeMenu");
+    $.post("https://bs-hud/closeMenu");
 }
 function restartHud() {
     closeMenu();
-    $.post("https://qb-hud/restartHud");
+    $.post("https://bs-hud/restartHud");
 }
 function resetStorage() {
     closeMenu();
-    $.post("https://qb-hud/resetStorage");
+    $.post("https://bs-hud/resetStorage");
 }
 function showOutMap() {
-    $.post("https://qb-hud/showOutMap");
+    $.post("https://bs-hud/showOutMap");
 }
 function showOutCompass() {
-    $.post("https://qb-hud/showOutCompass");
+    $.post("https://bs-hud/showOutCompass");
 }
 function showFollowCompass() {
-    $.post("https://qb-hud/showFollowCompass");
+    $.post("https://bs-hud/showFollowCompass");
 }
 function openMenuSounds() {
-    $.post("https://qb-hud/openMenuSounds");
+    $.post("https://bs-hud/openMenuSounds");
 }
 function resetHudSounds() {
-    $.post("https://qb-hud/resetHudSounds");
+    $.post("https://bs-hud/resetHudSounds");
 }
 function checklistSounds() {
-    $.post("https://qb-hud/checklistSounds");
+    $.post("https://bs-hud/checklistSounds");
 }
 function showMapNotif() {
-    $.post("https://qb-hud/showMapNotif");
+    $.post("https://bs-hud/showMapNotif");
 }
 function showFuelAlert() {
-    $.post("https://qb-hud/showFuelAlert");
+    $.post("https://bs-hud/showFuelAlert");
 }
 function showCinematicNotif() {
-    $.post("https://qb-hud/showCinematicNotif");
+    $.post("https://bs-hud/showCinematicNotif");
 }
 function dynamicHealth() {
-    $.post("https://qb-hud/dynamicHealth");
+    $.post("https://bs-hud/dynamicHealth");
 }
 function dynamicArmor() {
-    $.post("https://qb-hud/dynamicArmor");
+    $.post("https://bs-hud/dynamicArmor");
 }
 function dynamicHunger() {
-    $.post("https://qb-hud/dynamicHunger");
+    $.post("https://bs-hud/dynamicHunger");
 }
 function dynamicThirst() {
-    $.post("https://qb-hud/dynamicThirst");
+    $.post("https://bs-hud/dynamicThirst");
 }
 function dynamicStress() {
-    $.post("https://qb-hud/dynamicStress");
+    $.post("https://bs-hud/dynamicStress");
 }
 function dynamicOxygen() {
-    $.post("https://qb-hud/dynamicOxygen");
+    $.post("https://bs-hud/dynamicOxygen");
 }
 function dynamicEngine() {
-    $.post("https://qb-hud/dynamicEngine");
+    $.post("https://bs-hud/dynamicEngine");
 }
 function dynamicNitro() {
-    $.post("https://qb-hud/dynamicNitro");
+    $.post("https://bs-hud/dynamicNitro");
 }
 function ToggleMapShape() {
-    $.post("https://qb-hud/ToggleMapShape");
+    $.post("https://bs-hud/ToggleMapShape");
 }
 function changeFPS() {
-    $.post("https://qb-hud/changeFPS");
+    $.post("https://bs-hud/changeFPS");
 }
 function ToggleMapBorders() {
-    $.post("https://qb-hud/ToggleMapBorders");
+    $.post("https://bs-hud/ToggleMapBorders");
 }
 function HideMap() {
-    $.post("https://qb-hud/HideMap");
+    $.post("https://bs-hud/HideMap");
 }
 function changeCompassFPS() {
-    $.post("https://qb-hud/changeCompassFPS");
+    $.post("https://bs-hud/changeCompassFPS");
 }
 function showCompassBase() {
-    $.post("https://qb-hud/showCompassBase");
+    $.post("https://bs-hud/showCompassBase");
 }
 function showStreetsNames() {
-    $.post("https://qb-hud/showStreetsNames");
+    $.post("https://bs-hud/showStreetsNames");
 }
 function showPointerIndex() {
-    $.post("https://qb-hud/showPointerIndex");
+    $.post("https://bs-hud/showPointerIndex");
 }
 function showDegreesNum() {
-    $.post("https://qb-hud/showDegreesNum");
+    $.post("https://bs-hud/showDegreesNum");
 }
 function cinematicMode() {
-    $.post("https://qb-hud/cinematicMode");
+    $.post("https://bs-hud/cinematicMode");
 }
 
 $(document).ready(function () {

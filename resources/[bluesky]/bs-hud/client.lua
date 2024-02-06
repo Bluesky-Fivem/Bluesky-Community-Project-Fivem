@@ -113,7 +113,7 @@ RegisterNetEvent('Characters:Client:Spawn', function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
-    local PlayerData = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData()
+    PlayerData = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData()
     Wait(3000)
     SetEntityHealth(PlayerPedId(), 200)
 end)
