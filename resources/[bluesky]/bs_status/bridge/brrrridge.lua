@@ -59,10 +59,10 @@ RegisterCommand('check1', function()
     end)
 end, false)
 
-AddStateBagChangeHandler('needs', GetPlayerServerId(PlayerPedId()), function(bagName, key, value)
+-- AddStateBagChangeHandler('needs', GetPlayerServerId(PlayerPedId()), function(bagName, key, value)
 
-    -- Print the updated thirst value
-    print("Updated Thirst: " .. value.thirst)
-    print("Updated hugner: " .. value.hunger)
-    -- Send a message to update item.thirst
-end)
+--     -- Print the updated thirst value
+--     print("Updated Thirst: " .. value.thirst)
+--     print("Updated hugner: " .. value.hunger)
+--     -- Send a message to update item.thirst
+-- end)
