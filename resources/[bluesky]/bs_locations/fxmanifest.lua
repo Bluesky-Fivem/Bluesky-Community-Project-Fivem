@@ -2,6 +2,8 @@ fx_version 'bodacious'
 
 game 'gta5'
 
+server_script("@oxmysql/lib/MySQL.lua")
+
 client_scripts {
     'client/*.lua',
 }
