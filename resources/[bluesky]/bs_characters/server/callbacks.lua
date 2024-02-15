@@ -12,6 +12,16 @@ function RetrieveComponents()
     RegisterCommands()
 end
 
+local function buildWhereClause(queryParams)
+    local whereClauses = {}
+    local params = {}
+    for key, value in pairs(queryParams) do
+        table.insert(whereClauses, string.format("%s = ?", key))
+        table.insert(params, value)
+    end
+    return table.concat(whereClauses, " AND "), params
+end
+
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Characters', {
         'Callbacks',
@@ -62,10 +72,12 @@ function RegisterCallbacks()
                 cb({ changelog = nil, motd = motd})
             end
         end)
+        --cb({ changelog = nil, motd = motd})
     end)
 
     Callbacks:RegisterServerCallback('Characters:GetCharacters', function(source, data, cb)
         local player = Fetch:Source(source)
+        
         Database.Game:find({
             collection = 'characters',
             query = {

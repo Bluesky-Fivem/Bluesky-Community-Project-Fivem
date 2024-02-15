@@ -47,6 +47,7 @@ AddEventHandler('Queue:Server:SessionActive', function(source, data)
     end)
 end)
 
+
 COMPONENTS.Player = {
     _required = { 'GetData' },
     _name = 'base',
@@ -55,7 +56,8 @@ COMPONENTS.Player = {
     --- @param data string The data you want to get.
     GetData = function(self, source, data)
         local retVal = -1
-
+        
+   
         COMPONENTS.Database.Auth:find({
             collection = "users",
             query = {

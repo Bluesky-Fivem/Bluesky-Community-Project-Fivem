@@ -1,3 +1,27 @@
+local function buildWhereClause(queryParams)
+    local whereClauses = {}
+    local params = {}
+    for key, value in pairs(queryParams) do
+        table.insert(whereClauses, string.format("%s = ?", key))
+        table.insert(params, value)
+    end
+    return table.concat(whereClauses, " AND "), params
+end
+
+
+function MysqlSelect(data,cb)
+    local collection = data.collection
+    local query = data.query
+    
+    local whereClause, params = buildWhereClause(query)
+    local queryString = string.format("SELECT * FROM %s WHERE %s", collection, whereClause)
+  
+    print(queryString, params[1],params[2])
+    --MySQL.Async.fetchAll(queryString, params, function(results)
+      --  cb(results)
+    --end)
+end
+
 COMPONENTS.Fetch = {
     _required = { 'Source', 'PlayerData', 'All' },
     _name = 'base',
@@ -6,6 +30,7 @@ COMPONENTS.Fetch = {
     Source = function(self, source)
         return COMPONENTS.Players[source]
     end,
+
 
     --- @param key string The key to fetch the data from.
     --- @param value any The value to fetch the data from.
