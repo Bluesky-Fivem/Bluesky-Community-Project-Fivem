@@ -3,7 +3,10 @@ game 'gta5'
 
 server_only 'yes'
 
+server_script("@oxmysql/lib/MySQL.lua")
+
 server_scripts {
+
     'server/sv_*.lua',
 }
 

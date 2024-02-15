@@ -35,38 +35,96 @@ function RegisterCallbacks()
   end)
 end
 
+-- WALLET = {
+--   Create = function(self, cId)
+--     Database.Game:insertOne({
+--       collection = 'wallets',
+--       document = {
+--         Char = cId,
+--         Cash = Config.InitialCash
+--       }
+--     }, function(success, results) end)
+--   end,
+
+--   Get = function(self, char, cb)
+--     Database.Game:findOne({
+--       collection = 'wallets',
+--       query = {
+--         Char = char:GetData('ID')
+--       }
+--     }, function(success, results)
+--       if not success then return end
+--       if #results > 0 then
+--         local _data = results[1]
+--         _data.Modify = function(self, amount)
+--           Database.Game:updateOne({
+--             collection = 'wallets',
+--             query = {
+--               Char = results[1].Char
+--             },
+--             update = {
+--               ["$inc"] = {
+--                 Cash = amount
+--               }
+--             }
+--           })
+--         end
+--         cb(_data)
+--       else
+--         Logger:Error('Wallet', "Looking for non-existent Wallet")
+--         cb(nil)
+--       end
+--     end)
+--   end,
+
+--   Add = function(self, char, amount)
+--     Wallet:Get(char, function(wallet)
+--       if wallet then
+--         UI.Balance:UpdateCash(char:GetData('Source'), wallet.Cash, amount)
+
+--         TriggerClientEvent('Phone:Client:SetData', char:GetData('Source'), {
+--           cash = wallet.Cash + amount
+--         })
+
+--         wallet:Modify(amount)
+--       end
+--     end)
+--   end,
+
+--   Remove = function(self, char, amount)
+--     Wallet:Get(char, function(wallet)
+--       if wallet then
+--         UI.Balance:UpdateCash(char:GetData('Source'), wallet.Cash, -amount)
+
+--         TriggerClientEvent('Phone:Client:SetData', char:GetData('Source'), {
+--           cash = wallet.Cash - amount
+--         })
+
+--         wallet:Modify(-amount)
+--       end
+--     end)
+--   end,
+-- }
+
 WALLET = {
   Create = function(self, cId)
-    Database.Game:insertOne({
-      collection = 'wallets',
-      document = {
-        Char = cId,
-        Cash = Config.InitialCash
-      }
-    }, function(success, results) end)
+    MySQL.Async.execute('INSERT INTO wallets (Char, Cash) VALUES (@char, @cash)', {
+      ['@char'] = cId,
+      ['@cash'] = Config.InitialCash
+    }, function(rowsChanged)
+    end)
   end,
 
   Get = function(self, char, cb)
-    Database.Game:findOne({
-      collection = 'wallets',
-      query = {
-        Char = char:GetData('ID')
-      }
-    }, function(success, results)
-      if not success then return end
-      if #results > 0 then
+    MySQL.Async.fetchAll('SELECT * FROM wallets WHERE Char = @char', {
+      ['@char'] = char:GetData('ID')
+    }, function(results)
+      if results and #results > 0 then
         local _data = results[1]
         _data.Modify = function(self, amount)
-          Database.Game:updateOne({
-            collection = 'wallets',
-            query = {
-              Char = results[1].Char
-            },
-            update = {
-              ["$inc"] = {
-                Cash = amount
-              }
-            }
+          MySQL.Async.execute('UPDATE wallets SET Cash = Cash + @amount WHERE Char = @char', {
+            ['@amount'] = amount,
+            ['@char'] = _data.Char
           })
         end
         cb(_data)
@@ -81,11 +139,9 @@ WALLET = {
     Wallet:Get(char, function(wallet)
       if wallet then
         UI.Balance:UpdateCash(char:GetData('Source'), wallet.Cash, amount)
-
         TriggerClientEvent('Phone:Client:SetData', char:GetData('Source'), {
           cash = wallet.Cash + amount
         })
-
         wallet:Modify(amount)
       end
     end)
@@ -95,11 +151,9 @@ WALLET = {
     Wallet:Get(char, function(wallet)
       if wallet then
         UI.Balance:UpdateCash(char:GetData('Source'), wallet.Cash, -amount)
-
         TriggerClientEvent('Phone:Client:SetData', char:GetData('Source'), {
           cash = wallet.Cash - amount
         })
-
         wallet:Modify(-amount)
       end
     end)
@@ -110,19 +164,30 @@ AddEventHandler('Proxy:Shared:RegisterReady', function()
   exports['bs_base']:RegisterComponent('Wallet', WALLET)
 end)
 
+-- AddEventHandler('Characters:Server:CharacterCreated', function(cId)
+--   Database.Game:findOne({
+--     collection = 'wallets',
+--     query = {
+--       Char = cId
+--     }
+--   }, function(success, results)
+--     if not success then return end
+--     if #results == 0 then
+--       Wallet:Create(cId)
+--     end
+--   end)
+-- end)
+
 AddEventHandler('Characters:Server:CharacterCreated', function(cId)
-  Database.Game:findOne({
-    collection = 'wallets',
-    query = {
-      Char = cId
-    }
-  }, function(success, results)
-    if not success then return end
-    if #results == 0 then
+  MySQL.Async.fetchAll('SELECT * FROM wallets WHERE Char = @char', {
+    ['@char'] = cId
+  }, function(results)
+    if results and #results == 0 then
       Wallet:Create(cId)
     end
   end)
 end)
+
 
 RegisterServerEvent('Wallet:Server:GiveCash')
 AddEventHandler('Wallet:Server:GiveCash', function(cash)
