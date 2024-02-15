@@ -6,7 +6,8 @@ States = {
 }
 
 function Player(steamHex, src, deferrals)
-    local member = exports['bs_base']:FetchComponent('WebAPI').GetMember:Status(src, steamHex)
+
+    local member = steamHex
     if member == nil or member == '' then return nil
     elseif member == -1 then return -1 end
 
