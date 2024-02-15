@@ -1,6 +1,6 @@
 fx_version 'bodacious'
 games { 'gta5' }
-server_script("@oxmysql/lib/MySQL.lua")
+
 ui_page "ui/html/index.html"
 
 files{"ui/html/main.js","ui/html/index.html"}

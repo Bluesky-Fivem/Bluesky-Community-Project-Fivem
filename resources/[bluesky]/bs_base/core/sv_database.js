@@ -62,7 +62,7 @@ const DATABASE = {
         },
         insertOne: (t, params, callback) => {
             //return Methods.insertOne(gameDb, params, callback);
-            const { collection, document } = passParams
+            const { collection, document } = params
             const columns = Object.keys(document).join(', ');
             const placeholders = Object.keys(document).map(() => '?').join(', ');
             const values = Object.values(document);
@@ -84,10 +84,10 @@ const DATABASE = {
             const queryString = `SELECT * FROM ${collection} WHERE ${whereClause}`;
 
             exports.oxmysql.query(queryString, queryParams, (response) => {
-                return(response)
+                callback(response, response)
             })
 
-            //return
+            return
         },
         findOne: (t, params, callback) => {
             return Methods.findOne(gameDb, params, callback);
@@ -113,13 +113,35 @@ const DATABASE = {
             return !!Methods.isConnected(authDb);
         },
         insert: (t, params, callback) => {
-            return Methods.insert(authDb, params, callback);
+           // return Methods.insert(authDb, params, callback);
+           const { collection, document } = params
+            const columns = Object.keys(document).join(', ');
+            const placeholders = Object.keys(document).map(() => '?').join(', ');
+            const values = Object.values(document);
+            
+            const queryString = `INSERT INTO ${collection} (${columns}) VALUES (${placeholders})`;
+
+            exports.oxmysql.insert(queryString,values,(id) => {
+                callback(id,id)
+            })
         },
         insertOne: (t, params, callback) => {
             return Methods.insertOne(authDb, params, callback);
         },
         find: (t, params, callback) => {
-            return Methods.find(authDb, params, callback);
+            //return Methods.find(authDb, params, callback);
+            const {collection, query} = params
+
+            const whereClauses = Object.keys(query).map(key => `${key} = ?`);
+            const whereClause = whereClauses.join(' AND ');
+            const queryParams = Object.keys(query).map(key => query[key]);
+        
+            const queryString = `SELECT * FROM ${collection} WHERE ${whereClause}`;
+
+            exports.oxmysql.query(queryString, queryParams, (response) => {
+                callback(response,response)
+            })
+            return
         },
         findOne: (t, params, callback) => {
             return Methods.findOne(authDb, params, callback);
