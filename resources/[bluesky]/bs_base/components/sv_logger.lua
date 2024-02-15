@@ -116,19 +116,23 @@ function doLog(level, component, log, flags, data)
 
         if COMPONENTS.Proxy.DatabaseReady then
             if flags.database then
-                COMPONENTS.Database.Auth:insertOne({
-                    collection = "logs",
-                    document = {
-                        date = os.time(),
-                        server = COMPONENTS.Config.Server.ID,
-                        level = level,
-                        component = component,
-                        log = machineLog or log,
-                        extra = extra
-                    }
-                })
+                MySQL.Async.execute('INSERT INTO logs (date, server, level, component, log, extra) VALUES (@date, @server, @level, @component, @log, @extra)', {
+                    ['@date'] = os.time(),
+                    ['@server'] = COMPONENTS.Config.Server.ID,
+                    ['@level'] = level,
+                    ['@component'] = component,
+                    ['@log'] = machineLog or log,
+                    ['@extra'] = extra
+                }, function(rowsChanged)
+                    if rowsChanged > 0 then
+                        -- Log successfully inserted into the database
+                    else
+                        -- Log insertion failed
+                    end
+                end)
             end
         end
+        
 
         if flags.discord and level >= COMPONENTS.Convar.LOGGING.value then
             if logWebhook ~= 'NOT SET' then
