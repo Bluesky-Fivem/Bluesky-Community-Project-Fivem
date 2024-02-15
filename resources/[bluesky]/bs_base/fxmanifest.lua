@@ -1,6 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 
+server_script("@oxmysql/lib/MySQL.lua")
+
 client_scripts {
     '@bs_pwnzor/token.lua',
     'sh_init.lua',
