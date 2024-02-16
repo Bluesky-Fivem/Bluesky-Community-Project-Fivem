@@ -77,7 +77,7 @@ COMPONENTS.Player = {
                     ['@name'] = GetPlayerName(source)
                 }, function(success, rowsAffected, insertedId)
                     if not success then
-                        COMPONENTS.Logger:Error('Database', '[^8Error^7] Error in insertOne: ' .. tostring(rowsAffected), { console = true })
+                        COMPONENTS.Logger:Error('Database', '[^8Error^7] Error in insert Base sv_player : ' .. tostring(rowsAffected), { console = true })
                         return
                     end
     
@@ -104,45 +104,10 @@ COMPONENTS.Player = {
 
 
 function Player(source, data)
-    print(json.encode(data))
+   
     local _data = COMPONENTS.DataStore:CreateStore(source, 'Player', data)
 
-    -- _data.Permissions = {
-    --     IsAdmin = function(self)
-    --         local roles = _data:GetData('Roles')
-            
-    --         if (roles.isDev) then
-    --             return true
-    --         elseif (roles.isAdmin) then
-    --             return true
-    --         end
-
-    --         return false
-    --     end,
-    --     GetLevel = function(self)
-    --         local highest = 0        
-    --         local roles = _data:GetData('Roles')
-
-    --         if roles.isDev then
-    --             highest = 99
-    --         elseif roles.isAdmin then
-    --             highest = 1
-    --         end
-
-    --         return highest
-    --     end
-    -- }
-
-    -- local roles = _data:GetData('Roles')
-    -- local group = "user"
-
-    -- if roles.isDev then
-    --     group = "developer"
-    -- elseif roles.isAdmin then
-    --     group = "admin"
-    -- end
-
-    -- ExecuteCommand(('add_principal identifier.%s group.%s'):format(_data:GetData('Identifier'), group))
+    
 
     return _data
 end
