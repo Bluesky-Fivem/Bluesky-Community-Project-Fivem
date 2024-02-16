@@ -123,7 +123,7 @@ function RegisterCallbacks()
         
         local query = "INSERT INTO characters ( User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP) VALUES ( @User,  @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP)"
         local params = {
-
+    
             ['@User'] = doc.User,
             ['@First'] = doc.First,
             ['@Last'] = doc.Last,
@@ -137,17 +137,14 @@ function RegisterCallbacks()
             ['@HP'] = doc.HP
         }
         
-        -- Assuming you have established a MySQL connection
-        MySQL.Sync.execute(query, params, function(rowsInserted)
-            if rowsInserted > 0 then
-                local characterId = MySQL.Sync.fetchScalar("SELECT LAST_INSERT_ID()")
-                doc.ID = characterId
-                TriggerEvent('Characters:Server:CharacterCreated', characterId)
-                cb(doc)
-            else
-                cb(nil)
-            end
-        end)
+        local id = MySQL.insert.await(query, params)
+        if not id then
+            cb(nil)
+            return
+        end
+        doc.ID = id
+        TriggerEvent('Characters:Server:CharacterCreated', id)
+        cb(doc)
     end)
     
 
@@ -193,7 +190,7 @@ function RegisterCallbacks()
 
     Callbacks:RegisterServerCallback('Characters:GetSpawnPoints', function(source, data, cb)
         local player = Fetch:Source(source)
-        local userId = player:GetData('ID')
+        local userId = player:GetData('Identifier')
     
         local function GetSpawnPoints(characterId)
             local query = "SELECT LastPlayed FROM characters WHERE User = @userId"
@@ -221,13 +218,14 @@ function RegisterCallbacks()
 
     Callbacks:RegisterServerCallback('Characters:GetCharacterData', function(source, data, cb)
         local player = Fetch:Source(source)
-        local userId = player:GetData('ID')
+        local userId = player:GetData('Identifier')
+        local id = player:GetData('ID')
     
         local function UpdateLastPlayed(characterId)
             local query = "UPDATE characters SET LastPlayed = @currentTime WHERE User = @userId"
             local params = {
                 ['@currentTime'] = os.time() * 1000,
-                ['@userId'] = userId,
+                ['@_id'] = id,
             }
     
             -- Assuming you have established a MySQL connection
@@ -288,7 +286,7 @@ function RegisterMiddleware()
         if player ~= nil then
             local char = player:GetData('Character')
             if char ~= nil then
-                StoreData(player:GetData('ID'), char)
+                StoreData(player:GetData('Identifier'), char)
             end
         end
     end, 10000)
@@ -298,7 +296,7 @@ function RegisterMiddleware()
         if player ~= nil then
             local char = player:GetData('Character')
             if char ~= nil then
-                StoreData(player:GetData('ID'), char)
+                StoreData(player:GetData('Identifier'), char)
             end
         end
     end, 10000)

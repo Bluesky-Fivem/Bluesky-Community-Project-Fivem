@@ -43,7 +43,7 @@ RegisterNUICallback('CreateCharacter', function(data, cb)
         if character ~= nil then
             SendNUIMessage({
                 type = 'CREATE_CHARACTER',
-                data = { characters = characters }
+                data = { character = character }
             })
         end
 
