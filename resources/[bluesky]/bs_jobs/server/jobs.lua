@@ -1,5 +1,5 @@
 _onDuty = {}
-_jobs = {}
+_jobs = Config.Job
 jobCenterJobs = {}
 
 AddEventHandler('Jobs:Shared:DependencyUpdate', RetrieveComponents)
@@ -37,7 +37,6 @@ AddEventHandler('Core:Shared:Ready', function()
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
         RetrieveComponents()
-        DefaultData()
         Startup()
         RegisterCallbacks()
         RegisterMiddleware()
