@@ -69,7 +69,7 @@ function CHAT.RegisterAdminCommand(this, command, callback, suggestion, argument
         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
         if player ~= nil then
             local pData = player:GetData()
-            if player:GetData('Admin') == 'dev' then
+            if player:GetData('Roles') == 'dev' then
                 if((#args <= commands[command].args and #args == commands[command].args) or commands[command].args == -1)then
                     callback(source, args, rawCommand)
                 else
