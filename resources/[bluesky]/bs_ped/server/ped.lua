@@ -284,68 +284,94 @@ function RegisterCallbacks()
     Callbacks:RegisterServerCallback('Ped:CheckPed', function(source, data, cb)
         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
         local char = player:GetData('Character')
-        Database.Game:findOne({
-            collection = 'peds',
-            query = {
-                Char = char:GetData('ID')
-            }
-        }, function(success, results)
-            if not success then
-                return
-            end
-            if #results == 0 then
-                TriggerClientEvent('Ped:Client:SetPedData', source, TemplateData)
+
+        exports.oxmysql:single('SELECT skin FROM characters WHERE _id = ?', {char:GetData('ID')}, function(row)
+           if row.skin == nil then
+                TriggerClientEvent('Ped:Client:SetPedData', source, TemplateData, false)
                 cb(false)
             else
-                TriggerClientEvent('Ped:Client:SetPedData', source, results[1].Ped)
+                TriggerClientEvent('Ped:Client:SetPedData', source, json.decode(row.skin), false)
                 cb(true)
             end
         end)
     end)
+
     Callbacks:RegisterServerCallback('Ped:SavePed', function(source, data, cb)
         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
         local char = player:GetData('Character')
-        Database.Game:findOne({
-            collection = 'peds',
-            query = {
-                Char = char:GetData('ID')
-            }
-        }, function(success, results)
-            if not success then
-                return
-            end
-            if #results == 0 then
-                local doc = {
-                    Char = char:GetData('ID'),
-                    Ped = data.ped
-                }
-                Database.Game:insertOne({
-                    collection = 'peds',
-                    document = doc
-                }, function(success, results)
-                    if not success then
-                        return
-                    end
-                    cb(results > 0)
-                end)
-            else
-                Database.Game:updateOne({
-                    collection = 'peds',
-                    query = {
-                        Char = char:GetData('ID')
-                    },
-                    update = {
-                        ['$set'] = {
-                            Ped = data.ped
-                        }
-                    }
-                }, function(success, results)
-                    if not success then
-                        return
-                    end
-                    cb(results > 0)
-                end)
-            end
+        exports.oxmysql:execute("UPDATE characters SET skin = ? WHERE _id = ?",{json.encode(data.ped),char:GetData('ID')},function(updatedRow)
+            cb(updatedRow > 0)
         end)
     end)
 end
+
+
+-- function RegisterCallbacks()
+--     Callbacks:RegisterServerCallback('Ped:CheckPed', function(source, data, cb)
+--         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+--         local char = player:GetData('Character')
+--         Database.Game:findOne({
+--             collection = 'peds',
+--             query = {
+--                 Char = char:GetData('ID')
+--             }
+--         }, function(success, results)
+--             if not success then
+--                 return
+--             end
+--             if #results == 0 then
+--                 TriggerClientEvent('Ped:Client:SetPedData', source, TemplateData)
+--                 cb(false)
+--             else
+--                 TriggerClientEvent('Ped:Client:SetPedData', source, results[1].Ped)
+--                 cb(true)
+--             end
+--         end)
+--     end)
+--     Callbacks:RegisterServerCallback('Ped:SavePed', function(source, data, cb)
+--         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+--         local char = player:GetData('Character')
+--         Database.Game:findOne({
+--             collection = 'peds',
+--             query = {
+--                 Char = char:GetData('ID')
+--             }
+--         }, function(success, results)
+--             if not success then
+--                 return
+--             end
+--             if #results == 0 then
+--                 local doc = {
+--                     Char = char:GetData('ID'),
+--                     Ped = data.ped
+--                 }
+--                 Database.Game:insertOne({
+--                     collection = 'peds',
+--                     document = doc
+--                 }, function(success, results)
+--                     if not success then
+--                         return
+--                     end
+--                     cb(results > 0)
+--                 end)
+--             else
+--                 Database.Game:updateOne({
+--                     collection = 'peds',
+--                     query = {
+--                         Char = char:GetData('ID')
+--                     },
+--                     update = {
+--                         ['$set'] = {
+--                             Ped = data.ped
+--                         }
+--                     }
+--                 }, function(success, results)
+--                     if not success then
+--                         return
+--                     end
+--                     cb(results > 0)
+--                 end)
+--             end
+--         end)
+--     end)
+-- end

@@ -30,13 +30,13 @@ COMPONENTS.Fetch = {
             ['@value'] = value
         }, function(results)
             if results and #results > 0 then
-                local uData = COMPONENTS.WebAPI.GetMember:Roles(results[1].identifier)
+                --local uData = COMPONENTS.WebAPI.GetMember:Roles(results[1].identifier)
                 retVal = COMPONENTS.DataStore:CreateStore(-1, value, {
                     ID = results[1].id,
                     SID = results[1].sid,
                     Identifier = results[1].identifier,
                     Name = results[1].username,
-                    Roles = uData.roles
+                    Roles = results[1].roles
                 })
             else
                 retVal = nil

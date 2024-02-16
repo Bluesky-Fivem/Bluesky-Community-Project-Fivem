@@ -38,7 +38,7 @@ AddEventHandler('Characters:Server:StoreUpdate', function()
     local char = Fetch:Source(src):GetData('Character')
 
     if char ~= nil then
-        local data = char:GetData()
+        local data = char:GetData() 
     end
 end)
 
@@ -61,15 +61,19 @@ function RegisterCallbacks()
         local player = Fetch:Source(source)
         local playerId = player:GetData('ID')
         
+        
         local query = "SELECT * FROM characters WHERE User = @userId"
         local params = {['@userId'] = playerId}
         
         -- Assuming you have established a MySQL connection
         MySQL.Async.fetchAll(query, params, function(results)
+            print(json.encode(results))
+            if not results then cb(nil) return end
             if results and #results > 0 then
                 local cData = {}
                 for _, v in ipairs(results) do
                     table.insert(cData, {
+                        --CID = v._id
                         ID = v.ID,
                         First = v.First,
                         Last = v.Last,
@@ -82,9 +86,6 @@ function RegisterCallbacks()
                 end
                 player:SetData('Characters', cData)
                 cb(cData)
-                
-            else
-                cb(nil)
             end
         end)
     end)
@@ -109,6 +110,7 @@ function RegisterCallbacks()
         end
     
         local doc = {
+            Identifier = player:GetData('Identifier'),
             User = player:GetData('ID'),
             First = data.first,
             Last = data.last,
@@ -122,8 +124,9 @@ function RegisterCallbacks()
             HP = 200,
         }
         
-        local query = "INSERT INTO characters (User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP) VALUES (@User, @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP)"
+        local query = "INSERT INTO characters (Identifier, User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP) VALUES ( @Identifier, @User,  @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP)"
         local params = {
+            ['@Identifier'] = doc.Identifier,
             ['@User'] = doc.User,
             ['@First'] = doc.First,
             ['@Last'] = doc.Last,
