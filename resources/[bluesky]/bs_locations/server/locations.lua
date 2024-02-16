@@ -5,7 +5,6 @@ end)
 AddEventHandler('Locations:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
     Chat = exports['bs_base']:FetchComponent('Chat')
-    Database = exports['bs_base']:FetchComponent('Database')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Locations = exports['bs_base']:FetchComponent('Locations')
 end
@@ -14,7 +13,6 @@ AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Locations', {
         'Chat',
         'Callbacks',
-        'Database',
         'Locations',
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
@@ -100,48 +98,3 @@ LOCATIONS = {
         end)
     end
 }
-
-
--- LOCATIONS = {
---     Add = function(self, coords, heading, type, name, cb)
---         local doc = {
---             Coords = {
---                 x = coords.x,
---                 y = coords.y,
---                 z = coords.z,
---                 h = heading
---             },
---             Type = type,
---             Name = name
---         }
---         Database.Game:insertOne({
---             collection = "locations",
---             document = doc
---         }, function(success, results)
---             if not success then
---                 return
---             end
-
---             TriggerEvent('Locations:Server:Added', type, doc)
---             if cb ~= nil then
---                 cb(results > 1)
---             end
---         end)
---     end,
---     GetAll = function(self, type, cb)
---         Database.Game:find({
---             collection = 'locations',
---             query = {
---                 Type = type
---             }
---         }, function(success, results)
---             if not success then
---                 return
---             end
---             for k, location in ipairs(results) do
---                 results[k].Coords = vector3(location.Coords.x, location.Coords.y, location.Coords.z)
---             end
---             cb(results)
---         end)
---     end
--- }

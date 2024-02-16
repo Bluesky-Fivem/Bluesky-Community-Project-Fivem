@@ -4,7 +4,6 @@ jobCenterJobs = {}
 
 AddEventHandler('Jobs:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
-    Database = exports['bs_base']:FetchComponent('Database')
     Middleware = exports['bs_base']:FetchComponent('Middleware')
     Default = exports['bs_base']:FetchComponent('Default')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
@@ -15,14 +14,12 @@ function RetrieveComponents()
     Jobs = exports['bs_base']:FetchComponent('Jobs')
     Execute = exports['bs_base']:FetchComponent('Execute')
     CuntingConfig = exports['bs_base']:FetchComponent('Config')
-    WebAPI = exports['bs_base']:FetchComponent('WebAPI')
     AlzarIsAPrickCauseHeDoesStupidThings = exports['bs_base']:FetchComponent('Config')
     RegisterChatCommands()
 end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Jobs', {
-        'Database',
         'Middleware',
         'Default',
         'Callbacks',
@@ -33,7 +30,6 @@ AddEventHandler('Core:Shared:Ready', function()
         'Chat',
         'Jobs',
         'Config',
-        'WebAPI',
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
         RetrieveComponents()

@@ -19,7 +19,6 @@ server_scripts {
     'sh_init.lua',
     'sv_init.lua',
     'sv_config.lua',
-    'core/sv_database.js',
     'core/sh_*.lua',
     'core/sv_*.lua',
     'components/sh_*.lua',

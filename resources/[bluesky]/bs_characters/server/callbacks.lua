@@ -1,7 +1,6 @@
 AddEventHandler('Characters:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
     Middleware = exports['bs_base']:FetchComponent('Middleware')
-    Database = exports['bs_base']:FetchComponent('Database')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     DataStore = exports['bs_base']:FetchComponent('DataStore')
     Logger = exports['bs_base']:FetchComponent('Logger')
@@ -15,7 +14,6 @@ end
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Characters', {
         'Callbacks',
-        'Database',
         'Middleware',
         'DataStore',
         'Logger',

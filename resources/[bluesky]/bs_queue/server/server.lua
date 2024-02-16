@@ -346,11 +346,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(1000)
     end
 
-    if not exports['bs_base']:FetchComponent('WebAPI').Enabled then
-        Log("^8Queue Disabled^7", { console = true })
-        queueEnabled = false
-        return
-    end
+    
     
     while GetResourceState('hardcap') ~= 'stopped' do
         local state = GetResourceState('hardcap')

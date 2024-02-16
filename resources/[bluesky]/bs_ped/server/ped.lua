@@ -1,4 +1,3 @@
-Database = nil
 Callbacks = nil
 
 local TemplateData = {
@@ -262,7 +261,6 @@ local TemplateData = {
 AddEventHandler('Ped:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
-    Database = exports['bs_base']:FetchComponent('Database')
     Clotheshop = exports['bs_base']:FetchComponent('Clotheshop')
     Locations = exports['bs_base']:FetchComponent('Locations')
 end
@@ -270,7 +268,6 @@ end
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Ped', {
         'Callbacks',
-        'Database',
         'Clotheshop',
         'Locations',
     }, function(error)
