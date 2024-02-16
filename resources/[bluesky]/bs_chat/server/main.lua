@@ -29,7 +29,7 @@ CHAT = {
                         if IsPlayerAceAllowed(source, ('command.%s'):format(k)) then
                             if commands[k] ~= nil then
                                 if commands[k].admin then
-                                    if player.Permissions:IsAdmin() then
+                                    if player:GetData('Admin') == 'dev' then
                                         TriggerClientEvent('chat:addSuggestion', player:GetData('Source'), '/' .. k, command.help, command.params)
                                     else
                                         TriggerClientEvent('chat:removeSuggestion', player:GetData('Source'), '/' .. k)

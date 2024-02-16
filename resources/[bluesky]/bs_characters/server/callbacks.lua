@@ -67,7 +67,6 @@ function RegisterCallbacks()
         
         -- Assuming you have established a MySQL connection
         MySQL.Async.fetchAll(query, params, function(results)
-            print(json.encode(results))
             if not results then cb(nil) return end
             local cData = {}
             for _, v in ipairs(results) do
@@ -119,9 +118,10 @@ function RegisterCallbacks()
             Job = json.encode(AlzarIsAPrickCauseHeDoesStupidThings.DefaultJob),
             Armor = 100,
             HP = 200,
+            Admin = 'user'
         }
         
-        local query = "INSERT INTO characters ( User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP) VALUES ( @User,  @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP)"
+        local query = "INSERT INTO characters ( User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP, Admin) VALUES ( @User,  @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP, @Admin)"
         local params = {
     
             ['@User'] = doc.User,
@@ -134,7 +134,8 @@ function RegisterCallbacks()
             ['@LastPlayed'] = doc.LastPlayed,
             ['@Job'] = doc.Job,
             ['@Armor'] = doc.Armor,
-            ['@HP'] = doc.HP
+            ['@HP'] = doc.HP,
+            ['@Admin'] = doc.Admin
         }
         
         local id = MySQL.insert.await(query, params)
@@ -222,10 +223,10 @@ function RegisterCallbacks()
         local id = player:GetData('ID')
     
         local function UpdateLastPlayed(characterId)
-            local query = "UPDATE characters SET LastPlayed = @currentTime WHERE _id = @id"
+            local query = "UPDATE characters SET LastPlayed = @currentTime WHERE User = @userId"
             local params = {
                 ['@currentTime'] = os.time() * 1000,
-                ['@id'] = id,
+                ['@userId'] = userId,
             }
     
             -- Assuming you have established a MySQL connection

@@ -300,7 +300,7 @@ function RegisterCallbacks()
         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
         local char = player:GetData('Character')
         exports.oxmysql:execute("UPDATE characters SET skin = ? WHERE _id = ?",{json.encode(data.ped),char:GetData('ID')},function(updatedRow)
-            cb(updatedRow > 0)
+            cb(updatedRow[1])
         end)
     end)
 end
