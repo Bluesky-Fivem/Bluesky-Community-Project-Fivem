@@ -222,10 +222,10 @@ function RegisterCallbacks()
         local id = player:GetData('ID')
     
         local function UpdateLastPlayed(characterId)
-            local query = "UPDATE characters SET LastPlayed = @currentTime WHERE User = @userId"
+            local query = "UPDATE characters SET LastPlayed = @currentTime WHERE _id = @id"
             local params = {
                 ['@currentTime'] = os.time() * 1000,
-                ['@_id'] = id,
+                ['@id'] = id,
             }
     
             -- Assuming you have established a MySQL connection
