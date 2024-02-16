@@ -21606,6 +21606,7 @@ setTimeout(() => {
       return console.error(`^3Unable to establish a connection to the database!
 ^3[${err}]^0`);
     console.log(`^2Database server connection established!^0`);
+    emit('Database:Server:Ready');
     serverReady = true;
   });
 });
