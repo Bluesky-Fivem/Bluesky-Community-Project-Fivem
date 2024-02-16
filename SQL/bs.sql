@@ -44,17 +44,13 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `Armor` int(11) DEFAULT NULL,
   `HP` int(11) DEFAULT NULL,
   `skin` longtext DEFAULT NULL,
+  `Admin` varchar(50) DEFAULT 'user',
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Dumping data for table blueskysql.characters: ~6 rows (approximately)
-INSERT IGNORE INTO `characters` (`_id`, `User`, `First`, `Last`, `Phone`, `Gender`, `Bio`, `DOB`, `LastPlayed`, `Job`, `Armor`, `HP`, `skin`) VALUES
-	(22, '5', 'saaaaaaaaa', 'aesads', '4155662556', '0', NULL, '1990-12-31T23:59:59.000Z', -1, '{"salary":10,"grade":{"label":"Unemployed","id":0,"level":0},"job":"unemployed","label":"Unemployed","workplace":{"id":0,"label":"Unemployed"}}', 100, 200, NULL),
-	(23, '5', 'ssssssssssssssssss', 'ssssssssssssssss', '4156491944', '0', NULL, '1990-12-31T23:59:59.000Z', -1, '{"job":"unemployed","label":"Unemployed","grade":{"level":0,"id":0,"label":"Unemployed"},"workplace":{"label":"Unemployed","id":0},"salary":10}', 100, 200, NULL),
-	(24, '5', 'ssssssssssssssss', 'sssssssssssssssssss', '4154813568', '0', NULL, '1990-12-31T23:59:59.000Z', -1, '{"workplace":{"label":"Unemployed","id":0},"grade":{"id":0,"label":"Unemployed","level":0},"label":"Unemployed","job":"unemployed","salary":10}', 100, 200, NULL),
-	(25, '5', 'aaaaaaaaaaaaaaa', 'aaaaaaaaa', '6286799073', '0', NULL, '1990-12-31T23:59:59.000Z', -1, '{"workplace":{"label":"Unemployed","id":0},"grade":{"id":0,"label":"Unemployed","level":0},"job":"unemployed","label":"Unemployed","salary":10}', 100, 200, NULL),
-	(26, '5', 'ssssssssssssssssssss', 'qqqqqqqqqqqqqqqq', '4155147551', '0', NULL, '1990-12-31T23:59:59.000Z', -1, '{"job":"unemployed","grade":{"label":"Unemployed","id":0,"level":0},"workplace":{"id":0,"label":"Unemployed"},"salary":10,"label":"Unemployed"}', 100, 200, NULL),
-	(27, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'aaaaaaaaaaaa', 'ddddddddddddddd', '4158406820', '0', NULL, '1990-12-31T23:59:59.000Z', -1, '{"grade":{"label":"Unemployed","level":0,"id":0},"salary":10,"job":"unemployed","workplace":{"label":"Unemployed","id":0},"label":"Unemployed"}', 100, 200, NULL);
+-- Dumping data for table blueskysql.characters: ~1 rows (approximately)
+INSERT IGNORE INTO `characters` (`_id`, `User`, `First`, `Last`, `Phone`, `Gender`, `Bio`, `DOB`, `LastPlayed`, `Job`, `Armor`, `HP`, `skin`, `Admin`) VALUES
+	(54, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'dddddddddd', 'ddddddddddd', '6284647432', '0', NULL, '1990-12-31T23:59:59.000Z', 1708120042000, '{"grade":{"level":0,"label":"Unemployed","id":0},"workplace":{"label":"Unemployed","id":0},"salary":10,"job":"unemployed","label":"Unemployed"}', 0, 175, '{"customization":{"components":{"shoes":{"componentId":6,"paletteId":0,"textureId":0,"drawableId":0},"bag":{"componentId":5,"paletteId":0,"textureId":0,"drawableId":0},"mask":{"componentId":1,"paletteId":0,"textureId":0,"drawableId":0},"kevlar":{"componentId":9,"paletteId":0,"textureId":0,"drawableId":0},"torso2":{"componentId":11,"paletteId":0,"textureId":0,"drawableId":0},"undershirt":{"componentId":8,"paletteId":0,"textureId":0,"drawableId":0},"leg":{"componentId":4,"paletteId":0,"textureId":0,"drawableId":0},"face":{"componentId":0,"paletteId":0,"textureId":0,"drawableId":0},"accessory":{"componentId":7,"paletteId":0,"textureId":0,"drawableId":0},"torso":{"componentId":3,"paletteId":0,"textureId":0,"drawableId":0},"hair":{"componentId":2,"paletteId":0,"textureId":0,"drawableId":0},"badge":{"componentId":10,"paletteId":0,"textureId":0,"drawableId":0}},"face":{"face1":{"index":0,"texture":0,"mix":50.0},"face2":{"index":0,"texture":0,"mix":50.0},"features":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"props":{"watch":{"componentId":6,"disabled":true,"textureId":0,"drawableId":0},"bracelet":{"componentId":7,"disabled":true,"textureId":0,"drawableId":0},"glass":{"componentId":1,"disabled":true,"textureId":0,"drawableId":0},"hat":{"componentId":0,"disabled":true,"textureId":0,"drawableId":0},"ear":{"componentId":2,"disabled":true,"textureId":0,"drawableId":0}},"overlay":{"eyebrows":{"id":2,"opacity":100.0,"index":0,"disabled":true},"freckles":{"id":9,"opacity":100.0,"index":0,"disabled":true},"blemish":{"id":0,"opacity":100.0,"index":0,"disabled":true},"complexion":{"id":6,"opacity":100.0,"index":0,"disabled":true},"bodyblemish":{"id":11,"opacity":100.0,"index":0,"disabled":true},"makeup":{"id":4,"opacity":100.0,"index":0,"disabled":true},"ageing":{"id":3,"opacity":100.0,"index":0,"disabled":true},"sundamage":{"id":7,"opacity":100.0,"index":0,"disabled":true},"facialhair":{"id":1,"opacity":100.0,"index":0,"disabled":true},"blush":{"id":5,"opacity":100.0,"index":0,"disabled":true},"lipstick":{"id":8,"opacity":100.0,"index":0,"disabled":true},"addbodyblemish":{"id":12,"opacity":100.0,"index":0,"disabled":true},"chesthair":{"id":10,"opacity":100.0,"index":0,"disabled":true}},"colors":{"facialhair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"chesthair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"hair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}}}},"model":""}', 'dev');
 
 -- Dumping structure for table blueskysql.dealerships
 CREATE TABLE IF NOT EXISTS `dealerships` (
@@ -91,9 +87,14 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `component` varchar(255) DEFAULT NULL,
   `extra` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Dumping data for table blueskysql.logs: ~0 rows (approximately)
+INSERT IGNORE INTO `logs` (`id`, `level`, `log`, `date`, `server`, `component`, `extra`) VALUES
+	(1, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708119952, NULL, 'Commands', NULL),
+	(2, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120000, NULL, 'Commands', NULL),
+	(3, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120000, NULL, 'Commands', NULL),
+	(4, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120001, NULL, 'Commands', NULL);
 
 -- Dumping structure for table blueskysql.peds
 CREATE TABLE IF NOT EXISTS `peds` (
