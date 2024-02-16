@@ -59,7 +59,7 @@ function RegisterCallbacks()
 
     Callbacks:RegisterServerCallback('Characters:GetCharacters', function(source, data, cb)
         local player = Fetch:Source(source)
-        local playerId = player:GetData('ID')
+        local playerId = player:GetData('Identifier')
         
         
         local query = "SELECT * FROM characters WHERE User = @userId"
@@ -69,24 +69,22 @@ function RegisterCallbacks()
         MySQL.Async.fetchAll(query, params, function(results)
             print(json.encode(results))
             if not results then cb(nil) return end
-            if results and #results > 0 then
-                local cData = {}
-                for _, v in ipairs(results) do
-                    table.insert(cData, {
-                        --CID = v._id
-                        ID = v.ID,
-                        First = v.First,
-                        Last = v.Last,
-                        Phone = v.Phone,
-                        DOB = v.DOB,
-                        Gender = v.Gender,
-                        LastPlayed = v.LastPlayed,
-                        Job = v.Job
-                    })
-                end
-                player:SetData('Characters', cData)
-                cb(cData)
+            local cData = {}
+            for _, v in ipairs(results) do
+                table.insert(cData, {
+                    ID = v.ID,
+                    First = v.First,
+                    Last = v.Last,
+                    Phone = v.Phone,
+                    DOB = v.DOB,
+                    Gender = v.Gender,
+                    LastPlayed = v.LastPlayed,
+                    Job = v.Job
+                })
             end
+            player:SetData('Characters', cData)
+            cb(cData)
+        
         end)
     end)
     
@@ -110,8 +108,7 @@ function RegisterCallbacks()
         end
     
         local doc = {
-            Identifier = player:GetData('Identifier'),
-            User = player:GetData('ID'),
+            User = player:GetData('Identifier'),
             First = data.first,
             Last = data.last,
             Phone = pNumber,
@@ -124,9 +121,9 @@ function RegisterCallbacks()
             HP = 200,
         }
         
-        local query = "INSERT INTO characters (Identifier, User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP) VALUES ( @Identifier, @User,  @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP)"
+        local query = "INSERT INTO characters ( User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP) VALUES ( @User,  @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP)"
         local params = {
-            ['@Identifier'] = doc.Identifier,
+
             ['@User'] = doc.User,
             ['@First'] = doc.First,
             ['@Last'] = doc.Last,
