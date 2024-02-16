@@ -68,7 +68,7 @@ COMPONENTS.Player = {
                     Name = data.Name,
                     SID = data.SID,
                     Identifier = data.Identifier,
-                    Roles = data.Roles
+                    Roles = results[1].roles 
                 }
             else
                 MySQL.Async.execute('INSERT INTO users (sid, identifier, priority, name) VALUES (@sid, @identifier, 0, @name)', {
@@ -87,11 +87,12 @@ COMPONENTS.Player = {
                         Name = data.Name,
                         SID = data.SID,
                         Identifier = data.Identifier,
-                        Roles = data.Roles
+                        Roles = "" 
                     }
                 end)
             end
         end)
+    
     
         while retVal == -1 do
             Citizen.Wait(10)
