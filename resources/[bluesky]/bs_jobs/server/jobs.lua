@@ -65,33 +65,16 @@ JOBS = {
             if jobData.job ~= 'unemployed' then
                 _onDuty[jobData.job][source] = toggle or nil
                 char:SetData('JobDuty', toggle)
-
-                if toggle then
-                    local cData = char:GetData()
-                    cData.Server = CuntingConfig.Server.ID
-                    -- WebAPI.MDT:Request('POST', 'user/onDuty', {}, {
-                    --     user = player:GetData('ID'),
-                    --     character = cData
-                    -- })
-                else
-                    -- WebAPI.MDT:Request('POST', 'user/offDuty', {}, {
-                    --     job = jobData.job,
-                    --     user = player:GetData('ID'),
-                    --     charId = char:GetData('ID')
-                    -- })
-                end
-
-                if silent == nil or not silent then
-                    TriggerClientEvent('Notification:SendAlert', source,
-                        ('You went %s.'):format(toggle and 'on duty' or 'off duty'))
-                end
-
                 Chat.Refresh:Commands(source)
                 TriggerClientEvent('Characters:Client:SetData', source, char:GetData())
+                if silent == nil or not silent then
+                    TriggerClientEvent('Notification:SendAlert', source, ('You went %s.'):format(toggle and 'on duty' or 'off duty'))
+                    TriggerClientEvent('Jobs:Client:UpdateCharData', source)
+                end
             end
             if cb then
                 cb(_onDuty[jobData.job][source])
-            end
+            end 
         end,
         SetJob = function(self, source, job, grade, workplace, cb)
             local targetJob, targetGrade, targetWorkplace = _jobs[job], _jobs[job].grades[grade], _jobs[job].workplaces
