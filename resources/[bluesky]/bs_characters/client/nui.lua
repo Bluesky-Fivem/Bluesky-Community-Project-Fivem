@@ -19,7 +19,7 @@ RegisterNUICallback('GetData', function(data, cb)
         Callbacks:ServerCallback('Characters:GetCharacters', {}, function(characters)
             SendNUIMessage({
                 type = 'SET_DATA',
-                data = {  characters = characters }
+                data = { changelog = serverData.changelog, motd = serverData.motd, characters = characters }
             })
             SendNUIMessage({ type = 'LOADING_HIDE' })
             SendNUIMessage({
@@ -43,7 +43,7 @@ RegisterNUICallback('CreateCharacter', function(data, cb)
         if character ~= nil then
             SendNUIMessage({
                 type = 'CREATE_CHARACTER',
-                data = { changelog = serverData.changelog, motd = serverData.motd, characters = characters }
+                data = { characters = characters }
             })
         end
 
