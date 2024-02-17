@@ -279,7 +279,7 @@ function AnnounceWeatherInfo(source, args)
     local hour = math.floor(((_time + _timeOffset) / 60) % 24)
     local minute = math.floor((_time + _timeOffset) % 60)
     local timeString = string.format("%02d:%02d", hour, minute)
-    local message = string.format("Current weather: Temperature %s°C, Wind Speed %sm/s, Time %s", _temperature, _windSpeed, timeString)
+    local message = string.format("Current weather: %s, Temperature %s°C, Wind Speed %sm/s, Time %s", _weather, _temperature, _windSpeed, timeString)
     TriggerClientEvent('chat:addMessage', source, { args = { '^*Weather Info^r', message }, color = { 255, 255, 255 } })
 end
 
