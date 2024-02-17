@@ -216,6 +216,8 @@ SYNC = {
             _weather = "CLEAR"
         end
 
+        UpdateTemperatureAndWindSpeed()
+
         Logger:Info('Sync', 'Weather Updated: ^5' .. _weather .. '^7', { console = true })
         TriggerClientEvent('Sync:Client:Weather', -1, _weather, _temperature, _windSpeed)
     end,
