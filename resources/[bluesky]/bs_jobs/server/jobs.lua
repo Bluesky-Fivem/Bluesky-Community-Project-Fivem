@@ -14,10 +14,8 @@ function RetrieveComponents()
     Jobs = exports['bs_base']:FetchComponent('Jobs')
     Execute = exports['bs_base']:FetchComponent('Execute')
     CuntingConfig = exports['bs_base']:FetchComponent('Config')
-    WebAPI = exports['bs_base']:FetchComponent('WebAPI')
     AlzarIsAPrickCauseHeDoesStupidThings = exports['bs_base']:FetchComponent('Config')
     Wallet = exports['bs_base']:FetchComponent('Wallet')
-    Notification = exports['bs_base']:FetchComponent('Notification')
     RegisterChatCommands()
 end
 
@@ -33,9 +31,7 @@ AddEventHandler('Core:Shared:Ready', function()
         'Chat',
         'Jobs',
         'Config',
-        'WebAPI',
         'Wallet',
-        'Notification'
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
         RetrieveComponents()
