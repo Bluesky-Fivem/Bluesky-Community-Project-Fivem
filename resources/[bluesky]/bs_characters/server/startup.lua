@@ -17,7 +17,7 @@ function Startup()
             for _, v in ipairs(results) do
                 local spawn = {
                     label = v.Name,
-                    location = { x = v.Coords.x, y = v.Coords.y, z = v.Coords.z, h = v.Coords.h }
+                    location = { x = v.x, y = v.y, z = v.z, h = v.h }
                 }
                 table.insert(Spawns, spawn)
             end
