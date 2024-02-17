@@ -7221,6 +7221,13 @@
             This approach is 10x faster than the v1 approach in combination with CString
             </summary>
         </member>
+        <member name="M:CitizenFX.Core.Native.CustomNativeInvoker.NativeStringResultSanitization(System.UInt64,CitizenFX.Core.Native.Argument[],System.UInt64*,System.Int32,System.UInt64*)">
+            <summary>
+            Sanitization for string result types
+            Loops through all values given by the ScRT and deny any that equals the result value which isn't of the string type
+            </summary>
+            <returns>Result from <see cref="M:CitizenFX.Core.ScriptContext.GetResult(System.Type,System.UInt64*,System.UInt64)"/> or null if sanitized</returns>
+        </member>
         <member name="M:CitizenFX.Core.Native.MemoryAccess.Offset(System.IntPtr,System.Int32)">
             <remarks>
             Purely used to circumvent <see cref="T:System.IntPtr"/> operator+'s <see langword="internal"/> accessibility in game libraries
@@ -7470,6 +7477,7 @@
                 *   2699
                 *   2802
                 *   2944
+                *   3095
             *   RedM
                 *   1311
                 *   1355
@@ -7979,6 +7987,7 @@
                 *   2699
                 *   2802
                 *   2944
+                *   3095
             *   RedM
                 *   1311
                 *   1355

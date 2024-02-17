@@ -6491,6 +6491,13 @@
             <c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="M:CitizenFX.Core.Native.Function.NativeStringResultSanitization(CitizenFX.Core.Native.Hash,CitizenFX.Core.Native.InputArgument[],System.UInt64*,System.Int32,System.UInt64*)">
+            <summary>
+            Sanitization for string result types
+            Loops through all values given by the ScRT and deny any that equals the result value which isn't of the string type
+            </summary>
+            <returns>Result from <see cref="M:CitizenFX.Core.ScriptContext.GetResult(System.Type)"/> or null if sanitized</returns>
+        </member>
         <member name="F:CitizenFX.Core.Native.Hash.ADD_BLIP_FOR_COORD">
             <summary>
             Creates a blip for the specified coordinates. You can use `SET_BLIP_` natives to change the blip.
@@ -6947,6 +6954,7 @@
                 *   2699
                 *   2802
                 *   2944
+                *   3095
             *   RedM
                 *   1311
                 *   1355
@@ -7191,7 +7199,7 @@
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_PED">
             <summary>
-            GET_PLAYER_PED
+            Used to get the player's Ped Entity ID when a valid `playerSrc` is passed.
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_PING">
@@ -7696,9 +7704,9 @@
             NETWORK_GET_NETWORK_ID_FROM_ENTITY
             </summary>
         </member>
-        <member name="F:CitizenFX.Core.Native.Hash.NETWORK_GET_VOICE_PROXIMITY_OVERRIDE">
+        <member name="F:CitizenFX.Core.Native.Hash.NETWORK_GET_VOICE_PROXIMITY_OVERRIDE_FOR_PLAYER">
             <summary>
-            NETWORK_GET_VOICE_PROXIMITY_OVERRIDE
+            NETWORK_GET_VOICE_PROXIMITY_OVERRIDE_FOR_PLAYER
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.PERFORM_HTTP_REQUEST_INTERNAL">
@@ -7839,10 +7847,6 @@
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.SET_BLIP_SPRITE">
             <summary>
-            &lt;!--
-            _loc1_.map((name, idx) =&gt; `| ${idx} | ${name} | ![${name}](https://runtime.fivem.net/blips/${name}.svg) |`).join('\n')
-            --&gt;
-            
             Sets the displayed sprite for a specific blip.
             
             There's a [list of sprites](https://docs.fivem.net/game-references/blips/) on the FiveM documentation site.
@@ -8499,10 +8503,10 @@
             
             This native function is often called prior to calling natives such as:
             
-            *   [`SetPedHairColor`](#0xBB43F090)
-            *   [`SetPedHeadOverlayColor`](#0x78935A27)
-            *   [`SetPedHeadOverlay`](#0xD28DBA90)
-            *   [`SetPedFaceFeature`](#0x6C8D4458)
+            *   [`SetPedHairColor`](#\_0xBB43F090)
+            *   [`SetPedHeadOverlayColor`](#\_0x78935A27)
+            *   [`SetPedHeadOverlay`](#\_0xD28DBA90)
+            *   [`SetPedFaceFeature`](#\_0x6C8D4458)
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.SET_PED_HEAD_OVERLAY">
@@ -8527,7 +8531,7 @@
             
             **Note:**
             
-            You may need to call [`SetPedHeadBlendData`](#0x9414E18B9434C2FE) prior to calling this native in order for it to work.
+            You may need to call [`SetPedHeadBlendData`](#\_0x9414E18B9434C2FE) prior to calling this native in order for it to work.
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.SET_PED_INTO_VEHICLE">
@@ -8658,9 +8662,7 @@
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.SET_PLAYER_WANTED_LEVEL">
             <summary>
-            Call SET_PLAYER_WANTED_LEVEL_NOW for immediate effect  
-            wantedLevel is an integer value representing 0 to 5 stars even though the game supports the 6th wanted level but no police will appear since no definitions are present for it in the game files  
-            disableNoMission-  Disables When Off Mission- appears to always be false
+            SET_PLAYER_WANTED_LEVEL
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.SET_RESOURCE_KVP">
@@ -8995,8 +8997,8 @@
             By default, the blip will show as a *regular* blip with the specified color/sprite if it is outside of the minimap view.
             
             Example image:
-            ![minimap](https://w.wew.wtf/pdcjig.png)
-            ![big map](https://w.wew.wtf/zgcjcm.png)
+            ![minimap](https://i.imgur.com/qLbXWcQ.png)
+            ![big map](https://i.imgur.com/0j7O7Rh.png)
             
             (Native name is *likely* to actually be ADD_BLIP_FOR_AREA, but due to the usual reasons this can't be confirmed)
             </summary>
@@ -9070,7 +9072,7 @@
             
             **Note:**
             
-            You may need to call [`SetPedHeadBlendData`](#0x9414E18B9434C2FE) prior to calling this native in order for it to work.
+            You may need to call [`SetPedHeadBlendData`](#\_0x9414E18B9434C2FE) prior to calling this native in order for it to work.
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash._SET_PED_HAIR_COLOR">
@@ -9087,7 +9089,7 @@
             
             **Note:**
             
-            You may need to call [`SetPedHeadBlendData`](#0x9414E18B9434C2FE) prior to calling this native in order for it to work.
+            You may need to call [`SetPedHeadBlendData`](#\_0x9414E18B9434C2FE) prior to calling this native in order for it to work.
             </summary>
         </member>
         <member name="M:CitizenFX.Core.Native.API.AddBlipForArea(System.Single,System.Single,System.Single,System.Single,System.Single)">
@@ -9096,8 +9098,8 @@
             It is recommended to use [SET_BLIP_ROTATION](#\_0xF87683CDF73C3F6E) and [SET_BLIP_COLOUR](#\_0x03D7FB09E75D6B7E) to make the blip not rotate along with the camera.
             By default, the blip will show as a *regular* blip with the specified color/sprite if it is outside of the minimap view.
             Example image:
-            ![minimap](https://w.wew.wtf/pdcjig.png)
-            ![big map](https://w.wew.wtf/zgcjcm.png)
+            ![minimap](https://i.imgur.com/qLbXWcQ.png)
+            ![big map](https://i.imgur.com/0j7O7Rh.png)
             (Native name is *likely* to actually be ADD_BLIP_FOR_AREA, but due to the usual reasons this can't be confirmed)
             </summary>
             <param name="x">
@@ -9936,6 +9938,7 @@
             *   2699
             *   2802
             *   2944
+            *   3095
             *   RedM
             *   1311
             *   1355
@@ -10321,8 +10324,14 @@
         </member>
         <member name="M:CitizenFX.Core.Native.API.GetPlayerPed(System.String)">
             <summary>
-            GET_PLAYER_PED
+            Used to get the player's Ped Entity ID when a valid `playerSrc` is passed.
             </summary>
+            <param name="playerSrc">
+            The player source, passed as a string.
+            </param>
+            <returns>
+            Returns a valid Ped Entity ID if the passed `playerSrc` is valid, `0` if not.
+            </returns>
         </member>
         <member name="M:CitizenFX.Core.Native.API.GetPlayerPing(System.String)">
             <summary>
@@ -11125,9 +11134,9 @@
             NETWORK_GET_NETWORK_ID_FROM_ENTITY
             </summary>
         </member>
-        <member name="M:CitizenFX.Core.Native.API.NetworkGetVoiceProximityOverride(System.String)">
+        <member name="M:CitizenFX.Core.Native.API.NetworkGetVoiceProximityOverrideForPlayer(System.String)">
             <summary>
-            NETWORK_GET_VOICE_PROXIMITY_OVERRIDE
+            NETWORK_GET_VOICE_PROXIMITY_OVERRIDE_FOR_PLAYER
             </summary>
             <param name="playerSrc">
             The player handle
@@ -11341,9 +11350,6 @@
         </member>
         <member name="M:CitizenFX.Core.Native.API.SetBlipSprite(System.Int32,System.Int32)">
             <summary>
-            &lt;!--
-            _loc1_.map((name, idx) =&gt; `| ${idx} | ${name} | ![${name}](https://runtime.fivem.net/blips/${name}.svg) |`).join('\n')
-            --&gt;
             Sets the displayed sprite for a specific blip.
             There's a [list of sprites](https://docs.fivem.net/game-references/blips/) on the FiveM documentation site.
             </summary>
@@ -12122,7 +12128,7 @@
             *   **18**: Chin Hole (Chin Bum)
             *   **19**: Neck Thickness (Thin/Thick)
             **Note:**
-            You may need to call [`SetPedHeadBlendData`](#0x9414E18B9434C2FE) prior to calling this native in order for it to work.
+            You may need to call [`SetPedHeadBlendData`](#\_0x9414E18B9434C2FE) prior to calling this native in order for it to work.
             </summary>
             <param name="ped">
             The ped entity
@@ -12145,10 +12151,10 @@
             **Other information:**
             IDs start at zero and go Male Non-DLC, Female Non-DLC, Male DLC, and Female DLC.&lt;/br&gt;
             This native function is often called prior to calling natives such as:
-            *   [`SetPedHairColor`](#0xBB43F090)
-            *   [`SetPedHeadOverlayColor`](#0x78935A27)
-            *   [`SetPedHeadOverlay`](#0xD28DBA90)
-            *   [`SetPedFaceFeature`](#0x6C8D4458)
+            *   [`SetPedHairColor`](#\_0xBB43F090)
+            *   [`SetPedHeadOverlayColor`](#\_0x78935A27)
+            *   [`SetPedHeadOverlay`](#\_0xD28DBA90)
+            *   [`SetPedFaceFeature`](#\_0x6C8D4458)
             </summary>
             <param name="ped">
             The ped entity
@@ -12204,7 +12210,7 @@
             12              Add Body Blemishes    0 - 1, 255
             ```
             **Note:**
-            You may need to call [`SetPedHeadBlendData`](#0x9414E18B9434C2FE) prior to calling this native in order for it to work.
+            You may need to call [`SetPedHeadBlendData`](#\_0x9414E18B9434C2FE) prior to calling this native in order for it to work.
             </summary>
             <param name="ped">
             The ped entity
@@ -12226,7 +12232,7 @@
             Called after SET_PED_HEAD_OVERLAY().
             ```
             **Note:**
-            You may need to call [`SetPedHeadBlendData`](#0x9414E18B9434C2FE) prior to calling this native in order for it to work.
+            You may need to call [`SetPedHeadBlendData`](#\_0x9414E18B9434C2FE) prior to calling this native in order for it to work.
             </summary>
             <param name="ped">
             The ped entity
@@ -12405,10 +12411,17 @@
         </member>
         <member name="M:CitizenFX.Core.Native.API.SetPlayerWantedLevel(System.String,System.Int32,System.Boolean)">
             <summary>
-            Call SET_PLAYER_WANTED_LEVEL_NOW for immediate effect
-            wantedLevel is an integer value representing 0 to 5 stars even though the game supports the 6th wanted level but no police will appear since no definitions are present for it in the game files
-            disableNoMission-  Disables When Off Mission- appears to always be false
+            SET_PLAYER_WANTED_LEVEL
             </summary>
+            <param name="player">
+            the target player
+            </param>
+            <param name="wantedLevel">
+            the wanted level 1-5
+            </param>
+            <param name="delayedResponse">
+            false = 0-10sec police spawn response time, true = 10-20sec police spawn response time
+            </param>
         </member>
         <member name="M:CitizenFX.Core.Native.API.SetResourceKvp(System.String,System.String)">
             <summary>

@@ -47,107 +47,68 @@ AddEventHandler('Queue:Server:SessionActive', function(source, data)
     end)
 end)
 
+
 COMPONENTS.Player = {
     _required = { 'GetData' },
     _name = 'base',
 
     --- @param source number The source of the player.
     --- @param data string The data you want to get.
+
     GetData = function(self, source, data)
         local retVal = -1
-
-        COMPONENTS.Database.Auth:find({
-            collection = "users",
-            query = {
-                sid = data.SID
-            },
-            limit = 1
-        }, function (success, results)
-            if not success then retVal = nil return end
-
-            if #results > 0 then
+        
+        MySQL.Async.fetchAll('SELECT * FROM users WHERE sid = @sid LIMIT 1', {
+            ['@sid'] = data.SID
+        }, function(results)
+            if results and #results > 0 then
                 retVal = {
                     Source = source,
-                    ID = results[1]._id,
+                    ID = results[1].id,
                     Name = data.Name,
                     SID = data.SID,
                     Identifier = data.Identifier,
-                    Roles = data.Roles
+                    Roles = results[1].roles 
                 }
             else
-                COMPONENTS.Database.Auth:insertOne({ 
-                    collection = "users",
-                    document = {
-                        sid = data.SID,
-                        identifier = data.Identifier,
-                        priority = 0,
-                        name = GetPlayerName(source)
-                    }
-                }, function (success, result, insertedIds)
+                MySQL.Async.execute('INSERT INTO users (sid, identifier, priority, name) VALUES (@sid, @identifier, 0, @name)', {
+                    ['@sid'] = data.SID,
+                    ['@identifier'] = data.Identifier,
+                    ['@name'] = GetPlayerName(source)
+                }, function(success, rowsAffected, insertedId)
                     if not success then
-                        COMPONENTS.Logger:Error('Database', '[^8Error^7] Error in insertOne: ' .. tostring(result), { console = true })
+                        COMPONENTS.Logger:Error('Database', '[^8Error^7] Error in insert Base sv_player : ' .. tostring(rowsAffected), { console = true })
                         return
                     end
-
+    
                     retVal = {
                         Source = source,
-                        ID = insertedIds[1],
+                        ID = insertedId,
                         Name = data.Name,
                         SID = data.SID,
                         Identifier = data.Identifier,
-                        Roles = data.Roles
+                        Roles = "" 
                     }
                 end)
             end
         end)
-
+    
+    
         while retVal == -1 do
             Citizen.Wait(10)
         end
 
+        
         return retVal
     end
 }
 
+
 function Player(source, data)
+   
     local _data = COMPONENTS.DataStore:CreateStore(source, 'Player', data)
 
-    _data.Permissions = {
-        IsAdmin = function(self)
-            local roles = _data:GetData('Roles')
-            
-            if (roles.isDev) then
-                return true
-            elseif (roles.isAdmin) then
-                return true
-            end
-
-            return false
-        end,
-        GetLevel = function(self)
-            local highest = 0        
-            local roles = _data:GetData('Roles')
-
-            if roles.isDev then
-                highest = 99
-            elseif roles.isAdmin then
-                highest = 1
-            end
-
-            return highest
-        end
-    }
-
-    local roles = _data:GetData('Roles')
-    local group = "user"
-
-    if roles.isDev then
-        group = "developer"
-    elseif roles.isAdmin then
-        group = "admin"
-    end
-
-    -- ExecuteCommand(('add_principal identifier.%s group.%s'):format(_data:GetData('Identifier'), group))
+    
 
     return _data
 end

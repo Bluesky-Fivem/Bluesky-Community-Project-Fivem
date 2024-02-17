@@ -1,6 +1,5 @@
 AddEventHandler('Animations:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
-    Database = exports['bs_base']:FetchComponent('Database')
     Utils = exports['bs_base']:FetchComponent('Utils')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Chat = exports['bs_base']:FetchComponent('Chat')
@@ -10,7 +9,6 @@ end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Animations', {
-        'Database',
         'Utils',
         'Callbacks',
         'Chat',

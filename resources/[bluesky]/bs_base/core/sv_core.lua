@@ -13,18 +13,13 @@ COMPONENTS.Core = {
 
 AddEventHandler('Core:Server:StartupReady', function()
 	Citizen.CreateThread(function()
-		if not COMPONENTS.WebAPI:Validate() then
-			return
-		end
+		
 	
 		while not exports or exports[GetCurrentResourceName()] == nil do
 			Citizen.Wait(1)
 		end
 	
-		TriggerEvent('Database:Server:Initialize', COMPONENTS.Convar.AUTH_URL.value, COMPONENTS.Convar.AUTH_DB.value, COMPONENTS.Convar.GAME_URL.value, COMPONENTS.Convar.GAME_DB.value)
-		while not COMPONENTS.Proxy.DatabaseReady do
-			Citizen.Wait(1)
-		end
+		
 	
 		TriggerEvent('Proxy:Shared:RegisterReady')
 		for k, v in pairs(COMPONENTS) do TriggerEvent('Proxy:Shared:ExtendReady', k) end
@@ -38,7 +33,6 @@ AddEventHandler('Core:Server:StartupReady', function()
 end)
 
 AddEventHandler('Database:Server:Ready', function(db)
-	if COMPONENTS.Database == nil and db ~= nil then COMPONENTS.Database = db end
 	COMPONENTS.Proxy.DatabaseReady = true
 	TriggerEvent('Core:Shared:Ready')
 end)

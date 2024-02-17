@@ -5,7 +5,6 @@ end)
 AddEventHandler('Locations:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
     Chat = exports['bs_base']:FetchComponent('Chat')
-    Database = exports['bs_base']:FetchComponent('Database')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Locations = exports['bs_base']:FetchComponent('Locations')
 end
@@ -14,7 +13,6 @@ AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Locations', {
         'Chat',
         'Callbacks',
-        'Database',
         'Locations',
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
@@ -55,6 +53,8 @@ function RegisterChatCommands()
     }, 3)
 end
 
+
+
 LOCATIONS = {
     Add = function(self, coords, heading, type, name, cb)
         local doc = {
@@ -67,34 +67,34 @@ LOCATIONS = {
             Type = type,
             Name = name
         }
-        Database.Game:insertOne({
-            collection = "locations",
-            document = doc
-        }, function(success, results)
-            if not success then
-                return
+        MySQL.Async.execute('INSERT INTO locations (x, y, z, h, Type, Name) VALUES (@x, @y, @z, @h, @type, @name)', {
+            ['@x'] = coords.x,
+            ['@y'] = coords.y,
+            ['@z'] = coords.z,
+            ['@h'] = heading,
+            ['@type'] = type,
+            ['@name'] = name
+        }, function(rowsChanged)
+            if rowsChanged > 0 then
+                TriggerEvent('Locations:Server:Added', type, doc)
             end
-
-            TriggerEvent('Locations:Server:Added', type, doc)
             if cb ~= nil then
-                cb(results > 1)
+                cb(rowsChanged > 0)
             end
         end)
     end,
     GetAll = function(self, type, cb)
-        Database.Game:find({
-            collection = 'locations',
-            query = {
-                Type = type
-            }
-        }, function(success, results)
-            if not success then
-                return
+        MySQL.Async.fetchAll('SELECT * FROM locations WHERE Type = @type', {
+            ['@type'] = type
+        }, function(results)
+            if results then
+                for k, location in ipairs(results) do
+                    results[k].Coords = vector3(location.x, location.y, location.z)
+                end
+                cb(results)
+            else
+                cb({})
             end
-            for k, location in ipairs(results) do
-                results[k].Coords = vector3(location.Coords.x, location.Coords.y, location.Coords.z)
-            end
-            cb(results)
         end)
     end
 }
