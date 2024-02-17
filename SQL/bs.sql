@@ -50,7 +50,18 @@ CREATE TABLE IF NOT EXISTS `characters` (
 
 -- Dumping data for table blueskysql.characters: ~1 rows (approximately)
 INSERT IGNORE INTO `characters` (`_id`, `User`, `First`, `Last`, `Phone`, `Gender`, `Bio`, `DOB`, `LastPlayed`, `Job`, `Armor`, `HP`, `skin`, `Admin`) VALUES
-	(54, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'dddddddddd', 'ddddddddddd', '6284647432', '0', NULL, '1990-12-31T23:59:59.000Z', 1708120042000, '{"grade":{"level":0,"label":"Unemployed","id":0},"workplace":{"label":"Unemployed","id":0},"salary":10,"job":"unemployed","label":"Unemployed"}', 0, 175, '{"customization":{"components":{"shoes":{"componentId":6,"paletteId":0,"textureId":0,"drawableId":0},"bag":{"componentId":5,"paletteId":0,"textureId":0,"drawableId":0},"mask":{"componentId":1,"paletteId":0,"textureId":0,"drawableId":0},"kevlar":{"componentId":9,"paletteId":0,"textureId":0,"drawableId":0},"torso2":{"componentId":11,"paletteId":0,"textureId":0,"drawableId":0},"undershirt":{"componentId":8,"paletteId":0,"textureId":0,"drawableId":0},"leg":{"componentId":4,"paletteId":0,"textureId":0,"drawableId":0},"face":{"componentId":0,"paletteId":0,"textureId":0,"drawableId":0},"accessory":{"componentId":7,"paletteId":0,"textureId":0,"drawableId":0},"torso":{"componentId":3,"paletteId":0,"textureId":0,"drawableId":0},"hair":{"componentId":2,"paletteId":0,"textureId":0,"drawableId":0},"badge":{"componentId":10,"paletteId":0,"textureId":0,"drawableId":0}},"face":{"face1":{"index":0,"texture":0,"mix":50.0},"face2":{"index":0,"texture":0,"mix":50.0},"features":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"props":{"watch":{"componentId":6,"disabled":true,"textureId":0,"drawableId":0},"bracelet":{"componentId":7,"disabled":true,"textureId":0,"drawableId":0},"glass":{"componentId":1,"disabled":true,"textureId":0,"drawableId":0},"hat":{"componentId":0,"disabled":true,"textureId":0,"drawableId":0},"ear":{"componentId":2,"disabled":true,"textureId":0,"drawableId":0}},"overlay":{"eyebrows":{"id":2,"opacity":100.0,"index":0,"disabled":true},"freckles":{"id":9,"opacity":100.0,"index":0,"disabled":true},"blemish":{"id":0,"opacity":100.0,"index":0,"disabled":true},"complexion":{"id":6,"opacity":100.0,"index":0,"disabled":true},"bodyblemish":{"id":11,"opacity":100.0,"index":0,"disabled":true},"makeup":{"id":4,"opacity":100.0,"index":0,"disabled":true},"ageing":{"id":3,"opacity":100.0,"index":0,"disabled":true},"sundamage":{"id":7,"opacity":100.0,"index":0,"disabled":true},"facialhair":{"id":1,"opacity":100.0,"index":0,"disabled":true},"blush":{"id":5,"opacity":100.0,"index":0,"disabled":true},"lipstick":{"id":8,"opacity":100.0,"index":0,"disabled":true},"addbodyblemish":{"id":12,"opacity":100.0,"index":0,"disabled":true},"chesthair":{"id":10,"opacity":100.0,"index":0,"disabled":true}},"colors":{"facialhair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"chesthair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"hair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}}}},"model":""}', 'dev');
+	(54, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'dddddddddd', 'ddddddddddd', '6284647432', '0', NULL, '1990-12-31T23:59:59.000Z', 1708129715000, '{"grade":{"level":0,"label":"Unemployed","id":0},"workplace":{"label":"Unemployed","id":0},"salary":10,"job":"unemployed","label":"Unemployed"}', 0, 120, '{"customization":{"components":{"shoes":{"componentId":6,"paletteId":0,"textureId":0,"drawableId":0},"bag":{"componentId":5,"paletteId":0,"textureId":0,"drawableId":0},"mask":{"componentId":1,"paletteId":0,"textureId":0,"drawableId":0},"kevlar":{"componentId":9,"paletteId":0,"textureId":0,"drawableId":0},"torso2":{"componentId":11,"paletteId":0,"textureId":0,"drawableId":0},"undershirt":{"componentId":8,"paletteId":0,"textureId":0,"drawableId":0},"leg":{"componentId":4,"paletteId":0,"textureId":0,"drawableId":0},"face":{"componentId":0,"paletteId":0,"textureId":0,"drawableId":0},"accessory":{"componentId":7,"paletteId":0,"textureId":0,"drawableId":0},"torso":{"componentId":3,"paletteId":0,"textureId":0,"drawableId":0},"hair":{"componentId":2,"paletteId":0,"textureId":0,"drawableId":0},"badge":{"componentId":10,"paletteId":0,"textureId":0,"drawableId":0}},"face":{"face1":{"index":0,"texture":0,"mix":50.0},"face2":{"index":0,"texture":0,"mix":50.0},"features":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"props":{"watch":{"componentId":6,"disabled":true,"textureId":0,"drawableId":0},"bracelet":{"componentId":7,"disabled":true,"textureId":0,"drawableId":0},"glass":{"componentId":1,"disabled":true,"textureId":0,"drawableId":0},"hat":{"componentId":0,"disabled":true,"textureId":0,"drawableId":0},"ear":{"componentId":2,"disabled":true,"textureId":0,"drawableId":0}},"overlay":{"eyebrows":{"id":2,"opacity":100.0,"index":0,"disabled":true},"freckles":{"id":9,"opacity":100.0,"index":0,"disabled":true},"blemish":{"id":0,"opacity":100.0,"index":0,"disabled":true},"complexion":{"id":6,"opacity":100.0,"index":0,"disabled":true},"bodyblemish":{"id":11,"opacity":100.0,"index":0,"disabled":true},"makeup":{"id":4,"opacity":100.0,"index":0,"disabled":true},"ageing":{"id":3,"opacity":100.0,"index":0,"disabled":true},"sundamage":{"id":7,"opacity":100.0,"index":0,"disabled":true},"facialhair":{"id":1,"opacity":100.0,"index":0,"disabled":true},"blush":{"id":5,"opacity":100.0,"index":0,"disabled":true},"lipstick":{"id":8,"opacity":100.0,"index":0,"disabled":true},"addbodyblemish":{"id":12,"opacity":100.0,"index":0,"disabled":true},"chesthair":{"id":10,"opacity":100.0,"index":0,"disabled":true}},"colors":{"facialhair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"chesthair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"hair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}}}},"model":""}', 'dev');
+
+-- Dumping structure for table blueskysql.counters
+CREATE TABLE IF NOT EXISTS `counters` (
+  `type` varchar(255) NOT NULL,
+  `next` int(11) NOT NULL,
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- Dumping data for table blueskysql.counters: ~1 rows (approximately)
+INSERT IGNORE INTO `counters` (`type`, `next`) VALUES
+	('doors', 1);
 
 -- Dumping structure for table blueskysql.dealerships
 CREATE TABLE IF NOT EXISTS `dealerships` (
@@ -59,6 +70,31 @@ CREATE TABLE IF NOT EXISTS `dealerships` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Dumping data for table blueskysql.dealerships: ~0 rows (approximately)
+
+-- Dumping structure for table blueskysql.doors
+CREATE TABLE IF NOT EXISTS `doors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x` float NOT NULL,
+  `y` float NOT NULL,
+  `z` float NOT NULL,
+  `h` float NOT NULL,
+  `Pitch` float NOT NULL,
+  `Yaw` float NOT NULL,
+  `DrawDistance` float NOT NULL,
+  `Public` tinyint(1) NOT NULL,
+  `Multi` int(11) NOT NULL,
+  `DoorType` varchar(255) NOT NULL,
+  `Model` varchar(255) NOT NULL,
+  `DefaultLock` tinyint(1) NOT NULL,
+  `Auth` varchar(255) NOT NULL,
+  `Static` tinyint(1) NOT NULL,
+  `Lockpickable` tinyint(1) NOT NULL,
+  `Lockdown` tinyint(1) NOT NULL,
+  `Lock` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- Dumping data for table blueskysql.doors: ~0 rows (approximately)
 
 -- Dumping structure for table blueskysql.locations
 CREATE TABLE IF NOT EXISTS `locations` (
@@ -73,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `locations` (
   PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Dumping data for table blueskysql.locations: ~1 rows (approximately)
+-- Dumping data for table blueskysql.locations: ~0 rows (approximately)
 INSERT IGNORE INTO `locations` (`_id`, `Name`, `Type`, `Coords`, `x`, `y`, `z`, `h`) VALUES
 	(1, 'mrpd', 'spawn', '1', 1000, 1000, 1000, 1000);
 
@@ -87,14 +123,23 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `component` varchar(255) DEFAULT NULL,
   `extra` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Dumping data for table blueskysql.logs: ~0 rows (approximately)
+-- Dumping data for table blueskysql.logs: ~13 rows (approximately)
 INSERT IGNORE INTO `logs` (`id`, `level`, `log`, `date`, `server`, `component`, `extra`) VALUES
 	(1, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708119952, NULL, 'Commands', NULL),
 	(2, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120000, NULL, 'Commands', NULL),
 	(3, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120000, NULL, 'Commands', NULL),
-	(4, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120001, NULL, 'Commands', NULL);
+	(4, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120001, NULL, 'Commands', NULL),
+	(5, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120793, NULL, 'Commands', NULL),
+	(6, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120795, NULL, 'Commands', NULL),
+	(7, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120796, NULL, 'Commands', NULL),
+	(8, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120796, NULL, 'Commands', NULL),
+	(9, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120796, NULL, 'Commands', NULL),
+	(10, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120858, NULL, 'Commands', NULL),
+	(11, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708120858, NULL, 'Commands', NULL),
+	(12, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708122334, NULL, 'Commands', NULL),
+	(13, 0, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b attempted to use an admin command but failed Admin Validation.', 1708122335, NULL, 'Commands', NULL);
 
 -- Dumping structure for table blueskysql.peds
 CREATE TABLE IF NOT EXISTS `peds` (
@@ -122,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Dumping data for table blueskysql.users: ~2 rows (approximately)
 INSERT IGNORE INTO `users` (`id`, `name`, `sid`, `identifier`, `priority`, `roles`, `group`) VALUES
-	(5, 'luke1', 'e:a7602f66b0a43e8efdc232765bbb0e2b63bab26b@blue.sky', 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 0, 'user', 'user');
+	(5, 'luke1', 'e:a7602f66b0a43e8efdc232765bbb0e2b63bab26b@blue.sky', 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 0, 'dev', 'user');
 
 -- Dumping structure for table blueskysql.wallets
 CREATE TABLE IF NOT EXISTS `wallets` (
