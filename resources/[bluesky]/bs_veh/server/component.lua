@@ -2,7 +2,6 @@ local _keys = {}
 
 AddEventHandler('Vehicle:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
-    Database = exports['bs_base']:FetchComponent('Database')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Fetch = exports['bs_base']:FetchComponent('Fetch')
     Locations = exports['bs_base']:FetchComponent('Locations')
@@ -15,7 +14,6 @@ end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Vehicle', {
-        'Database',
         'Callbacks',
         'Fetch',
         'Locations',

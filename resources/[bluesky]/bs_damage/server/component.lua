@@ -1,6 +1,5 @@
 AddEventHandler('Damage:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
-    Database = exports['bs_base']:FetchComponent('Database')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Logger = exports['bs_base']:FetchComponent('Logger')
     Chat = exports['bs_base']:FetchComponent('Chat')
@@ -10,7 +9,6 @@ end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Damage', {
-        'Database',
         'Callbacks',
         'Logger',
         'Chat',

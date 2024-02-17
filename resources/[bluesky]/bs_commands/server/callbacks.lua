@@ -1,7 +1,7 @@
 function RegisterCallbacks()
     Callbacks:RegisterServerCallback('Commands:ValidateAdmin', function(source, data, cb)
         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
-        if player.Permissions:IsAdmin() then
+        if player:GetData('Roles') == 'dev' then
             cb(true)
         else
             exports['bs_base']:FetchComponent('Logger'):Log('Commands', ('%s attempted to use an admin command but failed Admin Validation.'):format(player:GetData('Identifier')), {
@@ -15,3 +15,9 @@ function RegisterCallbacks()
         end
     end)
 end
+
+RegisterCommand('test', function(source)
+    local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+    local roles = player:GetData('Roles')
+    print(roles)
+end)

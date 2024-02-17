@@ -6,35 +6,69 @@ States = {
 }
 
 function Player(steamHex, src, deferrals)
-    local member = exports['bs_base']:FetchComponent('WebAPI').GetMember:Status(src, steamHex)
+
+    local member = steamHex
     if member == nil or member == '' then return nil
     elseif member == -1 then return -1 end
 
     local prio = nil
     local msg = ''
 
-    exports['bs_base']:FetchComponent('Database').Auth:find({
-        collection = "users",
-        query = {
-            sid = member.sid
-        },
-        limit = 1
-    }, function (success, results)
-        if not success then retVal = nil return end
+    MySQL.Async.fetchAll('SELECT * FROM users WHERE sid = @sid LIMIT 1', {
+        ['@sid'] = member.sid
+    }, function(success, results)
+        if not success then 
+            prio = 0
+            return 
+        end
 
-        if #results > 0 then
+        if results and #results > 0 then
             if results[1].priority > 0 then
                 prio = results[1].priority
                 msg = '\n🌟 Base Priority +' .. results[1].priority .. ' 🌟' .. msg
             end
         end
-        
+
         if prio == nil then prio = 0 end
     end)
     
     while prio == nil do
         Citizen.Wait(10)
     end
+
+
+
+
+    -- function Player(steamHex, src, deferrals)
+    --     local member = exports['bs_base']:FetchComponent('WebAPI').GetMember:Status(src, steamHex)
+    --     if member == nil or member == '' then return nil
+    --     elseif member == -1 then return -1 end
+
+    --     local prio = nil
+    --     local msg = ''
+
+    --     exports['bs_base']:FetchComponent('Database').Auth:find({
+    --         collection = "users",
+    --         query = {
+    --             sid = member.sid
+    --         },
+    --         limit = 1
+    --     }, function (success, results)
+    --         if not success then retVal = nil return end
+
+    --         if #results > 0 then
+    --             if results[1].priority > 0 then
+    --                 prio = results[1].priority
+    --                 msg = '\n🌟 Base Priority +' .. results[1].priority .. ' 🌟' .. msg
+    --             end
+    --         end
+            
+    --         if prio == nil then prio = 0 end
+    --     end)
+        
+    --     while prio == nil do
+    --         Citizen.Wait(10)
+    --     end
     
     -- for k, v in ipairs(member.roles) do
         -- if Config.Groups.Priority[tostring(v)] then

@@ -1,7 +1,6 @@
 AddEventHandler('Characters:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
     Middleware = exports['bs_base']:FetchComponent('Middleware')
-    Database = exports['bs_base']:FetchComponent('Database')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     DataStore = exports['bs_base']:FetchComponent('DataStore')
     Logger = exports['bs_base']:FetchComponent('Logger')
@@ -15,7 +14,6 @@ end
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Characters', {
         'Callbacks',
-        'Database',
         'Middleware',
         'DataStore',
         'Logger',
@@ -32,74 +30,82 @@ AddEventHandler('Core:Shared:Ready', function()
     end)
 end)
 
-RegisterNetEvent('haracters:Server:StoreUpdate')
-AddEventHandler('haracters:Server:StoreUpdate', function()
+RegisterNetEvent('Characters:Server:StoreUpdate')
+AddEventHandler('Characters:Server:StoreUpdate', function()
     local src = source
     local char = Fetch:Source(src):GetData('Character')
 
     if char ~= nil then
-        local data = char:GetData()
+        local data = char:GetData() 
     end
 end)
 
 function RegisterCallbacks()
     Callbacks:RegisterServerCallback('Characters:GetServerData', function(source, data, cb)
         local motd = GetConvar('motd', 'Welcome to Blue Sky!')
-        Database.Game:find({
-            collection = 'changelogs',
-            options = {
-                sort = {
-                    date = -1
-                }
-            },
-            limit = 1
-        }, function (success, results)
-            if not success then print(json.encode(results)) cb({ changelog = nil, motd = ''}) return end
-
-            if #results > 0 then
-                cb({ changelog = results[1], motd = motd})
+        local query = "SELECT * FROM changelogs ORDER BY date DESC LIMIT 1"
+        
+        -- Assuming you have established a MySQL connection
+        MySQL.Async.fetchAll(query, {}, function(results)
+            if results and #results > 0 then
+                cb({ changelog = results[1], motd = motd })
             else
-                cb({ changelog = nil, motd = motd})
+                cb({ changelog = nil, motd = motd })
             end
         end)
     end)
 
     Callbacks:RegisterServerCallback('Characters:GetCharacters', function(source, data, cb)
         local player = Fetch:Source(source)
-        Database.Game:find({
-            collection = 'characters',
-            query = {
-                User = tostring(player:GetData('ID'))
-            }
-        }, function (success, results)
-            if not success then cb(nil) return end
+        local playerId = player:GetData('Identifier')
+        
+        
+        local query = "SELECT * FROM characters WHERE User = @userId"
+        local params = {['@userId'] = playerId}
+        
+        -- Assuming you have established a MySQL connection
+        MySQL.Async.fetchAll(query, params, function(results)
+            if not results then cb(nil) return end
             local cData = {}
-            for k, v in ipairs(results) do
+            for _, v in ipairs(results) do
                 table.insert(cData, {
-                    ID = v._id,
+                    ID = v.ID,
                     First = v.First,
                     Last = v.Last,
                     Phone = v.Phone,
                     DOB = v.DOB,
                     Gender = v.Gender,
                     LastPlayed = v.LastPlayed,
-                    Job = v.Job,
+                    Job = v.Job
                 })
             end
-            player:SetData('Characters', chars)
+            player:SetData('Characters', cData)
             cb(cData)
+        
         end)
     end)
+    
 
     Callbacks:RegisterServerCallback('Characters:CreateCharacter', function(source, data, cb)
         local player = Fetch:Source(source)
         local pNumber = GeneratePhoneNumber()
+        
+        -- Function to check if phone number is in use
+        local function IsNumberInUse(number)
+            local query = "SELECT * FROM characters WHERE Phone = @phone"
+            local params = {['@phone'] = number}
+    
+            -- Assuming you have established a MySQL connection
+            local result = MySQL.Sync.fetchAll(query, params)
+            return #result > 0
+        end
+    
         while IsNumberInUse(pNumber) do
             pNumber = GeneratePhoneNumber()
         end
-
+    
         local doc = {
-            User = player:GetData('ID'),
+            User = player:GetData('Identifier'),
             First = data.first,
             Last = data.last,
             Phone = pNumber,
@@ -107,95 +113,157 @@ function RegisterCallbacks()
             Bio = data.bio,
             DOB = data.dob,
             LastPlayed = -1,
-            Job = AlzarIsAPrickCauseHeDoesStupidThings.DefaultJob,
+            Job = json.encode(AlzarIsAPrickCauseHeDoesStupidThings.DefaultJob),
             Armor = 100,
             HP = 200,
+            Admin = 'user'
         }
         
-        Database.Game:insertOne({ 
-            collection="characters",
-            document = doc
-        }, function (success, result, insertedIds)
-            if not success then return nil end
-            doc.ID = insertedIds[1]
-            TriggerEvent('Characters:Server:CharacterCreated', doc.ID)
-            cb(doc)
-        end)
+        local query = "INSERT INTO characters ( User, First, Last, Phone, Gender, Bio, DOB, LastPlayed, Job, Armor, HP, Admin) VALUES ( @User,  @First, @Last, @Phone, @Gender, @Bio, @DOB, @LastPlayed, @Job, @Armor, @HP, @Admin)"
+        local params = {
+    
+            ['@User'] = doc.User,
+            ['@First'] = doc.First,
+            ['@Last'] = doc.Last,
+            ['@Phone'] = doc.Phone,
+            ['@Gender'] = doc.Gender,
+            ['@Bio'] = doc.Bio,
+            ['@DOB'] = doc.DOB,
+            ['@LastPlayed'] = doc.LastPlayed,
+            ['@Job'] = doc.Job,
+            ['@Armor'] = doc.Armor,
+            ['@HP'] = doc.HP,
+            ['@Admin'] = doc.Admin
+        }
+        
+        local id = MySQL.insert.await(query, params)
+        if not id then
+            cb(nil)
+            return
+        end
+        doc.ID = id
+        TriggerEvent('Characters:Server:CharacterCreated', id)
+        cb(doc)
     end)
+    
 
     Callbacks:RegisterServerCallback('Characters:DeleteCharacter', function(source, data, cb)
         local player = Fetch:Source(source)
-        Database.Game:findOne({
-            collection = 'characters',
-            query = {
-                User = player:GetData('ID'), 
-                _id = data
+        local userId = player:GetData('ID')
+    
+        local function DeleteCharacter(characterId)
+            local query = "DELETE FROM characters WHERE User = @userId AND _id = @characterId"
+            local params = {
+                ['@userId'] = userId,
+                ['@characterId'] = characterId
             }
-        }, function (success, results)
-            if not success or not #results then cb(nil) return end
-            Database.Game:deleteOne({
-                collection = 'characters',
-                query = {
-                    User = player:GetData('ID'),
-                    _id = data
-                }
-            }, function (success, results)
-                TriggerEvent('Characters:Server:CharacterDeleted', data)
-                cb(success)
+    
+            -- Assuming you have established a MySQL connection
+            MySQL.Sync.execute(query, params, function(rowsDeleted)
+                if rowsDeleted > 0 then
+                    TriggerEvent('Characters:Server:CharacterDeleted', characterId)
+                    cb(true)
+                else
+                    cb(false)
+                end
             end)
-        end)
-    end)
-
-    Callbacks:RegisterServerCallback('Characters:GetSpawnPoints', function(source, data, cb)
-        local player = Fetch:Source(source)
-        Database.Game:findOne({
-            collection = 'characters',
-            query = {
-                User = player:GetData('ID'),
-                _id = data
-            }
-        }, function (success, results)
-            if not success or not #results then cb(nil) return end
-            if results[1].LastPlayed == -1 then
-                cb({ Config.NewSpawn })
+        end
+    
+        local query = "SELECT * FROM characters WHERE User = @userId AND _id = @characterId"
+        local params = {
+            ['@userId'] = userId,
+            ['@characterId'] = data
+        }
+    
+        -- Assuming you have established a MySQL connection
+        MySQL.Async.fetchAll(query, params, function(results)
+            if results and #results > 0 then
+                local characterId = results[1]._id
+                DeleteCharacter(characterId)
             else
-                cb(Spawns)
+                cb(false)
             end
         end)
     end)
+    
+
+    Callbacks:RegisterServerCallback('Characters:GetSpawnPoints', function(source, data, cb)
+        local player = Fetch:Source(source)
+        local userId = player:GetData('Identifier')
+    
+        local function GetSpawnPoints(characterId)
+            local query = "SELECT LastPlayed FROM characters WHERE User = @userId"
+            local params = {
+                ['@userId'] = userId,
+            }
+    
+            -- Assuming you have established a MySQL connection
+            MySQL.Async.fetchAll(query, params, function(results)
+                if results and #results > 0 then
+                    if results[1].LastPlayed == -1 then
+                        cb({ Config.NewSpawn })
+                    else
+                        cb(Spawns)
+                    end
+                else
+                    cb(nil)
+                end
+            end)
+        end
+    
+        GetSpawnPoints(data)
+    end)
+    
 
     Callbacks:RegisterServerCallback('Characters:GetCharacterData', function(source, data, cb)
         local player = Fetch:Source(source)
-        Database.Game:findOne({
-            collection = 'characters',
-            query = {
-                User = player:GetData('ID'),
-                _id = data
+        local userId = player:GetData('Identifier')
+        local id = player:GetData('ID')
+    
+        local function UpdateLastPlayed(characterId)
+            local query = "UPDATE characters SET LastPlayed = @currentTime WHERE User = @userId"
+            local params = {
+                ['@currentTime'] = os.time() * 1000,
+                ['@userId'] = userId,
             }
-        }, function (success, results)
-            if not success or not #results then cb(nil) return end
-            Database.Game:updateOne({
-                collection = 'characters',
-                query = {
-                    User = player:GetData('ID'),
-                    _id = data
-                }, 
-                update = { 
-                    ["$set"] = { 
-                        LastPlayed = os.time() * 1000
-                    }
-                }
-            })
-
-            local cData = results[1]
-            cData.Source = source
-            cData.ID = results[1]._id
-            cData._id = nil
-
-            player:SetData('Character', DataStore:CreateStore(source, 'Character', cData))
-            cb(cData)
-        end)
+    
+            -- Assuming you have established a MySQL connection
+            MySQL.Sync.execute(query, params, function(rowsUpdated)
+                if rowsUpdated > 0 then
+                    Fetch:Source(source).SetData("Character", cData)
+                    cb(cData)
+                else
+                    cb(nil)
+                end
+            end)
+        end
+    
+        local function GetCharacterData(characterId)
+            local query = "SELECT * FROM characters WHERE User = @userId"
+            local params = {
+                ['@userId'] = userId,
+                
+            }
+    
+            -- Assuming you have established a MySQL connection
+            MySQL.Async.fetchAll(query, params, function(results)
+                if results and #results > 0 then
+                    local cData = results[1]
+                    cData.Source = source
+                    cData.ID = cData._id
+                    cData._id = nil
+                    player:SetData('Character', DataStore:CreateStore(source, 'Character', cData))
+                    UpdateLastPlayed(characterId)
+                    cb(results)
+                else
+                    cb(nil)
+                end
+            end)
+        end
+    
+        GetCharacterData(data)
     end)
+    
 
     Callbacks:RegisterServerCallback('Characters:Logout', function(source, data, cb)
         local player = Fetch:Source(source)
@@ -217,7 +285,7 @@ function RegisterMiddleware()
         if player ~= nil then
             local char = player:GetData('Character')
             if char ~= nil then
-                StoreData(player:GetData('ID'), char)
+                StoreData(player:GetData('Identifier'), char)
             end
         end
     end, 10000)
@@ -227,7 +295,7 @@ function RegisterMiddleware()
         if player ~= nil then
             local char = player:GetData('Character')
             if char ~= nil then
-                StoreData(player:GetData('ID'), char)
+                StoreData(player:GetData('Identifier'), char)
             end
         end
     end, 10000)
@@ -235,20 +303,28 @@ end
 
 function IsNumberInUse(number)
     local var = nil
-    Database.Game:findOne({
-        collection = 'characters',
-        query = {
-            phone = number
-        }
-    }, function (success, results)
-        if not success then var = true return end
-        var = #results > 0
+
+    local query = "SELECT * FROM characters WHERE phone = @number"
+    local params = {
+        ['@number'] = number
+    }
+
+    -- Assuming you have established a MySQL connection
+    MySQL.Async.fetchAll(query, params, function(results)
+        if results then
+            var = #results > 0
+        else
+            var = true -- Indicate an error occurred
+        end
     end)
 
     while var == nil do
         Citizen.Wait(10)
     end
+
+    return var
 end
+
 
 function GeneratePhoneNumber()
     local areaCode = math.random(50) > 25 and 415 or 628

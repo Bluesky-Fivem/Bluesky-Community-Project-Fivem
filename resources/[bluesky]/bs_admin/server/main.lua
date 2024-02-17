@@ -1,6 +1,5 @@
 AddEventHandler('Admin:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
-    Database = exports['bs_base']:FetchComponent('Database')
     Logger = exports['bs_base']:FetchComponent('Logger')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Fetch = exports['bs_base']:FetchComponent('Fetch')
@@ -12,7 +11,6 @@ end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Admin', {
-        'Database',
         'Logger',
         'Callbacks',
         'Fetch',
@@ -126,19 +124,19 @@ function RegisterCallbacks()
         cb(playersToReturn)
     end)
 
-    Callbacks:RegisterServerCallback('Admin:receiveSpawnLocations', function(source, data, cb)
-        Database.Game:find({
-            collection = 'locations',
-            query = {
-                Type = 'spawn'
-            }
-        }, function(success, results)
-            if not success then
-                return
-            end
-            cb(results)
-        end)
-    end)
+    -- Callbacks:RegisterServerCallback('Admin:receiveSpawnLocations', function(source, data, cb)
+    --     Database.Game:find({
+    --         collection = 'locations',
+    --         query = {
+    --             Type = 'spawn'
+    --         }
+    --     }, function(success, results)
+    --         if not success then
+    --             return
+    --         end
+    --         cb(results)
+    --     end)
+    -- end) --do this later
 end
 
 RegisterServerEvent('Admin:server:toggleDuty')

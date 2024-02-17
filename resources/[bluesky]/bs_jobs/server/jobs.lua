@@ -1,10 +1,9 @@
 _onDuty = {}
-_jobs = {}
+_jobs = Config.Job
 jobCenterJobs = {}
 
 AddEventHandler('Jobs:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
-    Database = exports['bs_base']:FetchComponent('Database')
     Middleware = exports['bs_base']:FetchComponent('Middleware')
     Default = exports['bs_base']:FetchComponent('Default')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
@@ -15,14 +14,13 @@ function RetrieveComponents()
     Jobs = exports['bs_base']:FetchComponent('Jobs')
     Execute = exports['bs_base']:FetchComponent('Execute')
     CuntingConfig = exports['bs_base']:FetchComponent('Config')
-    WebAPI = exports['bs_base']:FetchComponent('WebAPI')
     AlzarIsAPrickCauseHeDoesStupidThings = exports['bs_base']:FetchComponent('Config')
+    Wallet = exports['bs_base']:FetchComponent('Wallet')
     RegisterChatCommands()
 end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Jobs', {
-        'Database',
         'Middleware',
         'Default',
         'Callbacks',
@@ -33,11 +31,10 @@ AddEventHandler('Core:Shared:Ready', function()
         'Chat',
         'Jobs',
         'Config',
-        'WebAPI',
+        'Wallet',
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
         RetrieveComponents()
-        DefaultData()
         Startup()
         RegisterCallbacks()
         RegisterMiddleware()
@@ -66,49 +63,34 @@ JOBS = {
             if jobData.job ~= 'unemployed' then
                 _onDuty[jobData.job][source] = toggle or nil
                 char:SetData('JobDuty', toggle)
-
-                if toggle then
-                    local cData = char:GetData()
-                    cData.Server = CuntingConfig.Server.ID
-                    -- WebAPI.MDT:Request('POST', 'user/onDuty', {}, {
-                    --     user = player:GetData('ID'),
-                    --     character = cData
-                    -- })
-                else
-                    -- WebAPI.MDT:Request('POST', 'user/offDuty', {}, {
-                    --     job = jobData.job,
-                    --     user = player:GetData('ID'),
-                    --     charId = char:GetData('ID')
-                    -- })
-                end
-
-                if silent == nil or not silent then
-                    TriggerClientEvent('Notification:SendAlert', source,
-                        ('You went %s.'):format(toggle and 'on duty' or 'off duty'))
-                end
-
                 Chat.Refresh:Commands(source)
                 TriggerClientEvent('Characters:Client:SetData', source, char:GetData())
+                if silent == nil or not silent then
+                    TriggerClientEvent('Notification:SendAlert', source, ('You went %s.'):format(toggle and 'on duty' or 'off duty'))
+                    TriggerClientEvent('Jobs:Client:UpdateCharData', source)
+                end
             end
             if cb then
                 cb(_onDuty[jobData.job][source])
-            end
+            end 
         end,
         SetJob = function(self, source, job, grade, workplace, cb)
+            if _jobs[job] == nil then 
+                cb(false)
+                return 
+            end
+
             local targetJob, targetGrade, targetWorkplace = _jobs[job], _jobs[job].grades[grade], _jobs[job].workplaces
             if (targetJob and targetGrade) and (targetWorkplace == nil or targetWorkplace[workplace]) then
                 if targetWorkplace ~= nil and targetWorkplace[workplace] then
-                    targetWorkplace = targetWorkplace[workplace]
+                    targetWorkplace = targetWorkplace[workplace] 
                 else
                     workplace, targetWorkplace = 0, 'None'
                 end
-
                 local char = Fetch:Source(source):GetData('Character')
                 local currentJob = char:GetData('Job')
-                if currentJob.job == 'unemployed' or job ~= currentJob.job or grade ~= currentJob.grade.id or
-                    workplace ~= currentJob.workplace.id then
+                if currentJob.job == 'unemployed' or job ~= currentJob.job or grade ~= currentJob.grade.id or workplace ~= currentJob.workplace.id then
                     self:ToggleDuty(source, false, true)
-
                     local newJob = {
                         job = targetJob.job,
                         salary = targetGrade.salary,
@@ -116,23 +98,17 @@ JOBS = {
                         grade = { id = grade, label = targetGrade.label, level = targetGrade.level },
                         workplace = { id = workplace, label = targetWorkplace },
                     }
-
                     char:SetData('Job', newJob)
+                    char:SetData('JobTimer', Config.TimerAfterJobChange)
                     TriggerClientEvent('Characters:Client:SetData', source, char:GetData())
-
-                    Chat.Send.System:Single(source,
-                        'Your Job Was Set To ' ..
-                        newJob.label ..
-                        '.' ..
-                        (newJob.workplace.workplace ~= 0 and (' Workplace: ' .. newJob.workplace.label) or ' ') ..
-                        ', Grade: ' .. newJob.grade.label)
+                    TriggerClientEvent('Jobs:Client:UpdateCharData', source)
+                    Chat.Send.System:Single(source, 'Your Job Was Set To ' .. newJob.label .. '.' .. (newJob.workplace.workplace ~= 0 and (' Workplace: ' .. newJob.workplace.label) or ' ') .. ', Grade: '.. newJob.grade.label)
+                    --TriggerClientEvent('Jobs:Client:Updated', source, newJob)
                     cb(newJob)
                 elseif job == currentJob.job and grade == currentJob.grade.id and workplace == currentJob.workplace.id then
-                    print("hey yaaaaa")
                     cb(false, true)
                 end
             else
-                print("hey")
                 cb(false)
             end
         end,
@@ -142,6 +118,7 @@ JOBS = {
             char:SetData('Job', AlzarIsAPrickCauseHeDoesStupidThings.DefaultJob)
             TriggerClientEvent('Characters:Client:SetData', source, char:GetData())
             Chat.Send.System:Single(source, 'Your Job Was Removed, You Are Now Unemployed.')
+            TriggerClientEvent('Jobs:Client:UpdateCharData', source)
         end,
     },
     GetOnDutyCount = function(self, job)
@@ -153,7 +130,7 @@ JOBS = {
             return amount
         end
         return 0
-    end,
+    end, 
     GetOnDuty = function(self, job)
         if _jobs[job] and _onDuty[job] then
             return _onDuty[jobData.job]
@@ -179,6 +156,14 @@ AddEventHandler('playerDropped', function()
     local _src = source
     for k, v in pairs(_onDuty) do
         _onDuty[k][_src] = nil
+    end
+end)
+
+RegisterServerEvent('Jobs:Server:SetJobTimer')
+AddEventHandler('Jobs:Server:SetJobTimer', function(time)
+    local char = Fetch:Source(source):GetData('Character')
+    if char ~= nil then 
+        char:SetData('JobTimer', time)
     end
 end)
 

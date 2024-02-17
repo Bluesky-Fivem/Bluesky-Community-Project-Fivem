@@ -5,6 +5,7 @@ Citizen.CreateThread(function()
     SendNUIMessage({
         type = 'APP_SHOW'
     })
+   
 end)
 
 RegisterNUICallback('GetData', function(data, cb)
@@ -27,6 +28,13 @@ RegisterNUICallback('GetData', function(data, cb)
             })
         end)
     end)
+end)
+
+RegisterCommand("show", function()
+    SendNUIMessage({
+        type = 'APP_SHOW'
+    })
+    SetNuiFocus(true)
 end)
 
 RegisterNUICallback('CreateCharacter', function(data, cb)
