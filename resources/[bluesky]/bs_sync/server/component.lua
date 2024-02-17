@@ -29,8 +29,11 @@ local _time = 0
 local _timeOffset = 0
 local _freezeState = false
 local _blackoutState = false
+local _temperature = 25 
+local _windSpeed = 10
 
 AddEventHandler('Sync:Shared:DependencyUpdate', RetrieveComponents)
+
 function RetrieveComponents()
     Logger = exports['bs_base']:FetchComponent('Logger')
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
@@ -47,7 +50,7 @@ AddEventHandler('Core:Shared:Ready', function()
         'Utils',
         'Chat',
     }, function(error)
-        if #error > 0 then return end -- Do something to handle if not all dependencies loaded
+        if #error > 0 then return end 
         RetrieveComponents()
         RegisterCallbacks()
     end)
@@ -55,7 +58,7 @@ end)
 
 function RegisterCallbacks()
     Callbacks:RegisterServerCallback('Sync:GetState', function(source, data, cb)
-        cb(_weather, _blackoutState, _time, _timeOffset, _freezeState)
+        cb(_weather, _blackoutState, _time, _timeOffset, _freezeState, _temperature, _windSpeed)
     end)
 end
 
@@ -75,7 +78,7 @@ function StartThreads()
     Citizen.CreateThread(function()
         while true do
             Citizen.Wait(8000)
-            TriggerClientEvent('Sync:Client:Weather', -1, _weather)
+            TriggerClientEvent('Sync:Client:Weather', -1, _weather, _temperature, _windSpeed)
         end
     end)
 
@@ -87,7 +90,7 @@ function StartThreads()
         Sync:NextWeatherStage()
 
         while true do
-            Citizen.Wait(1800000)
+            Citizen.Wait(1800000) 
             if _isDynamic then
                 Sync:NextWeatherStage()
             end
@@ -126,7 +129,7 @@ SYNC = {
         Weather = function(self, type)
             _weather = string.upper(type)
             Chat.Send.System:All('Weather set to ' .. type)
-            TriggerClientEvent('Sync:Client:Weather', -1, _weather)
+            TriggerClientEvent('Sync:Client:Weather', -1, _weather, _temperature, _windSpeed)
         end,
         Time = function(self, type)
             if type:upper() == AvailableTimeTypes[1] then
@@ -173,6 +176,16 @@ SYNC = {
             Chat.Send.System:All('Time was changed to: ' .. newtime)
             TriggerClientEvent('Sync:Client:Time', -1, _time, _timeOffset)
         end,
+        Temperature = function(self, temp)
+            _temperature = temp
+            Chat.Send.System:All('Temperature set to ' .. temp .. '°C')
+            TriggerClientEvent('Sync:Client:Weather', -1, _weather, _temperature, _windSpeed)
+        end,
+        WindSpeed = function(self, speed)
+            _windSpeed = speed
+            Chat.Send.System:All('Wind speed set to ' .. speed .. ' m/s')
+            TriggerClientEvent('Sync:Client:Weather', -1, _weather, _temperature, _windSpeed)
+        end,
     },
     NextWeatherStage = function(self)
         if _weather == "CLEAR" or _weather == "CLOUDS" or _weather == "EXTRASUNNY" then
@@ -204,9 +217,40 @@ SYNC = {
         end
 
         Logger:Info('Sync', 'Weather Updated: ^5' .. _weather .. '^7', { console = true })
-        TriggerClientEvent('Sync:Client:Weather', -1, _weather, false)
+        TriggerClientEvent('Sync:Client:Weather', -1, _weather, _temperature, _windSpeed)
     end,
 }
+
+function UpdateTemperatureAndWindSpeed()
+    if _weather == "EXTRASUNNY" then
+        _temperature = 30
+        _windSpeed = 5
+    elseif _weather == "CLEAR" then
+        _temperature = 25
+        _windSpeed = 7
+    elseif _weather == "CLOUDS" then
+        _temperature = 20
+        _windSpeed = 10
+    elseif _weather == "OVERCAST" then
+        _temperature = 18
+        _windSpeed = 12
+    elseif _weather == "RAIN" or _weather == "THUNDER" then
+        _temperature = 15
+        _windSpeed = 15
+    elseif _weather == "FOGGY" then
+        _temperature = 12
+        _windSpeed = 5
+    elseif _weather == "SNOW" or _weather == "BLIZZARD" or _weather == "SNOWLIGHT" then
+        _temperature = 0
+        _windSpeed = 20
+    elseif _weather == "XMAS" or _weather == "HALLOWEEN" then
+        _temperature = 10
+        _windSpeed = 10
+    else
+        _temperature = 25 
+        _windSpeed = 10 
+    end
+end
 
 AddEventHandler('Proxy:Shared:RegisterReady', function(component)
     exports['bs_base']:RegisterComponent('Sync', SYNC)
@@ -229,4 +273,35 @@ Citizen.CreateThread(function()
         end
         _time = newBaseTime
     end
+end)
+
+function AnnounceWeatherInfo(source, args)
+    local hour = math.floor(((_time + _timeOffset) / 60) % 24)
+    local minute = math.floor((_time + _timeOffset) % 60)
+    local timeString = string.format("%02d:%02d", hour, minute)
+    local message = string.format("Current weather: Temperature %s°C, Wind Speed %sm/s, Time %s", _temperature, _windSpeed, timeString)
+    TriggerClientEvent('chat:addMessage', source, { args = { '^*Weather Info^r', message }, color = { 255, 255, 255 } })
+end
+
+function AnnounceWeatherInfoOnJoin(playerId)
+    AnnounceWeatherInfo(playerId, nil)
+end
+
+AddEventHandler('onResourceStart', function(resourceName)
+    if GetCurrentResourceName() == resourceName then
+        RegisterChatCommands()
+    end
+end)
+
+function RegisterChatCommands()
+    RegisterCommand('weatheri', function(source, args)
+        AnnounceWeatherInfo(source, args)
+    end, false)
+end
+
+RegisterNetEvent('Characters:Server:Spawn')
+AddEventHandler('Characters:Server:Spawn', function()
+    print('nigga')
+    local playerId = source
+    AnnounceWeatherInfoOnJoin(playerId)
 end)
