@@ -5,6 +5,11 @@ game 'gta5'
 client_scripts {
     'client/jobs.lua',
     'client/jobcenter.lua',
+    'client/metalwork.lua',
+    'client/mower/*.lua',
+    'client/postal/*.lua',
+    'client/lumberjack/*.lua',
+    --'client/postaljob.lua',
 }
 shared_script 'config.lua'
 
