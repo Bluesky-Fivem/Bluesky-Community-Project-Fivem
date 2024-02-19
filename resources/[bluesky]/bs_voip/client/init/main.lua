@@ -16,7 +16,7 @@ callData = {}
 RegisterNetEvent('Characters:Client:Spawn')
 AddEventHandler('Characters:Client:Spawn', function()
 	_character = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character')
-	currentJob = _character:GetData('Job').job
+	--currentJob = _character:GetData('Job').job when jobs fixed uncomment
 	_isloggedIn = true
 end)
 
