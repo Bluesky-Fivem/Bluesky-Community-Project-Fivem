@@ -194,7 +194,7 @@ div#q-loading-bar {
 /* Vehicle HUD */
 
 #speed:after {
-    content: "KPH"; /* If using KPH change this content from MPH */
+    content: "MPH"; /* If using KPH change this content from MPH */
     display: block;
     position: absolute;
     font-family: 'Gravitica', sans-serif;

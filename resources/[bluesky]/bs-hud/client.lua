@@ -1,4 +1,3 @@
-local PlayerData = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData()
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
@@ -113,7 +112,7 @@ RegisterNetEvent('Characters:Client:Spawn', function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
-    PlayerData = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData()
+    PlayerData = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character')
     Wait(3000)
     SetEntityHealth(PlayerPedId(), 200)
 end)
@@ -728,7 +727,7 @@ CreateThread(function()
             local weapon = GetSelectedPedWeapon(player)
             -- Player hud
             if not config.WhitelistedWeaponArmed[weapon] then
-                if weapon ~= `WEAPON_UNARMED` then
+                if weapon ~= 'WEAPON_UNARMED' then
                     armed = true
                 else
                     armed = false
@@ -976,7 +975,7 @@ if not config.DisableStress then
             if LocalPlayer.state.loggedIn then
                 local ped = PlayerPedId()
                 local weapon = GetSelectedPedWeapon(ped)
-                if weapon ~= `WEAPON_UNARMED` then
+                if weapon ~= 'WEAPON_UNARMED' then
                     if IsPedShooting(ped) and not config.WhitelistedWeaponStress[weapon] then
                         if math.random() < config.StressChance then
                             TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
