@@ -291,11 +291,11 @@ end
 
 AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() == resourceName then
-        RegisterChatCommands()
+        RegisterChatCommands1()
     end
 end)
 
-function RegisterChatCommands()
+function RegisterChatCommands1()
     RegisterCommand('weatheri', function(source, args)
         AnnounceWeatherInfo(source, args)
     end, false)

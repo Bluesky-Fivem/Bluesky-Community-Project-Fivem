@@ -1,6 +1,4 @@
-
-
-function CHAT.RegisterCommand(this, command, callback, suggestion, arguments, job)
+CHAT.RegisterCommand = function(this, command, callback, suggestion, arguments, job)
     if job ~= nil then
         if type(job) == 'table' and #job > 0 then
             for k,v in pairs(job) do
@@ -51,7 +49,7 @@ function CHAT.RegisterCommand(this, command, callback, suggestion, arguments, jo
     end, false)
 end
 
-function CHAT.RegisterAdminCommand(this, command, callback, suggestion, arguments)
+CHAT.RegisterAdminCommand = function(this, command, callback, suggestion, arguments)
 	commands[command] = {
         cb = callback,
         args = (arguments or -1),
@@ -75,6 +73,8 @@ function CHAT.RegisterAdminCommand(this, command, callback, suggestion, argument
                 else
                     Chat.Send.Server:Single(source, 'Invalid Number Of Arguments')
                 end
+            else
+                --Do Something
             end
         end
     end, false)

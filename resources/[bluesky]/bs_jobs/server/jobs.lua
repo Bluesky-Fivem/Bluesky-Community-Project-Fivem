@@ -66,7 +66,7 @@ JOBS = {
                 Chat.Refresh:Commands(source)
                 TriggerClientEvent('Characters:Client:SetData', source, char:GetData())
                 if silent == nil or not silent then
-                    TriggerClientEvent('Notification:SendAlert', source, ('You went %s.'):format(toggle and 'on duty' or 'off duty'))
+                    Notification:SendAlert(source, (toggle and 'Success' or 'Error'), 'You Went ' .. (toggle and 'On Duty' or 'Off Duty'))
                     TriggerClientEvent('Jobs:Client:UpdateCharData', source)
                 end
             end

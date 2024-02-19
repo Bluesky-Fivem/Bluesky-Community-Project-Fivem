@@ -12,10 +12,16 @@ AddEventHandler('Core:Shared:Ready', function()
     end)
 end)
 
-
+---Server.Chat
+--@class Server.Chat
 CHAT = {
     _required = { 'Send' },
+    -- Refresh
+    --@rename Chat.Refresh
     Refresh = {
+      --- Commands
+      -- This is method you can refresh all commands
+      --@rename Chat.Refresh:Commands
         Commands = function(self, source)
             local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
             if player ~= nil then
@@ -57,7 +63,133 @@ CHAT = {
                 end
             end
         end
-    }
+    },
+    ---RegisterCommand
+    --
+    -- You can register custom command with help text
+    --@example
+        -- -- The simple command can be used by everyone on the server
+    --   Chat:RegisterCommand('clear', function(source, args, rawCommand)
+    --     TriggerClientEvent('chat:clearChat', source)
+    --   end, {
+    --     help = 'Clear The Chat'
+    --   })
+    --
+    --@example
+        -- -- You can add specified job who use this command
+    --    Chat:RegisterCommand('policelock', function(source, args, rawCommand)
+    --      TriggerClientEvent('Doors:Lockdown', source)
+    --    end, {
+    --      help = 'Lockdown a door',
+    --      params = {}
+    --    }, -1, { { name = "police", gradelevel = 1 } })
+    --@tparam table this self obj
+    --@tparam string command command name
+    --@tparam function callback callback function
+    --@tparam string suggestion suggestion message
+    --@tparam table arguments command arguments
+    --@tparam string job job name which job use this command
+    --@rename Chat:RegisterCommand
+    RegisterCommand = function(this, command, callback, suggestion, arguments, job)
+      if job ~= nil then
+          if type(job) == 'table' and #job > 0 then
+              for k,v in pairs(job) do
+                  if v.name == nil then return end 
+                  if v.gradelevel == nil then job.gradelevel = 1 end
+              end
+          end
+      end
+
+      commands[command] = {
+            cb = callback,
+            args = (arguments or -1),
+            job = job
+        }
+
+      if suggestion ~= nil then
+        if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+        if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+
+        commandSuggestions[command] = suggestion
+      end
+
+      RegisterCommand(command, function(source, args, rawCommand)
+          local pData = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+          if pData ~= nil then
+              -- TODO : Implement character specific data for commands (IE Jobs)
+              local cData = pData:GetData('Character'):GetData()
+              if commands[command].job ~= nil then
+                  for k, v in pairs(commands[command].job) do
+                      if cData.Job ~= nil and cData.JobDuty ~= nil and v['name'] == cData.Job.job and cData.JobDuty then
+                          if tonumber(v['gradelevel']) <= cData.Job.grade.level then
+                              if ((#args <= commands[command].args and #args == commands[command].args) or commands[command].args == -1) then
+                                  callback(source, args, rawCommand)
+                              else
+                                  Chat.Send.Server:Single(source, 'Invalid Number Of Arguments')
+                              end
+                          end
+                      end
+                  end
+              else
+                  if ((#args <= commands[command].args and #args == commands[command].args) or commands[command].args == -1) then
+                      callback(source, args, rawCommand)
+                  else
+                      Chat.Send.Server:Single(source, 'Invalid Number Of Arguments')
+                  end
+              end
+          end
+      end, false)
+    end,
+    ---RegisterAdminCommand
+    --
+    -- You can register admin command with specified job and help text
+    --@example
+    --  Chat:RegisterAdminCommand('system', function(source, args, rawCommand)
+    --      Chat.Send.System:All(rawCommand:sub(8))
+    --  end, {
+    --    help = 'Send System Message To All Players',
+    --    params = {{
+    --            name = 'Message',
+    --            help = 'The Message You Want To Send To System Channel'
+    --        }
+    --    }
+    --  }, -1)
+    --@tparam table this self obj
+    --@tparam string command command name
+    --@tparam function callback callback function
+    --@tparam string suggestion suggestion message
+    --@tparam table arguments command arguments
+    --@rename Chat:RegisterAdminCommand
+    RegisterAdminCommand = function(this, command, callback, suggestion, arguments)
+        commands[command] = {
+          cb = callback,
+          args = (arguments or -1),
+          admin = true
+      }
+
+      if suggestion then
+        if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+        if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+
+        commandSuggestions[command] = suggestion
+      end
+
+        RegisterCommand(command, function(source, args, rawCommand)
+            local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+            if player ~= nil then
+                local pData = player:GetData()
+                if player:GetData('Roles') == 'dev' then
+                    if((#args <= commands[command].args and #args == commands[command].args) or commands[command].args == -1)then
+                        callback(source, args, rawCommand)
+                    else
+                        Chat.Send.Server:Single(source, 'Invalid Number Of Arguments')
+                    end
+                else
+                    --Do Something
+                end
+            end
+        end, false)
+    end
 }
 
 AddEventHandler('Proxy:Shared:RegisterReady', function()
@@ -83,7 +215,7 @@ AddEventHandler('chatMessage', function(source, n, message)
                     if commands[commandName].job ~= nil then
                         for k, v in pairs(commands[commandName].job) do
                             if cData.Job.job == v.name then
-                                if v.gradelevel <= cData.Job.grade.level and cData.JobDuty then
+                                if v.gradelevel <= cData.job.grade.level and cData.JobDuty then
                                     local command = commands[commandName]
                                 end
                             end
@@ -102,6 +234,8 @@ AddEventHandler('chatMessage', function(source, n, message)
                     else
                         Chat.Send.Server:Single(source, 'Invalid Command Handler')
                     end
+                else
+                    Chat.Send.Server:Single(source, 'Invalid Command')
                 end
             end
         end
