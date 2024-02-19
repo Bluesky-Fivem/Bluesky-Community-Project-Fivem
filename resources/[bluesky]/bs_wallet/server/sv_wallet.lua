@@ -36,22 +36,15 @@ end
 
 
 WALLET = {
-  Create = function(self, cId)
-    MySQL.Async.execute('INSERT INTO wallets (Char, Cash) VALUES (@char, @cash)', {
-      ['@char'] = cId,
-      ['@cash'] = Config.InitialCash
-    }, function(rowsChanged)
-    end)
-  end,
-
+  
   Get = function(self, char, cb)
-    MySQL.Async.fetchAll('SELECT * FROM wallets WHERE Char = @char', {
+    MySQL.Async.fetchAll('SELECT * FROM characters WHERE _id = @char', {
       ['@char'] = char:GetData('ID')
     }, function(results)
       if results and #results > 0 then
         local _data = results[1]
         _data.Modify = function(self, amount)
-          MySQL.Async.execute('UPDATE wallets SET Cash = Cash + @amount WHERE Char = @char', {
+          MySQL.Async.execute('UPDATE characters SET Cash = Cash + @amount WHERE _id = @char', {
             ['@amount'] = amount,
             ['@char'] = _data.Char
           })
@@ -68,9 +61,6 @@ WALLET = {
     Wallet:Get(char, function(wallet)
       if wallet then
         UI.Balance:UpdateCash(char:GetData('Source'), wallet.Cash, amount)
-        TriggerClientEvent('Phone:Client:SetData', char:GetData('Source'), {
-          cash = wallet.Cash + amount
-        })
         wallet:Modify(amount)
       end
     end)
@@ -80,9 +70,6 @@ WALLET = {
     Wallet:Get(char, function(wallet)
       if wallet then
         UI.Balance:UpdateCash(char:GetData('Source'), wallet.Cash, -amount)
-        TriggerClientEvent('Phone:Client:SetData', char:GetData('Source'), {
-          cash = wallet.Cash - amount
-        })
         wallet:Modify(-amount)
       end
     end)
@@ -93,29 +80,6 @@ AddEventHandler('Proxy:Shared:RegisterReady', function()
   exports['bs_base']:RegisterComponent('Wallet', WALLET)
 end)
 
--- AddEventHandler('Characters:Server:CharacterCreated', function(cId)
---   Database.Game:findOne({
---     collection = 'wallets',
---     query = {
---       Char = cId
---     }
---   }, function(success, results)
---     if not success then return end
---     if #results == 0 then
---       Wallet:Create(cId)
---     end
---   end)
--- end)
-
-AddEventHandler('Characters:Server:CharacterCreated', function(cId)
-  MySQL.Async.fetchAll('SELECT * FROM wallets WHERE Char = @char', {
-    ['@char'] = cId
-  }, function(results)
-    if results and #results == 0 then
-      Wallet:Create(cId)
-    end
-  end)
-end)
 
 
 RegisterServerEvent('Wallet:Server:GiveCash')
