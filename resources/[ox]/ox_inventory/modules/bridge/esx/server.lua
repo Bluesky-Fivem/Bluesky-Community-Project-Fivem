@@ -31,6 +31,9 @@ server.accounts.black_money = 0
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function server.setPlayerData(player)
+	local source = source
+	local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+    local char = player:GetData('Character')
 	local groups = {
 		[player.job.name] = player.job.grade
 	}

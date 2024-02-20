@@ -1,5 +1,17 @@
-CreateThread(function() lib.load('@ox_core.imports.client') end)
+--CreateThread(function() lib.load('@ox_core.imports.client') end)
+local Custom = setmetatable({}, {
+	__index = function(self, index)
+		self.SetPlayerData = SetPlayerData
+		self.PlayerLoaded = PlayerLoaded
+		return self[index]
+	end
+})
 
+---@diagnostic disable-next-line: duplicate-set-field
+function client.setPlayerData(key, value)
+	PlayerData[key] = value
+	Custom.SetPlayerData(key, value)
+end
 RegisterNetEvent('ox:playerLogout', client.onLogout)
 
 RegisterNetEvent('ox:setGroup', function(name, grade)
