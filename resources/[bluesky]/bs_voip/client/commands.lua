@@ -44,7 +44,6 @@ end)
 
 function setProximityState(proximityRange, isCustom)
 	local voiceModeData = Cfg.voiceModes[mode]
-	UI.Hud:Update({ id = "voice", value = mode - 1 })
 	MumbleSetTalkerProximity(proximityRange + 0.0)
 	LocalPlayer.state:set('proximity', {
 		index = mode,
