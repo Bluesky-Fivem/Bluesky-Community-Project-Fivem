@@ -1,4 +1,3 @@
-local LS_CORE = exports["ls-core"]:GetCoreObject()
 
 function DrawText3Ds(x, y, z, text)
     SetTextScale(0.35, 0.35)

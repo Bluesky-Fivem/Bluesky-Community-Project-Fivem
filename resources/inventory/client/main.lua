@@ -1,17 +1,5 @@
 local isDisable = false
-if GetResourceState("ls-core") ~= "started" then
-    isDisable = true
-    CreateThread(function()
-        while true do
-            if GetResourceState("ls-core") == "started" then
-                print("ls-core is started. \n^8Please restart your server.^7 \nPhone not will work.")
-            else
-                print("ls-core not found. Please install before trying to use phone. ^8Error Code 2^7")
-            end
-            Citizen.Wait(5000)
-        end
-    end)
-end
+
 if isDisable then return end
 
 local LS_CORE = exports["ls-core"]:GetCoreObject()

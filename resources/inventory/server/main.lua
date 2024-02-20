@@ -1,29 +1,4 @@
 local isDisable = false
-if GetResourceState("ls-core") ~= "started" or GetCurrentResourceName() ~= "inventory" then
-    local isStarted = GetResourceState("ls-core")
-    isDisable = true
-    CreateThread(function()
-        while true do
-            local text = ""
-            if isStarted ~= "started" then
-                if GetResourceState("ls-core") == "started" then
-                    text = "ls-core is started. \n^8Please restart your server.^7 \nInventory not will work."
-                else
-                    text = "ls-core not found. Please install before trying to use Inventory. ^8Error Code 2^7"
-                end
-            end
-            if GetCurrentResourceName() ~= "inventory" then
-                if string.len(text) > 0 then
-                    text = text .. "\nInventory name is ^8"..GetCurrentResourceName().."^7, change script name to ^8inventory^7. ^8Error Code 3^7"
-                else
-                    text = "Inventory name is ^8"..GetCurrentResourceName().."^7, change script name to ^8inventory^7. ^8Error Code 3^7"
-                end
-            end 
-            print(text)
-            Wait(5000)
-        end
-    end)
-end
 
 if isDisable then return end
 

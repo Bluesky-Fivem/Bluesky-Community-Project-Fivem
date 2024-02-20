@@ -1,7 +1,6 @@
 if Config.ItemsOnBack.isEnabled then
 
 
-local LS_CORE = exports['ls-core']:GetCoreObject()
 
 local CurrentBackItems = {}
 local ItemChecking = true
