@@ -20,7 +20,6 @@ require 'modules.shops.server'
 --- player requires source, identifier, and name
 --- optionally, it should contain jobs/groups, sex, and dateofbirth
 function server.setPlayerInventory(player, data)
-	print(json.encode(data))
 	while not shared.ready do Wait(0) end
 
 	if not data then
