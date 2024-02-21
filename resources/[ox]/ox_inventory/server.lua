@@ -26,7 +26,7 @@ function server.setPlayerInventory(player, data)
 	print("------------------------------")
 	print("DATA")
 	print(json.encode(data,{indent = true}))
-	if not player then
+	if not data then
 		data = db.loadPlayer(player.identifier)
 	end
 

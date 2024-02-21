@@ -4,6 +4,8 @@ local playerState = LocalPlayer.state
 
 RegisterNetEvent('bs_status:add')
 AddEventHandler('bs_status:add', function(name, val)
+    local food = playerState.needs.hunger
+    local water = playerState.needs.water
     local amount = val / 1000
     if name == 'food' or 'hunger' then
         statusUpdate( amount, 0)
@@ -20,6 +22,8 @@ end)
 
 RegisterNetEvent('bs_status:remove')
 AddEventHandler('bs_status:remove', function(name, val)
+    local food = playerState.needs.hunger
+    local water = playerState.needs.water
     local amount = val / 1000
     if name == 'food' or 'hunger' then
         statusUpdate( amount , 0)
