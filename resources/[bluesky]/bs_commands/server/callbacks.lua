@@ -16,8 +16,12 @@ function RegisterCallbacks()
     end)
 end
 
-RegisterCommand('test', function(source)
+DoesCidExist = function(source, cid)
     local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
-    local roles = player:GetData('Roles')
-    print(roles)
-end)
+    local char = player:GetData('Character')
+    return #exports.oxmysql:executeSync("SELECT 1 FROM characters WHERE `_id`=:id LIMIT 1", { id = char:GetData('ID') }) > 0
+end
+
+exports('doesCidExist', function(...) -- exports['bs_base']:doesCidExist(cid)
+	return DoesCidExist(...)
+end) 

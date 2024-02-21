@@ -44,23 +44,23 @@ plyState:set('invHotkeys', false, false)
 plyState:set('canUseWeapons', false, false)
 
 local function canOpenInventory()
-    if not PlayerData.loaded then
-        return shared.info('cannot open inventory', '(is not loaded)')
-    end
+    --if not PlayerData.loaded then
+    --    return shared.info('cannot open inventory', '(is not loaded)')
+    --end
 
     if IsPauseMenuActive() then return end
 
-    if invBusy or invOpen == nil or (currentWeapon and currentWeapon.timer ~= 0) then
-        return shared.info('cannot open inventory', '(is busy)')
-    end
+    -- if invBusy or invOpen == nil or (currentWeapon and currentWeapon.timer ~= 0) then
+    --     return shared.info('cannot open inventory', '(is busy)')
+    -- end
 
-    if PlayerData.dead or IsPedFatallyInjured(playerPed) then
-        return shared.info('cannot open inventory', '(fatal injury)')
-    end
+    -- if PlayerData.dead or IsPedFatallyInjured(playerPed) then
+    --     return shared.info('cannot open inventory', '(fatal injury)')
+    -- end
 
-    if PlayerData.cuffed or IsPedCuffed(playerPed) then
-        return shared.info('cannot open inventory', '(cuffed)')
-    end
+    -- if PlayerData.cuffed or IsPedCuffed(playerPed) then
+    --     return shared.info('cannot open inventory', '(cuffed)')
+    -- end
 
     return true
 end
@@ -302,6 +302,10 @@ function client.openInventory(inv, data)
 		end
 	else lib.notify({ id = 'inventory_player_access', type = 'error', description = locale('inventory_player_access') }) end
 end
+
+RegisterCommand("open", function()
+	TriggerEvent("ox_inventory:openInventory")
+end)
 
 RegisterNetEvent('ox_inventory:openInventory', client.openInventory)
 exports('openInventory', client.openInventory)

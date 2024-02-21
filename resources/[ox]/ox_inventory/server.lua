@@ -21,8 +21,12 @@ require 'modules.shops.server'
 --- optionally, it should contain jobs/groups, sex, and dateofbirth
 function server.setPlayerInventory(player, data)
 	while not shared.ready do Wait(0) end
-
-	if not data then
+	print("PLAYER DATA")
+	print(json.encode(player,{indent = true}))
+	print("------------------------------")
+	print("DATA")
+	print(json.encode(data,{indent = true}))
+	if not player then
 		data = db.loadPlayer(player.identifier)
 	end
 
