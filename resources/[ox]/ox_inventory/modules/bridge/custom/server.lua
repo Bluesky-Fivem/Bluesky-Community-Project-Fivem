@@ -20,7 +20,7 @@ function server.setPlayerData(player)
     end
 
     return {
-        source = 1,
+        source = playerData:GetData('Source'),
         name = playerData:GetData('First') .. ' ' .. playerData:GetData('Last'),
         groups = playerData:GetData('Job'),
         sex = playerData:GetData('Gender'),
