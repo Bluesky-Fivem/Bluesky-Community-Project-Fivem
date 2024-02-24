@@ -221,10 +221,10 @@ function RegisterCallbacks()
         local id = player:GetData('ID')
     
         local function UpdateLastPlayed(characterId)
-            local query = "UPDATE characters SET LastPlayed = @currentTime WHERE User = @userId"
+            local query = "UPDATE characters SET LastPlayed = @currentTime WHERE _id = @userId"
             local params = {
                 ['@currentTime'] = os.time() * 1000,
-                ['@userId'] = userId,
+                ['@userId'] = id,
             }
     
             -- Assuming you have established a MySQL connection
@@ -252,6 +252,8 @@ function RegisterCallbacks()
                     cData.Source = source
                     cData.ID = cData._id
                     cData._id = nil
+                    cData.Job = json.decode(cData.Job) or {}
+                    cData.skin = json.decode(cData.skin) or {}
                     player:SetData('Character', DataStore:CreateStore(source, 'Character', cData))
                     UpdateLastPlayed(characterId)
                     cb(cData)
