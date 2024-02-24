@@ -8,7 +8,7 @@ function server.setPlayerData(player)
     local playerData = exports['bs_base']:FetchComponent('Fetch'):Source(player.source)
     local char = playerData:GetData('Character')
 
-    print(json.encode(char,{indent = true}))
+    --print(json.encode(char,{indent = true}))
 
     if char == nil then
         print("Error: Unable to fetch player data")
@@ -18,7 +18,7 @@ function server.setPlayerData(player)
     return {
         source = char:GetData('Source'),
         name = char:GetData('First') .. ' ' .. char:GetData('Last'),
-        groups = 'police',
+        groups = char:GetData('Job').job,
         sex = char:GetData('Gender'),
         dateofbirth = char:GetData('DOB'),
         identifier = char:GetData('ID')   
