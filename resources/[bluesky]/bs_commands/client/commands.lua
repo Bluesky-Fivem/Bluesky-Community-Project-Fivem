@@ -71,8 +71,3 @@ AddEventHandler('Commands:Client:FixVehicle', function()
         end
     end)
 end)
-
-RegisterCommand("cid", function()
-    local cid = exports['bs_commands']:doesCidExist(cid)
-    print(cid)
-end)

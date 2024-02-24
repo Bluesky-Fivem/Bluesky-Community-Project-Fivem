@@ -254,7 +254,7 @@ function RegisterCallbacks()
                     cData._id = nil
                     player:SetData('Character', DataStore:CreateStore(source, 'Character', cData))
                     UpdateLastPlayed(characterId)
-                    cb(results)
+                    cb(cData)
                 else
                     cb(nil)
                 end
