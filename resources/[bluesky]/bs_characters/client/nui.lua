@@ -8,6 +8,12 @@ Citizen.CreateThread(function()
    
 end)
 
+RegisterCommand("show", function()
+    SendNUIMessage({
+        type = 'APP_SHOW'
+    })
+end)
+
 RegisterNUICallback('GetData', function(data, cb)
     cb("ok")
     Callbacks:ServerCallback('Characters:GetServerData', {}, function(serverData)
