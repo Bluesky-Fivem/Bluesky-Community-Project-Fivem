@@ -33,7 +33,7 @@ Citizen.CreateThread(function()
     while Fetch == nil  do Citizen.Wait(1000) end
 
     while true do
-        Citizen.Wait(10000)
+        Citizen.Wait(120000)
         Logger:Trace('Characters', 'Storing Character Data', { console = true })
         for k, v in pairs(Fetch:All()) do
             local char = v:GetData('Character')

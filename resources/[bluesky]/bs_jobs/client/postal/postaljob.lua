@@ -6,21 +6,21 @@ function CheckJob()
     end
 end
 
-RegisterNetEvent('Jobs:Client:JobCreate')
-AddEventHandler('Jobs:Client:JobCreate', function()
-    CheckJob()
-end)
+-- RegisterNetEvent('Jobs:Client:JobCreate')
+-- AddEventHandler('Jobs:Client:JobCreate', function()
+--     CheckJob()
+-- end)
 
-RegisterNetEvent('Jobs:Client:UpdateCharData')
-AddEventHandler('Jobs:Client:UpdateCharData', function()
-    CheckJob()
-end)
+-- RegisterNetEvent('Jobs:Client:UpdateCharData')
+-- AddEventHandler('Jobs:Client:UpdateCharData', function()
+--     CheckJob()
+-- end)
 
-RegisterNetEvent('Characters:Client:Logout')
-AddEventHandler('Characters:Client:Logout', function()
-    Jobs.PostalJob:RemoveWorkMarkers()
-    Jobs.PostalJob:RemoveGeneratedWork()
-end)
+-- RegisterNetEvent('Characters:Client:Logout')
+-- AddEventHandler('Characters:Client:Logout', function()
+--     Jobs.PostalJob:RemoveWorkMarkers()
+--     Jobs.PostalJob:RemoveGeneratedWork()
+-- end)
 
 JOBS.PostalJob = {
     CreateWorkMarkers = function(self)

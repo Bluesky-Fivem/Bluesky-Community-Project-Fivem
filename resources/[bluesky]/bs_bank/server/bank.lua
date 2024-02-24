@@ -6,7 +6,6 @@ function RetrieveComponents()
     Utils = exports['bs_base']:FetchComponent('Utils')
     Chat = exports['bs_base']:FetchComponent('Chat')
     Tasks = exports['bs_base']:FetchComponent('Tasks')
-    Inventory = exports['bs_base']:FetchComponent('Inventory')
     Default = exports['bs_base']:FetchComponent('Default')
 end
 
@@ -18,7 +17,6 @@ AddEventHandler('Core:Shared:Ready', function()
         'Database',
         'Default',
         'Utils',
-        'Inventory',
         'Tasks',
     }, function(error)
         if #error > 0 then
@@ -98,11 +96,11 @@ function RegisterTasks()
     end)
 end
 
-function RegisterItemUse()
-    Inventory.Items:RegisterUse('card', 'Bank', function(source, item)
-        TriggerClientEvent('Bank:OpenATMUI', source, item.MetaData)
-    end)
-end
+-- function RegisterItemUse()
+--     Inventory.Items:RegisterUse('card', 'Bank', function(source, item)
+--         TriggerClientEvent('Bank:OpenATMUI', source, item.MetaData)
+--     end)
+-- end
 
 function RegisterChatCommands()
     Chat:RegisterAdminCommand('bank', function(source, args, rawCommand)
@@ -331,10 +329,10 @@ function RegisterCallbacks()
             doc._id = insertedIds[1]
             cb(doc)
             Wallet:Add(char, Config.CardCommissionAmount)
-            Inventory:AddItem(char:GetData('ID'), 'card', 1, {
-                AccountNumber = data.AccountNumber,
-                CardNumber = cardNumber
-            }, 1, source)
+            -- Inventory:AddItem(char:GetData('ID'), 'card', 1, {
+            --     AccountNumber = data.AccountNumber,
+            --     CardNumber = cardNumber
+            -- }, 1, source)
             cb(true)
         end)
     end)

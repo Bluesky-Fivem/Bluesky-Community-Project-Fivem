@@ -9,7 +9,20 @@ FETCH = {
         end
 
         return nil
-    end
+    end,
+
+    Next = function(self, prev)
+		local retNext = false
+		for k, v in pairs(Fetch:All()) do
+			if prev == 0 or retNext then
+				return v
+			elseif prev == v:GetData("Source") then
+				retNext = true
+			end
+		end
+
+		return nil
+	end,
 }
 
 AddEventHandler('Proxy:Shared:ExtendReady', function(component)

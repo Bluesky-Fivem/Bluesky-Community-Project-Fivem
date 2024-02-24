@@ -77,7 +77,6 @@ function RetrieveComponents()
     Logger = exports['bs_base']:FetchComponent('Logger')
     Menu = exports['bs_base']:FetchComponent('Menu')
     Notification = exports['bs_base']:FetchComponent('Notification')
-    Status = exports['bs_base']:FetchComponent('Status')
     Admin = exports['bs_base']:FetchComponent('Admin')
     Jobs = exports['bs_base']:FetchComponent('Jobs')
 end
@@ -89,7 +88,6 @@ AddEventHandler('Core:Shared:Ready', function()
         'Logger',
         'Menu',
         'Notification',
-        'Status',
         'Admin',
         'Jobs',
     }, function(error)
@@ -269,18 +267,8 @@ function doAdminMenuToggle()
                                 { success = debugMode })
                         end)
 
-                        adminUtilities.Add:Button((Status:Check() and "Needs Enabled" or "Needs Disabled"),
-                            { disabled = false, success = Status:Check() }, function(data)
-                            Status:Toggle()
-                            Notification:SendAlert('Needs have been ' .. (Status:Check() and "Enabled" or "Disabled"),
-                                3500)
-                            adminUtilities.Update:Item(data.id, (Status:Check() and "Needs Enabled" or "Needs Disabled")
-                                , { success = Status:Check() })
-                        end)
-                        adminUtilities.Add:Button("Reset Needs", { disabled = false, success = true }, function(data)
-                            TriggerEvent('Status:Client:Reset')
-                            Notification:SendAlert('Needs have been Reset', 3500)
-                        end)
+                       
+                        
 
                         if recentDisconnectsData ~= nil then
                             local found = false

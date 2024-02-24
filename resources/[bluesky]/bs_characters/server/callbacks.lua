@@ -287,7 +287,7 @@ function RegisterMiddleware()
         if player ~= nil then
             local char = player:GetData('Character')
             if char ~= nil then
-                StoreData(player:GetData('Identifier'), char)
+                StoreData(player:GetData('ID'), char)
             end
         end
     end, 10000)
@@ -297,7 +297,7 @@ function RegisterMiddleware()
         if player ~= nil then
             local char = player:GetData('Character')
             if char ~= nil then
-                StoreData(player:GetData('Identifier'), char)
+                StoreData(player:GetData('ID'), char)
             end
         end
     end, 10000)

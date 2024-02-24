@@ -7,7 +7,6 @@ function RetrieveComponents()
     Markers = exports['bs_base']:FetchComponent('Markers')
     Interiors = exports['bs_base']:FetchComponent('Interiors')
     Motels = exports['bs_base']:FetchComponent('Motels')
-    Inventory = exports['bs_base']:FetchComponent('Inventory')
 end
 
 AddEventHandler('Core:Shared:Ready', function()
@@ -17,7 +16,6 @@ AddEventHandler('Core:Shared:Ready', function()
         'Markers',
         'Interiors',
         'Motels',
-        'Inventory',
     }, function(error)
         if #error > 0 then return; end
         RetrieveComponents()
@@ -92,13 +90,6 @@ MOTELS = {
                             return true
                         end, '[E] Stash', function()
                         TriggerServerEvent('Motels:server:loadInventory')
-                        --Callbacks:ServerCallback('Inventory:GetSecondInventory', {
-                        --    invType = 2
-                        --}, function(inventory)
-                        --    Inventory.Set.Secondary:Inventory(inventory)
-                        --    Inventory.Open:Player()
-                        --    Inventory.Open:Secondary()
-                        --end)
                     end)
                 end)
             end)

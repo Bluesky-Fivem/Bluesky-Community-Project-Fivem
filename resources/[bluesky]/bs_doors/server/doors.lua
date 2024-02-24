@@ -10,7 +10,6 @@ function RetrieveComponents()
     Doors = exports['bs_base']:FetchComponent('Doors')
     Chat = exports['bs_base']:FetchComponent('Chat')
     Jobs = exports['bs_base']:FetchComponent('Jobs')
-    -- Inventory = exports['bs_base']:FetchComponent('Inventory')
 end
 
 AddEventHandler('Core:Shared:Ready', function()
@@ -20,7 +19,6 @@ AddEventHandler('Core:Shared:Ready', function()
         'Utils',
         'Doors',
         'Chat',
-        -- 'Inventory',
         'Jobs'
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
@@ -60,11 +58,7 @@ function RegisterChatCommands()
     }, -1, { { name = "police", gradelevel = 1 } })
 end
 
--- function RegisterItems()
---     Inventory.Items:RegisterUse('lockpick', 'Doors', function(source, item)
---         TriggerClientEvent('Doors:client:usedLockpick', source, item)
---     end)
--- end
+
 
 function RegisterCallbacks()
     Callbacks:RegisterServerCallback('Doors:Add', function(source, data, cb)

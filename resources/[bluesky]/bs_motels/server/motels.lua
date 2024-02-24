@@ -4,7 +4,6 @@ function RetrieveComponents()
     Logger = exports['bs_base']:FetchComponent('Logger')
     Chat = exports['bs_base']:FetchComponent('Chat')
     Locations = exports['bs_base']:FetchComponent('Locations')
-    Inventory = exports['bs_base']:FetchComponent('Inventory')
     Motels = exports['bs_base']:FetchComponent('Motels')
     RegisterChatCommands()
 end
@@ -15,7 +14,6 @@ AddEventHandler('Core:Shared:Ready', function()
         'Logger',
         'Chat',
         'Locations',
-        'Inventory',
         'Motels',
     }, function(error)
         if #error > 0 then return end -- Do something to handle if not all dependencies loaded
@@ -28,13 +26,13 @@ AddEventHandler('Proxy:Shared:RegisterReady', function()
     exports['bs_base']:RegisterComponent('Motels', MOTELS)
 end)
 
-RegisterServerEvent('Motels:server:loadInventory')
-AddEventHandler('Motels:server:loadInventory', function()
-    local src = source
-    local player = exports['bs_base']:FetchComponent('Fetch'):Source(src)
-    local id = player:GetData('Character'):GetData('ID')
-    Inventory:OpenSecondary(src, 2, 'motel-'..id)
-end)
+-- RegisterServerEvent('Motels:server:loadInventory')
+-- AddEventHandler('Motels:server:loadInventory', function()
+--     local src = source
+--     local player = exports['bs_base']:FetchComponent('Fetch'):Source(src)
+--     local id = player:GetData('Character'):GetData('ID')
+--     Inventory:OpenSecondary(src, 2, 'motel-'..id)
+-- end)
 
 RegisterServerEvent('Characters:Server:Spawn')
 AddEventHandler('Characters:Server:Spawn', function()

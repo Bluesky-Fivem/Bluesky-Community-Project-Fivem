@@ -12,7 +12,6 @@ end
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Housing', {
         'Callbacks',
-        'Inventory',
         'Utils',
         'Notification',
         'Housing',

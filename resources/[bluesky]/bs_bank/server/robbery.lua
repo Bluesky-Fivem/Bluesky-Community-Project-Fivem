@@ -181,26 +181,26 @@ AddEventHandler('Bank:StartBankRobbery', function(id)
     end
 end)
 
-RegisterServerEvent('Bank:CounterReward')
-AddEventHandler('Bank:CounterReward', function(bank)
-    local source = source
-    local random = math.random(95, 100)
-    if random >= 95 then
-        local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
-        local char = player:GetData('Character')
-        Inventory:AddItem(char:GetData('ID'), 'vaultcard', 1, {
-            bank = bank
-        }, 1)
-    end
-end)
+-- RegisterServerEvent('Bank:CounterReward')
+-- AddEventHandler('Bank:CounterReward', function(bank)
+--     local source = source
+--     local random = math.random(95, 100)
+--     if random >= 95 then
+--         local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+--         local char = player:GetData('Character')
+--         Inventory:AddItem(char:GetData('ID'), 'vaultcard', 1, {
+--             bank = bank
+--         }, 1)
+--     end
+-- end)
 
-RegisterServerEvent('Bank:RemoveAccessCard')
-AddEventHandler('Bank:RemoveAccessCard', function(item)
-    local source = source
-    local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
-    local char = player:GetData('Character')
-    Inventory:RemoveItem(source, char:GetData('ID'), 'vaultcard', 1, item.Slot, 1)
-end)
+-- RegisterServerEvent('Bank:RemoveAccessCard')
+-- AddEventHandler('Bank:RemoveAccessCard', function(item)
+--     local source = source
+--     local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+--     local char = player:GetData('Character')
+--     Inventory:RemoveItem(source, char:GetData('ID'), 'vaultcard', 1, item.Slot, 1)
+-- end)
 
 RegisterServerEvent('Bank:MSpotReward')
 AddEventHandler('Bank:MSpotReward', function()
@@ -210,11 +210,11 @@ AddEventHandler('Bank:MSpotReward', function()
     Wallet:Add(char, math.random(1000))
 end)
 
-RegisterServerEvent('Bank:VGSpotReward')
-AddEventHandler('Bank:VGSpotReward', function()
-    local source = source
-    local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
-    local char = player:GetData('Character')
-    local items = { 'rolex', 'ring', 'valuegoods' }
-    Inventory:AddItem(char:GetData('ID'), items[math.random(#items)], math.random(5), {}, 1)
-end)
+-- RegisterServerEvent('Bank:VGSpotReward')
+-- AddEventHandler('Bank:VGSpotReward', function()
+--     local source = source
+--     local player = exports['bs_base']:FetchComponent('Fetch'):Source(source)
+--     local char = player:GetData('Character')
+--     local items = { 'rolex', 'ring', 'valuegoods' }
+--     Inventory:AddItem(char:GetData('ID'), items[math.random(#items)], math.random(5), {}, 1)
+-- end)
