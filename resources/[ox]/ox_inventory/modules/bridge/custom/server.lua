@@ -5,37 +5,31 @@ local Inventory = require 'modules.inventory.server'
 local Items = require 'modules.items.server'
 
 function server.setPlayerData(player)
-    local src = source
-    local user = exports['bs_base']:FetchComponent('Fetch'):Source(src)
+    local playerData = exports['bs_base']:FetchComponent('Fetch'):Source(player.source)
+    local char = playerData:GetData('Character')
 
-    
-    local playerData = user:GetData('Character')
+    print(json.encode(char,{indent = true}))
 
-    if playerData == nil then
+    if char == nil then
         print("Error: Unable to fetch player data")
         return nil
     end
 
     return {
-        source = playerData:GetData('Source'),
-        name = playerData:GetData('First') .. ' ' .. playerData:GetData('Last'),
+        source = char:GetData('Source'),
+        name = char:GetData('First') .. ' ' .. char:GetData('Last'),
         groups = 'police',
-        sex = playerData:GetData('Gender'),
-        dateofbirth = playerData:GetData('DOB'),
-        identifier = playerData:GetData('ID'),
-        
+        sex = char:GetData('Gender'),
+        dateofbirth = char:GetData('DOB'),
+        identifier = char:GetData('ID')   
     }
 end
 
 
 RegisterServerEvent('Characters:Server:Spawn')
 AddEventHandler('Characters:Server:Spawn', function()
-	print("CLIENT SPAWN")
-      --run if player spawn
-    local player = server.setPlayerData()
-	if player then
-		server.setPlayerInventory(player)
-		print(player)
-	end
+    local player = server.setPlayerData({source = source})
+    if player then
+        server.setPlayerInventory(player)
+    end
 end)
-
