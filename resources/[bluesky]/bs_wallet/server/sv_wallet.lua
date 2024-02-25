@@ -46,7 +46,7 @@ WALLET = {
         _data.Modify = function(self, amount)
           MySQL.Async.execute('UPDATE characters SET Cash = Cash + @amount WHERE _id = @char', {
             ['@amount'] = amount,
-            ['@char'] = _data.Char
+            ['@char'] = char:GetData('ID')
           })
         end
         cb(_data)
