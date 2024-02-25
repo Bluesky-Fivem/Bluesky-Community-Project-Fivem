@@ -7,13 +7,15 @@ function RetrieveComponents()
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Game = exports['bs_base']:FetchComponent('Game')
     Vehicle = exports['bs_base']:FetchComponent('Vehicle')
+    Notification = exports["fs-base"]:FetchComponent("Notification")
 end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Commands', {
         'Callbacks',
         'Game',
-        'Vehicle'
+        'Vehicle',
+        "Notification",
     }, function(error)  
         if #error > 0 then return; end
         RetrieveComponents()
@@ -70,6 +72,28 @@ AddEventHandler('Commands:Client:FixVehicle', function()
             SetVehicleFixed(vehicle)
         end
     end)
+end)
+
+RegisterNetEvent("Commands:Client:TeleportToMarker", function()
+	local WaypointHandle = GetFirstBlipInfoId(8)
+	if DoesBlipExist(WaypointHandle) then
+		local waypointCoords = GetBlipInfoIdCoord(WaypointHandle)
+		for height = 1, 1000 do
+			SetPedCoordsKeepVehicle(PlayerPedId(), waypointCoords["x"], waypointCoords["y"], height + 0.0)
+
+			local foundGround, zPos = GetGroundZFor_3dCoord(waypointCoords["x"], waypointCoords["y"], height + 0.0)
+
+			if foundGround then
+				SetPedCoordsKeepVehicle(PlayerPedId(), waypointCoords["x"], waypointCoords["y"], height + 0.0)
+				break
+			end
+
+			Citizen.Wait(5)
+		end
+		Notification:SendAlert("Teleported", 2500)
+	else
+		Notification:SendAlert("Please place your waypoint.", 2500)
+	end
 end)
 
 RegisterCommand("s", function()
