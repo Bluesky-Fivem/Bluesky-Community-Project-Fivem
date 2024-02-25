@@ -70,6 +70,7 @@ return {
 	['burger'] = {
 		label = 'Burger',
 		weight = 220,
+		durability = 0.075,
 		client = {
 			status = { hunger = 200000 },
 			anim = 'eating',
