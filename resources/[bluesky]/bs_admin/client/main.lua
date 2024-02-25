@@ -2,7 +2,7 @@ local menuOpen = false
 local noClip = false
 local showCoords = false
 local debugMode = false
-local loggedIn = false
+local loggedIn = true
 
 local noClipIndex = 1 -- [[Used to determine the index of the speeds table.]]
 local noclipEntity = nil
@@ -153,17 +153,23 @@ AddEventHandler('Admin:Revive:Client:All', function()
     end
 end)
 
+RegisterCommand("admin", function()
+    doAdminMenuToggle()
+end)
+
 function doAdminMenuToggle()
     Callbacks:ServerCallback('Commands:ValidateAdmin', {}, function(isAdmin)
         if isAdmin and not menuOpen then
+            
             Callbacks:ServerCallback('Admin:receiveRecentDisconnects', {}, function(recentDisconnectsData)
                 Callbacks:ServerCallback('Admin:receiveActivePlayers', {}, function(activePlayersData)
-                    Callbacks:ServerCallback('Admin:receiveSpawnLocations', {}, function(spawnLocations)
+                    --Callbacks:ServerCallback('Admin:receiveSpawnLocations', {}, function(spawnLocations)
                         if noClip then
                             noClip = false
                             TriggerEvent('Admin:noclip')
-                        end
+                        end 
 
+                        print("why ?1")
                         local x, y, z = nil, nil, nil
                         local spawnVeh, spawnProp = "gtr", nil
                         local spawnCash = 0
@@ -174,6 +180,7 @@ function doAdminMenuToggle()
                             menuOpen = false
                         end)
 
+                        print("why ?")
                         local recentDisconnects = Menu:Create('recentDisconnects', 'Recent Disconnects')
                         local activePlayers = Menu:Create('activePlayers', 'Active Players')
                         local teleportTo = Menu:Create('teleportTo', 'Teleport Management')
@@ -635,7 +642,7 @@ function doAdminMenuToggle()
                         root.Add:SubMenu('Entity Management', spawnMenu)
 
                         root:Show()
-                    end)
+                    --end)
                 end)
             end)
         end
