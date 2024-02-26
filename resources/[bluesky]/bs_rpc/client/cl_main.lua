@@ -19,7 +19,7 @@ end)
 
 local res, promises, functions, callIden = GetCurrentResourceName(), {}, {}, 0
 remoteCalls = {
-    execute = function(name, ...)
+    Execute = function(name, ...)
         local callId, solved = callIden, false
         callIden = callIden + 1
     
@@ -66,24 +66,6 @@ clearPromise = function(callId)
     end)
 end
 
-remoteCalls.execute = function(name, ...)
-    local callId, solved = callIden, false
-    callIden = callIden + 1
-
-    promises[callId] = promise:new()
-    TriggerServerEvent('bs_rpc:cl_request', res, name, callId, paramPacker(...))
-
-    Citizen.SetTimeout(20000, function()
-        if not solved then
-            promises[callId]:resolve({nil})
-        end
-    end)
-    local response = Citizen.Await(promises[callId])
-    solved = true
-    clearPromise(callId)
-
-    return paramUnpacker(response)
-end
 
 RegisterNetEvent('bs_rpc:cl_response')
 AddEventHandler('bs_rpc:cl_response', function(origin, callId, response)
