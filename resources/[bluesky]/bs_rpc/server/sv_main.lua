@@ -19,11 +19,11 @@ AddEventHandler('Proxy:Shared:RegisterReady', function()
 end)
 
 remoteCalls = {
-    register = function(name, func)
+    Register = function(name, func)
         functions[name] = func
     end,
 
-    remove = function(name)
+    Remove = function(name)
         functions[name] = nil
     end
 }
