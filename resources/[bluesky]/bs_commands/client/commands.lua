@@ -7,7 +7,7 @@ function RetrieveComponents()
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Game = exports['bs_base']:FetchComponent('Game')
     Vehicle = exports['bs_base']:FetchComponent('Vehicle')
-    Notification = exports["fs-base"]:FetchComponent("Notification")
+    Notification = exports["bs_base"]:FetchComponent("Notification")
 end
 
 AddEventHandler('Core:Shared:Ready', function()
