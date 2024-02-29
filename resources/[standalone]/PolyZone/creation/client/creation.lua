@@ -150,7 +150,7 @@ function drawThread()
   Citizen.CreateThread(function()
     while drawZone do
       if createdZone then
-        createdZone:draw(true)
+        createdZone:draw()
       end
       Wait(0)
     end

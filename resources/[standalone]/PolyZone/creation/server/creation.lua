@@ -83,7 +83,7 @@ end
 function parseBox(zone)
   if Config.ConfigFormatEnabled then
     local printout = printoutHeader(zone.name)
-    printout = printout .. "coords = "
+    printout = printout .. "center = "
     printout = printout .. "vector3(" .. tostring(round(zone.center.x, 2)) .. ", " .. tostring(round(zone.center.y, 2))  .. ", " .. tostring(round(zone.center.z, 2)) .."),\n"
     printout = printout .. "length = " .. tostring(zone.length) .. ",\n"
     printout = printout .. "width = " .. tostring(zone.width) .. ",\n"
@@ -98,6 +98,7 @@ function parseBox(zone)
     return printout
   else
     local printout = printoutHeader(zone.name)
+    printout = printout .. "-- Deze code maakt niet gebruik van de export en het nieuw formaat, dus deze code zal niet werken.\n"
     printout = printout .. "BoxZone:Create("
     printout = printout .. "vector3(" .. tostring(round(zone.center.x, 2)) .. ", " .. tostring(round(zone.center.y, 2))  .. ", " .. tostring(round(zone.center.z, 2)) .."), "
     printout = printout .. tostring(zone.length) .. ", "

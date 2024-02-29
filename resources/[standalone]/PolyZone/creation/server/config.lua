@@ -1,5 +1,5 @@
 Config = Config or {}
-Config.ConfigFormatEnabled = false
+Config.ConfigFormatEnabled = true
 -- Default Format
 
 -- Name: TestBox | 2022-04-13T22:46:17Z

@@ -34,7 +34,7 @@ RegisterCommand('+cycleproximity', function()
 end, false)
 
 function RegisterKeybinds()
-	Keybinds:Register("Voip", "Cycles the proximity state.", "+cycleproximity", "-cycleproximity", "keyboard", 'Z')
+	Keybinds:AddKeybind("Voip", "Cycles the proximity state.", "Cycle" ,"+cycleproximity", "-cycleproximity", 'Z')
 end
 
 exports('setAllowProximityCycleState', function(state)

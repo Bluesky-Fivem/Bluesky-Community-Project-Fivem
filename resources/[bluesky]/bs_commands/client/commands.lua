@@ -96,16 +96,16 @@ RegisterNetEvent("Commands:Client:TeleportToMarker", function()
 	end
 end)
 
-RegisterCommand("s", function()
-    local playerData = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData('Job').job
-    if playerData then
-        --local characterID = playerData:GetData("ID")
-        --if characterID then
-            print("Character ID: " .. json.encode(playerData))
-        else
-            print("Character ID not found")
-        end
-    --else
-    --    print("Player data not found")
-    --end
-end)
+-- RegisterCommand("s", function()
+--     local playerData = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData('Bank')
+--     if playerData then
+--         --local characterID = playerData:GetData("ID")
+--         --if characterID then
+--             print("Character ID: " .. json.encode(playerData))
+--         else
+--             print("Character ID not found")
+--         end
+--     --else
+--     --    print("Player data not found")
+--     --end
+-- end)

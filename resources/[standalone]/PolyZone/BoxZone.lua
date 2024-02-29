@@ -1,4 +1,4 @@
-BoxZone = {}
+BoxZone, BoxZones = {}, {}
 -- Inherits from PolyZone
 setmetatable(BoxZone, { __index = PolyZone })
 
@@ -96,7 +96,7 @@ local function _initDebug(zone, options)
 
   Citizen.CreateThread(function()
     while not zone.destroyed do
-      zone:draw(false)
+      zone:draw()
       Citizen.Wait(0)
     end
   end)
@@ -147,10 +147,42 @@ function BoxZone:new(center, length, width, options)
   return zone
 end
 
-function BoxZone:Create(center, length, width, options)
-  local zone = BoxZone:new(center, length, width, options)
-  _initDebug(zone, options)
-  return zone
+function BoxZone:Create(Faces, Options, OnPointInOutCb)
+  if Options.name == nil then return error("No Boxzone Name was defined.") end
+  if not Options.IsMultiple then Faces = { Faces } end
+
+  for k, v in pairs(Faces) do
+    if not v.length or not v.width then return error("No length or width was defined.") end
+    if not v.center then return error("No center was defined.") end
+
+    local Name = Options.name
+    if BoxZones[Name] ~= nil and BoxZones[Name][k] then
+      BoxZones[Name][k]:destroy()
+      BoxZones[Name][k] = nil
+    end
+
+    if BoxZones[Name] == nil then BoxZones[Name] = {} end
+
+    -- Reformat options
+    Options.minZ = v.minZ ~= nil and v.minZ or Options.minZ
+    Options.maxZ = v.maxZ ~= nil and v.maxZ or Options.maxZ
+    Options.heading = v.heading ~= nil and v.heading or Options.heading
+    Options.data = v.data
+
+    Options.debugPoly = Options.debugPoly or IsDebugMode
+    Options.debugGrid = Options.debugGrid or IsDebugMode
+
+    local Zone = BoxZone:new(vector3(v.center.x, v.center.y, v.center.z), v.length, v.width, Options)
+    _initDebug(Zone, Options)
+    Zone:onPlayerInOut(OnPointInOutCb, 500)
+
+    BoxZones[Name][k] = Zone
+  end
+
+  return BoxZones[Options.name][1]
+  -- local zone = BoxZone:new(center, length, width, options)
+  -- _initDebug(zone, options)
+  -- return zone
 end
 
 

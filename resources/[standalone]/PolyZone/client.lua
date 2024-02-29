@@ -125,9 +125,7 @@ function PolyZone:TransformPoint(point)
   return point
 end
 
-function PolyZone:draw(forceDraw)
-  if not forceDraw and not self.debugPoly and not self.debugGrid then return end
-  
+function PolyZone:draw()
   local zDrawDist = 45.0
   local oColor = self.debugColors.outline or defaultColorOutline
   local oR, oG, oB = oColor[1], oColor[2], oColor[3]
@@ -137,6 +135,13 @@ function PolyZone:draw(forceDraw)
   local plyPos = GetEntityCoords(plyPed)
   local minZ = self.minZ or plyPos.z - zDrawDist
   local maxZ = self.maxZ or plyPos.z + zDrawDist
+  
+  local centerCoords = vector3(self.center.x, self.center.y, self.center.z)
+  if self.minZ and self.maxZ then centerCoords = vector3(self.center.x, self.center.y, self.minZ + ((self.maxZ - self.minZ) / 2)) end
+
+  if #(plyPos - centerCoords) < 15.0 then
+    DrawText3D(centerCoords.x, centerCoords.y, centerCoords.z, self.name)
+  end
 
   local points = self.points
   for i=1, #points do
@@ -158,8 +163,8 @@ function PolyZone:draw(forceDraw)
   end
 end
 
-function PolyZone.drawPoly(poly, forceDraw)
-  PolyZone.draw(poly, forceDraw)
+function PolyZone.drawPoly(poly)
+  PolyZone.draw(poly)
 end
 
 -- Debug drawing all grid cells that are completly within the polygon
@@ -434,7 +439,7 @@ local function _initDebug(poly, options)
 
   Citizen.CreateThread(function()
     while not poly.destroyed do
-      poly:draw(false)
+      poly:draw()
       if options.debugGrid and poly.lines then
         _drawGrid(poly)
       end
@@ -541,8 +546,14 @@ function PolyZone:onPointInOut(getPointCb, onPointInOutCb, waitInMS)
         local point = getPointCb()
         local newIsInside = self:isPointInside(point)
         if newIsInside ~= isInside then
-          onPointInOutCb(newIsInside, point)
+          if onPointInOutCb then onPointInOutCb(newIsInside, self, point) end
           isInside = newIsInside
+
+          if isInside then
+            TriggerEvent('PolyZone:OnEnter', self, point)
+          else
+            TriggerEvent('PolyZone:OnExit', self, point)
+          end
         end
       end
       Citizen.Wait(_waitInMS)
@@ -598,4 +609,18 @@ end
 
 function PolyZone:getBoundingBoxCenter()
   return self.center
+end
+
+function DrawText3D(x, y, z, text)
+  SetTextScale(0.35, 0.35)
+  SetTextFont(4)
+  SetTextProportional(1)
+  SetTextColour(255, 255, 255, 215)
+  SetTextEntry("STRING")
+  SetTextCentre(true)
+  SetTextOutline()
+  AddTextComponentString(text) 
+  SetDrawOrigin(x,y,z, 0)
+  DrawText(0.0, 0.0)
+  ClearDrawOrigin()
 end

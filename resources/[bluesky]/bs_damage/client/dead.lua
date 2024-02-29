@@ -1,7 +1,8 @@
 local deadAnimDict = 'dead'
 local deadAnim = 'dead_a'
 local dick = 5
-deathTime = 60
+local deathTime = 60
+local isDead = false
 
 -- Functions
 
@@ -55,30 +56,24 @@ function OnDeath()
 end
 
 function DeathTimer()
-    local player = PlayerPedId()
-    local pos = GetEntityCoords(player)
-    local heading = GetEntityHeading(player)
-    dick = 5
     while isDead do
         Wait(1000)
         deathTime = deathTime - 1
-        while deathTime <= 0 do
-            Wait(0)
-            if IsControlPressed(0, 38) then
-                if dick < 1 then 
-                    TriggerEvent('hospital:client:Revive')
+
+        if deathTime <= 0 then
+            while true do
+                Wait(0)
+                if IsControlPressed(0, 38) then
+                    if dick < 1 then 
+                        TriggerEvent('hospital:client:Revive')
+                        dick = 5
+                        break  -- Exit the inner loop
+                    else
+                        dick = dick - 1
+                    end
+                elseif IsControlReleased(0, 38) then
                     dick = 5
                 end
-            end
-            if IsControlPressed(0, 38) then
-                if dick - 1 >= 0 then
-                    dick = dick - 1
-                else
-                    dick = 0
-                end
-            end
-            if IsControlReleased(0, 38) then
-                dick = 5
             end
         end
     end
@@ -138,7 +133,6 @@ CreateThread(function()
                    DrawTxt(0.89, 1.42, 1.0,1.0,0.6, "~w~ HOLD ~r~[E] ("..dick..")~w~ TO RESPAWN ~w~OR WAIT FOR ~r~EMS", 255, 255, 255, 255)
                 end
         
-
                 if IsPedInAnyVehicle(ped, false) then
                     loadAnimDict('veh@low@front_ps@idle_duck')
                     if not IsEntityPlayingAnim(ped, 'veh@low@front_ps@idle_duck', 'sit', 3) then
@@ -160,6 +154,7 @@ RegisterNetEvent('hospital:client:Revive', function()
         NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z, GetEntityHeading(player), true, false)
         isDead = false
         SetEntityInvincible(player, false)
+        deathTime = 60  -- Reset death timer
     end
 
     SetEntityMaxHealth(player, 200)

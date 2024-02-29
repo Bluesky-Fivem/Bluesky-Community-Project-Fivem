@@ -42,7 +42,7 @@ local function _initDebug(zone, options)
     local shouldDraw = options.debugPoly
     while not zone.destroyed do
       UpdateOffsets(entity, zone)
-      if shouldDraw then zone:draw(false) end
+      if shouldDraw then zone:draw() end
       Citizen.Wait(0)
     end
   end)

@@ -72,7 +72,7 @@ end
 
 function boxStart(name, heading, length, width, minHeight, maxHeight)
   local center = GetEntityCoords(PlayerPedId())
-  createdZone = BoxZone:Create(center, length, width, {name = tostring(name)})
+  createdZone = BoxZone:Create({center = center, length = length, width = width}, {name = tostring(name), IsMultiple = false, debugPoly = true})
   local useZ, minZ, maxZ = false, center.z - 1.0, center.z + 3.0
   if minHeight then
     minZ = center.z - minHeight
@@ -108,6 +108,9 @@ function boxStart(name, heading, length, width, minHeight, maxHeight)
 end
 
 function boxFinish()
+  if createdZone then
+    createdZone:destroy()
+  end
   TriggerServerEvent("polyzone:printBox",
     {name=createdZone.name, center=createdZone.center, length=createdZone.length, width=createdZone.width, heading=createdZone.offsetRot, minZ=createdZone.minZ, maxZ=createdZone.maxZ})
 end

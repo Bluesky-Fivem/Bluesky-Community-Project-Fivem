@@ -254,6 +254,8 @@ function RegisterCallbacks()
                     cData._id = nil
                     cData.Job = json.decode(cData.Job) or {}
                     cData.skin = json.decode(cData.skin) or {}
+                    cData.Cash = cData.Cash
+                    cData.Bank = cData.Bank
                     player:SetData('Character', DataStore:CreateStore(source, 'Character', cData))
                     UpdateLastPlayed(characterId)
                     cb(cData)

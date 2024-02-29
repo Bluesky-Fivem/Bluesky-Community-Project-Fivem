@@ -14,12 +14,14 @@ function StoreData(userId, char)
     data.Armor = GetPedArmour(ped)
     data.LastPlayed = os.time() * 1000
 
-    exports.oxmysql:update("UPDATE characters SET HP = @hp, Armor = @armor, LastPlayed = @lastPlayed, Job = @job WHERE _id = @userId", {
+    exports.oxmysql:update("UPDATE characters SET HP = @hp, Armor = @armor, LastPlayed = @lastPlayed, Job = @job, Cash = @cash, Bank = @bank WHERE _id = @userId", {
         ['@hp'] = data.HP,
         ['@armor'] = data.Armor,
         ['@lastPlayed'] = tonumber(data.LastPlayed),
         ['@userId'] = id,
-        ['@job'] = json.encode(data.Job)
+        ['@job'] = json.encode(data.Job),
+        ['@cash'] = data.Cash,
+        ['@bank'] = data.Bank
     }, function(rowsChanged)
         print(json.encode(rowsChanged))
         --Logger:Trace('Characters', 'Storing Character Data', { console = true })
