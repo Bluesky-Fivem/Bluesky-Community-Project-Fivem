@@ -52,7 +52,7 @@ local function GivePlayerPaycheck(playerId, grossPaycheckAmount)
 end
 
 function GivePaychecksToAllPlayers()
-  local allPlayers = Fetch:All()
+  local allPlayers = exports['bs_base']:FetchComponent('Fetch'):All()
   for src,playerData in pairs(allPlayers) do
     local player = Fetch:Source(src):GetData("Character")
     local job = player:GetData('Job').job
