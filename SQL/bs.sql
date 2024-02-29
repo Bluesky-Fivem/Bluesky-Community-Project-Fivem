@@ -46,15 +46,17 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `skin` longtext DEFAULT NULL,
   `Admin` varchar(50) DEFAULT 'user',
   `inventory` longtext DEFAULT NULL,
-  `Cash` int(255) DEFAULT 5000,
+  `Cash` int(255) DEFAULT 500,
+  `Bank` int(255) DEFAULT 5000,
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Dumping data for table blueskysql.characters: ~3 rows (approximately)
-INSERT IGNORE INTO `characters` (`_id`, `User`, `First`, `Last`, `Phone`, `Gender`, `Bio`, `DOB`, `LastPlayed`, `Job`, `Armor`, `HP`, `skin`, `Admin`, `inventory`, `Cash`) VALUES
-	(54, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'dddddddddd', 'ddddddddddd', '6284647432', '0', NULL, '1990-12-31T23:59:59.000Z', 1708385856000, '{"salary":10,"grade":{"level":0,"label":"Unemployed","id":0},"label":"Unemployed","workplace":{"id":0,"label":"Unemployed"},"job":"unemployed"}', 0, 200, '{"customization":{"components":{"shoes":{"componentId":6,"paletteId":0,"textureId":0,"drawableId":0},"bag":{"componentId":5,"paletteId":0,"textureId":0,"drawableId":0},"mask":{"componentId":1,"paletteId":0,"textureId":0,"drawableId":0},"kevlar":{"componentId":9,"paletteId":0,"textureId":0,"drawableId":0},"torso2":{"componentId":11,"paletteId":0,"textureId":0,"drawableId":0},"undershirt":{"componentId":8,"paletteId":0,"textureId":0,"drawableId":0},"leg":{"componentId":4,"paletteId":0,"textureId":0,"drawableId":0},"face":{"componentId":0,"paletteId":0,"textureId":0,"drawableId":0},"accessory":{"componentId":7,"paletteId":0,"textureId":0,"drawableId":0},"torso":{"componentId":3,"paletteId":0,"textureId":0,"drawableId":0},"hair":{"componentId":2,"paletteId":0,"textureId":0,"drawableId":0},"badge":{"componentId":10,"paletteId":0,"textureId":0,"drawableId":0}},"face":{"face1":{"index":0,"texture":0,"mix":50.0},"face2":{"index":0,"texture":0,"mix":50.0},"features":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"props":{"watch":{"componentId":6,"disabled":true,"textureId":0,"drawableId":0},"bracelet":{"componentId":7,"disabled":true,"textureId":0,"drawableId":0},"glass":{"componentId":1,"disabled":true,"textureId":0,"drawableId":0},"hat":{"componentId":0,"disabled":true,"textureId":0,"drawableId":0},"ear":{"componentId":2,"disabled":true,"textureId":0,"drawableId":0}},"overlay":{"eyebrows":{"id":2,"opacity":100.0,"index":0,"disabled":true},"freckles":{"id":9,"opacity":100.0,"index":0,"disabled":true},"blemish":{"id":0,"opacity":100.0,"index":0,"disabled":true},"complexion":{"id":6,"opacity":100.0,"index":0,"disabled":true},"bodyblemish":{"id":11,"opacity":100.0,"index":0,"disabled":true},"makeup":{"id":4,"opacity":100.0,"index":0,"disabled":true},"ageing":{"id":3,"opacity":100.0,"index":0,"disabled":true},"sundamage":{"id":7,"opacity":100.0,"index":0,"disabled":true},"facialhair":{"id":1,"opacity":100.0,"index":0,"disabled":true},"blush":{"id":5,"opacity":100.0,"index":0,"disabled":true},"lipstick":{"id":8,"opacity":100.0,"index":0,"disabled":true},"addbodyblemish":{"id":12,"opacity":100.0,"index":0,"disabled":true},"chesthair":{"id":10,"opacity":100.0,"index":0,"disabled":true}},"colors":{"facialhair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"chesthair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"hair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}}}},"model":""}', 'dev', NULL, 5000),
-	(60, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'sssssssssss', 'ssssssssssssssssssss', '6285682218', '0', NULL, '2000-01-01T00:00:00.000Z', 1708385856000, '{"grade":{"level":0,"id":0,"label":"Unemployed"},"label":"Unemployed","workplace":{"label":"Unemployed","id":0},"salary":10,"job":"unemployed"}', 100, 200, NULL, 'user', NULL, 5000),
-	(61, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'wwwwwwwwwwwww', 'wwwwwwwwwwwwwwwww', '4157392653', '0', NULL, '1990-12-31T23:59:59.000Z', 1708385856000, '{"salary":10,"label":"Unemployed","workplace":{"id":0,"label":"Unemployed"},"job":"unemployed","grade":{"id":0,"level":0,"label":"Unemployed"}}', 100, 200, NULL, 'user', NULL, 5000);
+-- Dumping data for table blueskysql.characters: ~4 rows (approximately)
+INSERT IGNORE INTO `characters` (`_id`, `User`, `First`, `Last`, `Phone`, `Gender`, `Bio`, `DOB`, `LastPlayed`, `Job`, `Armor`, `HP`, `skin`, `Admin`, `inventory`, `Cash`, `Bank`) VALUES
+	(54, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'dddddddddd', 'ddddddddddd', '6284647432', '0', NULL, '1990-12-31T23:59:59.000Z', 1709248622000, '{"salary":200,"workplace":{"label":"Los Santos Police Department","id":1},"job":"police","grade":{"level":0,"id":"lspd_cadet","label":"Cadet"},"label":"Police"}', 0, 200, '{"customization":{"components":{"shoes":{"componentId":6,"paletteId":0,"textureId":0,"drawableId":0},"bag":{"componentId":5,"paletteId":0,"textureId":0,"drawableId":0},"mask":{"componentId":1,"paletteId":0,"textureId":0,"drawableId":0},"kevlar":{"componentId":9,"paletteId":0,"textureId":0,"drawableId":0},"torso2":{"componentId":11,"paletteId":0,"textureId":0,"drawableId":0},"undershirt":{"componentId":8,"paletteId":0,"textureId":0,"drawableId":0},"leg":{"componentId":4,"paletteId":0,"textureId":0,"drawableId":0},"face":{"componentId":0,"paletteId":0,"textureId":0,"drawableId":0},"accessory":{"componentId":7,"paletteId":0,"textureId":0,"drawableId":0},"torso":{"componentId":3,"paletteId":0,"textureId":0,"drawableId":0},"hair":{"componentId":2,"paletteId":0,"textureId":0,"drawableId":0},"badge":{"componentId":10,"paletteId":0,"textureId":0,"drawableId":0}},"face":{"face1":{"index":0,"texture":0,"mix":50.0},"face2":{"index":0,"texture":0,"mix":50.0},"features":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"props":{"watch":{"componentId":6,"disabled":true,"textureId":0,"drawableId":0},"bracelet":{"componentId":7,"disabled":true,"textureId":0,"drawableId":0},"glass":{"componentId":1,"disabled":true,"textureId":0,"drawableId":0},"hat":{"componentId":0,"disabled":true,"textureId":0,"drawableId":0},"ear":{"componentId":2,"disabled":true,"textureId":0,"drawableId":0}},"overlay":{"eyebrows":{"id":2,"opacity":100.0,"index":0,"disabled":true},"freckles":{"id":9,"opacity":100.0,"index":0,"disabled":true},"blemish":{"id":0,"opacity":100.0,"index":0,"disabled":true},"complexion":{"id":6,"opacity":100.0,"index":0,"disabled":true},"bodyblemish":{"id":11,"opacity":100.0,"index":0,"disabled":true},"makeup":{"id":4,"opacity":100.0,"index":0,"disabled":true},"ageing":{"id":3,"opacity":100.0,"index":0,"disabled":true},"sundamage":{"id":7,"opacity":100.0,"index":0,"disabled":true},"facialhair":{"id":1,"opacity":100.0,"index":0,"disabled":true},"blush":{"id":5,"opacity":100.0,"index":0,"disabled":true},"lipstick":{"id":8,"opacity":100.0,"index":0,"disabled":true},"addbodyblemish":{"id":12,"opacity":100.0,"index":0,"disabled":true},"chesthair":{"id":10,"opacity":100.0,"index":0,"disabled":true}},"colors":{"facialhair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"chesthair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}},"hair":{"color2":{"rgb":"rgb(0, 0, 0)","index":0},"color1":{"rgb":"rgb(0, 0, 0)","index":0}}}},"model":""}', 'dev', '[{"name":"money","count":99971,"slot":1},{"name":"phone","count":1,"slot":2}]', 10005000, 5000),
+	(60, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'sssssssssss', 'ssssssssssssssssssss', '6285682218', '0', NULL, '2000-01-01T00:00:00.000Z', 1708735647000, '{"grade":{"level":0,"id":0,"label":"Unemployed"},"label":"Unemployed","workplace":{"label":"Unemployed","id":0},"salary":10,"job":"unemployed"}', 0, 200, NULL, 'user', NULL, 5000, 5000),
+	(61, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'wwwwwwwwwwwww', 'wwwwwwwwwwwwwwwww', '4157392653', '0', NULL, '1990-12-31T23:59:59.000Z', 1708735647000, '{"salary":10,"label":"Unemployed","workplace":{"id":0,"label":"Unemployed"},"job":"unemployed","grade":{"id":0,"level":0,"label":"Unemployed"}}', 0, 200, NULL, 'user', NULL, 5000, 5000),
+	(62, 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 'Test', 'McTest', '4155395233', '0', NULL, '1990-12-31T23:59:59.000Z', -1, '{"salary":10,"grade":{"level":0,"id":0,"label":"Unemployed"},"workplace":{"id":0,"label":"Unemployed"},"job":"unemployed","label":"Unemployed"}', 100, 200, NULL, 'user', NULL, 5000, 5000);
 
 -- Dumping structure for table blueskysql.character_emails
 CREATE TABLE IF NOT EXISTS `character_emails` (
@@ -169,6 +171,8 @@ CREATE TABLE IF NOT EXISTS `ox_inventory` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Dumping data for table blueskysql.ox_inventory: ~0 rows (approximately)
+INSERT IGNORE INTO `ox_inventory` (`owner`, `name`, `data`, `lastupdated`) VALUES
+	('54', '1', '[{"slot":1,"count":4,"name":"bandage"}]', '2024-02-21 16:30:05');
 
 -- Dumping structure for table blueskysql.peds
 CREATE TABLE IF NOT EXISTS `peds` (
@@ -196,6 +200,23 @@ CREATE TABLE IF NOT EXISTS `phone_contacts` (
 
 -- Dumping data for table blueskysql.phone_contacts: ~0 rows (approximately)
 
+-- Dumping structure for table blueskysql.phone_documents
+CREATE TABLE IF NOT EXISTS `phone_documents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `citizenid` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '',
+  `type` int(11) DEFAULT NULL,
+  `title` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `content` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `signatures` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT '[]',
+  `sharees` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT '[]',
+  `finalized` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `citizenid` (`citizenid`),
+  KEY `sharees` (`sharees`(1024))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table blueskysql.phone_documents: ~0 rows (approximately)
+
 -- Dumping structure for table blueskysql.player_vehicles
 CREATE TABLE IF NOT EXISTS `player_vehicles` (
   `id` int(11) DEFAULT NULL,
@@ -214,12 +235,28 @@ CREATE TABLE IF NOT EXISTS `users` (
   `priority` int(11) DEFAULT NULL,
   `roles` varchar(50) DEFAULT NULL,
   `group` varchar(50) DEFAULT 'user',
+  `inventory` longtext DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- Dumping data for table blueskysql.users: ~2 rows (approximately)
-INSERT IGNORE INTO `users` (`id`, `name`, `sid`, `identifier`, `priority`, `roles`, `group`) VALUES
-	(5, 'luke1', 'e:a7602f66b0a43e8efdc232765bbb0e2b63bab26b@blue.sky', 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 0, 'dev', 'user');
+INSERT IGNORE INTO `users` (`id`, `name`, `sid`, `identifier`, `priority`, `roles`, `group`, `inventory`) VALUES
+	(5, 'luke1', 'e:a7602f66b0a43e8efdc232765bbb0e2b63bab26b@blue.sky', 'license:a7602f66b0a43e8efdc232765bbb0e2b63bab26b', 0, 'dev', 'user', NULL);
+
+-- Dumping structure for table blueskysql.user_inventory2
+CREATE TABLE IF NOT EXISTS `user_inventory2` (
+  `item_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '0',
+  `information` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '0',
+  `slot` int(11) NOT NULL,
+  `dropped` tinyint(4) NOT NULL DEFAULT 0,
+  `creationDate` bigint(20) NOT NULL DEFAULT 0,
+  `quality` int(11) DEFAULT 100,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=323693 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- Dumping data for table blueskysql.user_inventory2: ~0 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
