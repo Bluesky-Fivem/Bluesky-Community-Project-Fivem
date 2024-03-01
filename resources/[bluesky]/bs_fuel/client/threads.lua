@@ -1,6 +1,6 @@
 local _nearestPump = false
 local _fueling = false
-local _spawned = false
+local _spawned = true
 
 RegisterNetEvent('Characters:Client:Logout')
 AddEventHandler('Characters:Client:Logout', function()
@@ -82,71 +82,71 @@ function RunThreads()
                     --DrawMarker(20, vehCOords.x, vehCOords.y, vehCOords.z + 1.5, 0, 0, 0, 0, 0, GetEntityHeading(veh), 1.0, 1.0, 1.0, 58, 170, 249, 155, false, false, 2, false, false, false, false)
     
                     if IsControlJustReleased(0, 38) then
-                        Callbacks:ServerCallback('Fuel:Check', {}, function(cash)
-                            if cash >= Config.BaseCost then
-                                local start = current
-                                local start = current
-                                local time = (100 - current) * 1000
-    
-                                if cash < ((100 - current) * Config.BaseCost) then
-                                    time = Round(cash / Config.BaseCost) * 1000
-                                end
-            
-                                Progress:ProgressWithStartAndTick({
-                                    name = 'idle',
-                                    duration = Round(time, 1),
-                                    label = 'Refueling Vehicle',
-                                    canCancel = true,
-                                    tickrate = 1000,
-                                    controlDisables = {
-                                        disableMovement = true,
-                                        disableCarMovement = true,
-                                        disableMouse = false,
-                                        disableCombat = true,
-                                    },
-                                    animation = {
-                                        animDict = 'weapons@misc@jerrycan@',
-                                        anim = 'fire',
-                                        flags = 49,
-                                    },
-                                    prop = {
-                                        model = 'prop_jerrycan_01a',
-                                        bone = 60309,
-                                        coords = { x = 0.0, y = 0.1, z = 0.5 },
-                                        rotation = { x = 364.0, y = 180.0, z = 90.0 },
-                                    }
-                                }, function()
-                                    _fueling = true
-                                    UI.Action:Hide()
-                                    actionShowing = false
-            
-                                    
-                                end, function()
-                                    local c = DecorGetFloat(veh, 'VEH_FUEL')
-            
-                                    if current < 100.0 then
-                                        current = current + 1
-                                    else
-                                        Progress:Cancel()
-                                    end
-            
-                                    if IsControlJustReleased(0, 178) or DoesEntityExist(GetPedInVehicleSeat(vehicle, -1)) or (isNearPump and GetEntityHealth(isNearPump) <= 0) then
-                                        _fueling = false
-                                        Progress:Cancel()
-                                    end
-                                end, function(status)
-                                    Callbacks:ServerCallback('Fuel:Pay', Round((current - start), 1), function(status)
-                                        DecorSetFloat(veh, 'VEH_FUEL', current)
-                                        TriggerEvent('Vehicle:Client:Fuel', DecorGetFloat(veh, 'VEH_FUEL'))
-                                        Vehicle.Fuel:Refueled(veh)
-                                        _fueling = false
-                                    end)
-            
-                                end)
-                            else
-                                Notification:SendError('Not Enough Cash')
+                        local cash = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData('Cash')
+                        if cash >= Config.BaseCost then
+                            local start = current
+                            local start = current
+                            local time = (100 - current) * 1000
+
+                            if cash < ((100 - current) * Config.BaseCost) then
+                                time = Round(cash / Config.BaseCost) * 1000
                             end
-                        end)
+        
+                            Progress:ProgressWithStartAndTick({
+                                name = 'idle',
+                                duration = Round(time, 1),
+                                label = 'Refueling Vehicle',
+                                canCancel = true,
+                                tickrate = 1000,
+                                controlDisables = {
+                                    disableMovement = true,
+                                    disableCarMovement = true,
+                                    disableMouse = false,
+                                    disableCombat = true,
+                                },
+                                animation = {
+                                    animDict = 'weapons@misc@jerrycan@',
+                                    anim = 'fire',
+                                    flags = 49,
+                                },
+                                prop = {
+                                    model = 'prop_jerrycan_01a',
+                                    bone = 60309,
+                                    coords = { x = 0.0, y = 0.1, z = 0.5 },
+                                    rotation = { x = 364.0, y = 180.0, z = 90.0 },
+                                }
+                            }, function()
+                                _fueling = true
+                                UI.Action:Hide()
+                                actionShowing = false
+        
+                                
+                            end, function()
+                                local c = DecorGetFloat(veh, 'VEH_FUEL')
+        
+                                if current < 100.0 then
+                                    current = current + 1
+                                else
+                                    Progress:Cancel()
+                                end
+        
+                                if IsControlJustReleased(0, 178) or DoesEntityExist(GetPedInVehicleSeat(vehicle, -1)) or (isNearPump and GetEntityHealth(isNearPump) <= 0) then
+                                    _fueling = false
+                                    Progress:Cancel()
+                                end
+                            end, function(status)
+                                Callbacks:ServerCallback('Fuel:Pay', Round((current - start), 1), function(status)
+                                    DecorSetFloat(veh, 'VEH_FUEL', current)
+                                    TriggerEvent('Vehicle:Client:Fuel', DecorGetFloat(veh, 'VEH_FUEL'))
+                                    Vehicle.Fuel:Refueled(veh)
+                                    _fueling = false
+                                end)
+        
+                            end)
+                        else
+                            Notification:SendError('Not Enough Cash')
+                        end
+                        
                         
                     end
                     Citizen.Wait(1)
