@@ -4,15 +4,16 @@ RegisterNetEvent("fw-phone:Server:GiveContactDetails")
 AddEventHandler("fw-phone:Server:GiveContactDetails", function(Data)
     local Source = source
     local MyCoords = GetEntityCoords(GetPlayerPed(Source))
-
-    local Player = FW.Functions.GetPlayer(Source)
+    local players = exports['bs_base']:FetchComponent('Fetch'):All()
+    local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+    local Char = Player:GetData('Character')
     if Player == nil then return end
     
-    for k, v in pairs(FW.GetPlayers()) do
+    for k, v in pairs(players()) do
         if v.ServerId ~= Source and #(MyCoords - v.Coords) <= 3.0 then
             TriggerClientEvent('fw-phone:Client:AddContactSuggestion', v.ServerId, {
-                Name = Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname,
-                Phone = Player.PlayerData.charinfo.phone
+                Name = Char:GetData('First') .. ' ' .. Char:GetData('Last'),
+                Phone = Char:GetData('Phone')
             })
         end
     end
@@ -21,10 +22,11 @@ end)
 RegisterNetEvent("fw-phone:Server:DialContact")
 AddEventHandler("fw-phone:Server:DialContact", function(Data, UsingBurner)
     local Source = source
-    local Player = FW.Functions.GetPlayer(Source)
+    local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+    local Char = Player:GetData('Character')
     if Player == nil then return end
 
-    local MyPhone = UsingBurner and UsingBurner or Player.PlayerData.charinfo.phone
+    local MyPhone = UsingBurner and UsingBurner or Player:GetData('Phone')
 
     if Data.Phone and Data.Phone.Number then
         Data.Phone = Data.Phone.Number
@@ -43,11 +45,11 @@ AddEventHandler("fw-phone:Server:DialContact", function(Data, UsingBurner)
         return Player.Functions.Notify("Je zit al in een gesprek..", "error")
     end
 
-    local CallId = FW.Shared.RandomInt(6)
+    local CallId = RandomInt(6)
     CallerSources[Source] = CallId
 
     -- Get contact info by ID
-    local Result = exports['ghmattimysql']:executeSync("SELECT * FROM `phone_contacts` WHERE `phone` = @Phone AND `citizenid` = @Cid", { ['@Phone'] = Data.Phone, ['@Cid'] = Player.PlayerData.citizenid })
+    local Result = exports['ghmattimysql']:executeSync("SELECT * FROM `phone_contacts` WHERE `phone` = @Phone AND `citizenid` = @Cid", { ['@Phone'] = Data.Phone, ['@Cid'] = Player:GetData('ID') })
     local ContactName = Result[1] and Result[1].name or FormatPhone(Data.Phone)
     
     TriggerClientEvent("fw-phone:Client:Notification", Source, 'contacts-dial-' .. CallId, 'fas fa-phone-alt', { 'white', '#029587' }, ContactName, "Verbinden...", false, false, nil, "fw-phone:Server:Contacts:DeclineCall", { HideOnAction = false, CallId = CallId })
@@ -57,38 +59,42 @@ AddEventHandler("fw-phone:Server:DialContact", function(Data, UsingBurner)
     Citizen.Wait(1000) -- waiting simulator belike 👀
 
     -- Check if player online with that phonenumber, if it isn't than return 'Disconnected.'
-    local Target = FW.Functions.GetPlayerByPhone(Data.Phone)
-    if Target == nil then
-        TriggerClientEvent('fw-phone:Client:UpdateNotification', Source, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
-        CallerSources[Source] = nil
-        return
+    local player2 = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+    local Char2 = Player:GetData('Character')
+    if Data.Phone == Char2:GetData('Phone') then 
+        local Target = Char2:GetData('Phone')
+        if Target == nil then
+            TriggerClientEvent('fw-phone:Client:UpdateNotification', Source, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
+            CallerSources[Source] = nil
+            return
+        end
     end
 
     -- Check if Target has phone, if not return 'Disconnected.'
-    if not Target.Functions.HasEnoughOfItem("phone", 1) then
-        TriggerClientEvent('fw-phone:Client:UpdateNotification', Source, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
-        CallerSources[Source] = nil
-        return
-    end
+    -- if not Target.Functions.HasEnoughOfItem("phone", 1) then
+    --     TriggerClientEvent('fw-phone:Client:UpdateNotification', Source, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
+    --     CallerSources[Source] = nil
+    --     return
+    -- end
 
-    local TargetPhone = exports['ghmattimysql']:executeSync("SELECT * FROM `phone_contacts` WHERE `phone` = @Phone AND `citizenid` = @Cid", { ['@Phone'] = MyPhone, ['@Cid'] = Target.PlayerData.citizenid })
+    local TargetPhone = exports['ghmattimysql']:executeSync("SELECT * FROM `phone_contacts` WHERE `phone` = @Phone AND `citizenid` = @Cid", { ['@Phone'] = MyPhone, ['@Cid'] = Char2:GetData('ID') })
     local TargetContactName = TargetPhone[1] and TargetPhone[1].name or FormatPhone(MyPhone)
 
     OngoingCalls[CallId] = {
-        Payphone = false,
+        Payphone = true,
         CallId = CallId,
         Dialing = true,
-        Caller = Player.PlayerData.source,
-        Target = Target.PlayerData.source,
-        CallerPhone = Player.PlayerData.charinfo.phone,
-        TargetPhone = Target.PlayerData.charinfo.phone,
+        Caller = Char:GetData('Source'),
+        Target = Char2:GetData('Source'),
+        CallerPhone = Char:GetData('Phone'),
+        TargetPhone = Char2:GetData('Phone'),
         CallerName = TargetContactName, -- Name that the TARGET sees
         TargetName = ContactName, -- Name that the CALLER sees
     }
     
     SetCallData(CallId, false)
     TriggerClientEvent("fw-phone:Client:Notification", OngoingCalls[CallId].Target, 'contacts-dial-' .. CallId, 'fas fa-phone-alt', { 'white', '#029587' }, TargetContactName, "Inkomende Oproep", false, false, "fw-phone:Server:Contacts:AnswerContact", "fw-phone:Server:Contacts:DeclineCall", { HideOnAction = false, CallId = CallId })
-    TriggerClientEvent('fw-phone:Client:AddCall', Target.PlayerData.source, { Burner = false, Incoming = true, Contact = TargetContactName, Phone = MyPhone, Timestamp = os.time() * 1000})
+    TriggerClientEvent('fw-phone:Client:AddCall', Char2:GetData('Source'), { Burner = false, Incoming = true, Contact = TargetContactName, Phone = MyPhone, Timestamp = os.time() * 1000})
     
     Citizen.CreateThread(function()
         while OngoingCalls[CallId] and OngoingCalls[CallId].Dialing do
@@ -106,7 +112,7 @@ AddEventHandler("fw-phone:Server:DialContact", function(Data, UsingBurner)
                 TriggerClientEvent('fw-misc:Client:PlaySoundEntity', OngoingCalls[CallId].Target, 'phone.phoneRing', false, true, OngoingCalls[CallId].Target)
             end
 
-            Citizen.Wait(exports['fw-misc']:GetSoundTimeout('phone.phoneRing') + 2000)
+            --Citizen.Wait(exports['fw-misc']:GetSoundTimeout('phone.phoneRing') + 2000)
         end
     end)
 
@@ -118,18 +124,33 @@ AddEventHandler("fw-phone:Server:DialContact", function(Data, UsingBurner)
 
             OngoingCalls[CallId] = nil
             CallerSources[Source] = nil
-            CallerSources[Target.PlayerData.source] = nil
+            CallerSources[Char2:GetData('Source')] = nil
         end
     end)
 end)
 
+local StringCharset = {}
+local NumberCharset = {}
+for i = 48,  57 do table.insert(NumberCharset, string.char(i)) end
+for i = 65,  90 do table.insert(StringCharset, string.char(i)) end
+for i = 97, 122 do table.insert(StringCharset, string.char(i)) end
+
+RandomInt = function(length)
+	if length > 0 then
+		return RandomInt(length-1) .. NumberCharset[math.random(1, #NumberCharset)]
+	else
+		return ''
+	end
+end
+
 RegisterNetEvent("fw-phone:Server:DialPayphone")
 AddEventHandler("fw-phone:Server:DialPayphone", function(Data)
     local Source = source
-    local Player = FW.Functions.GetPlayer(Source)
+    local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+    local Char = Player:GetData('Character')
     if Player == nil then return end
 
-    if Data.Phone == Player.PlayerData.charinfo.phone then
+    if Data.Phone == Char:GetData('Phone') then
         return Player.Functions.Notify("Het is wel heel eenzaam om met jezelf te bellen..", "error")
     end
 
@@ -138,7 +159,7 @@ AddEventHandler("fw-phone:Server:DialPayphone", function(Data)
         return Player.Functions.Notify("Je zit al in een gesprek..", "error")
     end
 
-    local CallId = FW.Shared.RandomInt(6)
+    local CallId = RandomInt(6)
     CallerSources[Source] = CallId
 
     local ContactName = Data.CalleeName and Data.CalleeName or FormatPhone(Data.Phone)
@@ -147,11 +168,15 @@ AddEventHandler("fw-phone:Server:DialPayphone", function(Data)
     Citizen.Wait(1000) -- waiting simulator belike 👀
 
     -- Check if player online with that phonenumber, if it isn't than return 'Disconnected.'
-    local Target = FW.Functions.GetPlayerByPhone(Data.Phone)
-    if Target == nil then
-        TriggerClientEvent('fw-phone:Client:UpdateNotification', Source, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
-        CallerSources[Source] = nil
-        return
+    local player2 = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+    local Char2 = Player:GetData('Character')
+    if Data.Phone == Char2:GetData('Phone') then 
+        local Target = Char2:GetData('Phone')
+        if Target == nil then
+            TriggerClientEvent('fw-phone:Client:UpdateNotification', Source, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
+            CallerSources[Source] = nil
+            return
+        end
     end
 
     local TargetPhone = exports['ghmattimysql']:executeSync("SELECT * FROM `phone_contacts` WHERE `phone` = @Phone AND `citizenid` = @Cid", { ['@Phone'] = Data.CallingFrom, ['@Cid'] = Target.PlayerData.citizenid })
@@ -161,10 +186,10 @@ AddEventHandler("fw-phone:Server:DialPayphone", function(Data)
         Payphone = true,
         CallId = CallId,
         Dialing = true,
-        Caller = Player.PlayerData.source,
-        Target = Target.PlayerData.source,
-        CallerPhone = Player.PlayerData.charinfo.phone,
-        TargetPhone = Target.PlayerData.charinfo.phone,
+        Caller = Char:GetData('Source'),
+        Target = Char2:GetData('Source'),
+        CallerPhone = Char:GetData('Phone'),
+        TargetPhone = Char2:GetData('Phone'),
         CallerName = TargetContactName, -- Name that the TARGET sees
         TargetName = ContactName, -- Name that the CALLER sees
     }
@@ -194,7 +219,7 @@ AddEventHandler("fw-phone:Server:DialPayphone", function(Data)
 
             OngoingCalls[CallId] = nil
             CallerSources[Source] = nil
-            CallerSources[Target.PlayerData.source] = nil
+            CallerSources[Char2:GetData('Source')] = nil
         end
     end)
 end)
@@ -203,7 +228,7 @@ RegisterNetEvent("fw-phone:Server:Contacts:AnswerContact")
 AddEventHandler("fw-phone:Server:Contacts:AnswerContact", function(Data)
     if not OngoingCalls[Data.CallId] then return end
 
-    local Caller = FW.Functions.GetPlayer(OngoingCalls[Data.CallId].Caller)
+    local Caller = exports['bs_base']:FetchComponent('Fetch'):Source(OngoingCalls[Data.CallId].Caller)
     if Caller == nil then return end
 
     OngoingCalls[Data.CallId].Dialing = false
@@ -225,7 +250,7 @@ RegisterNetEvent("fw-phone:Server:Contacts:DeclineCall")
 AddEventHandler("fw-phone:Server:Contacts:DeclineCall", function(Data)
     if not OngoingCalls[Data.CallId] then return end
 
-    local Caller = FW.Functions.GetPlayer(OngoingCalls[Data.CallId].Caller)
+    local Caller = exports['bs_base']:FetchComponent('Fetch'):Source(OngoingCalls[Data.CallId].Caller)
     if Caller == nil then return end
 
     TriggerClientEvent("fw-phone:Client:UpdateNotification", OngoingCalls[Data.CallId].Caller, 'contacts-dial-' .. Data.CallId, true, true, nil, 'Verbinding verbroken!', true, false)
@@ -240,57 +265,65 @@ AddEventHandler("fw-phone:Server:Contacts:DeclineCall", function(Data)
     OngoingCalls[Data.CallId] = nil
 end)
 
-FW.Functions.CreateCallback("fw-phone:Server:Contacts:GetContacts", function(Source, Cb)
-    local Player = FW.Functions.GetPlayer(Source)
-    if Player == nil then return end
-    
-    local Result = exports['ghmattimysql']:executeSync("SELECT * FROM `phone_contacts` WHERE `citizenid` = @Cid ORDER BY `name` ASC", {
-        ['@Cid'] = Player.PlayerData.citizenid
-    })
+function RegisterCallbacks2()
 
-    Cb(Result[1] and Result or {})
-end)
+    Callbacks:RegisterServerCallback("fw-phone:Server:Contacts:GetContacts", function(Source, Data, Cb)
+        local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+        local Char = Player:GetData('Character')
+        if Player == nil then return end
+        
+        local Result = exports['ghmattimysql']:executeSync("SELECT * FROM `phone_contacts` WHERE `citizenid` = @Cid ORDER BY `name` ASC", {
+            ['@Cid'] = Char:GetData('ID')
+        })
 
-FW.Functions.CreateCallback("fw-phone:Server:Contacts:AddContacts", function(Source, Cb, Data)
-    local Player = FW.Functions.GetPlayer(Source)
-    if Player == nil then return end
+        Cb(Result)
+    end)
 
-    if not Data.Name or not Data.Phone then return Cb(false) end
-    
-    local Result = exports['ghmattimysql']:executeSync("INSERT INTO `phone_contacts` (`citizenid`, `name`, `phone`) VALUES (@Cid, @Name, @Phone)", {
-        ['@Cid'] = Player.PlayerData.citizenid,
-        ['@Name'] = Data.Name,
-        ['@Phone'] = Data.Phone,
-    })
+    Callbacks:RegisterServerCallback("fw-phone:Server:Contacts:AddContacts", function(Source, Data, Cb)
+        print('Add')
+        local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+        local Char = Player:GetData('Character')
+        if Player == nil then return end
 
-    Cb(true)
-end)
+        if not Data.Name or not Data.Phone then return Cb(false) end
+        
+        local Result = exports['oxmysql']:execute("INSERT INTO `phone_contacts` (`citizenid`, `name`, `phone`) VALUES (@Cid, @Name, @Phone)", {
+            ['@Cid'] = Char:GetData('ID'),
+            ['@Name'] = Data.Name,
+            ['@Phone'] = Data.Phone,
+        })
 
-FW.Functions.CreateCallback("fw-phone:Server:Contacts:EditContact", function(Source, Cb, Data)
-    local Player = FW.Functions.GetPlayer(Source)
-    if Player == nil then return end
+        Cb(true)
+    end)
 
-    if not Data.Name or not Data.Phone then return Cb(false) end
-    
-    local Result = exports['ghmattimysql']:executeSync("UPDATE `phone_contacts` SET `name` = @Name, `phone` = @Phone WHERE `id` = @Id", {
-        ['@Id'] = Data.Id,
-        ['@Name'] = Data.Name,
-        ['@Phone'] = Data.Phone,
-    })
+    Callbacks:RegisterServerCallback("fw-phone:Server:Contacts:EditContact", function(Source, Cb, Data)
+        local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+        local Char = Player:GetData('Character')
+        if Player == nil then return end
 
-    Cb(true)
-end)
+        if not Data.Name or not Data.Phone then return Cb(false) end
+        
+        local Result = exports['oxmysql']:execute("UPDATE `phone_contacts` SET `name` = @Name, `phone` = @Phone WHERE `id` = @Id", {
+            ['@Id'] = Data.Id,
+            ['@Name'] = Data.Name,
+            ['@Phone'] = Data.Phone,
+        })
 
-FW.Functions.CreateCallback("fw-phone:Server:Contacts:DeleteContact", function(Source, Cb, Data)
-    local Player = FW.Functions.GetPlayer(Source)
-    if Player == nil then return end
-    
-    local Result = exports['ghmattimysql']:executeSync("DELETE FROM `phone_contacts` WHERE `id` = @Id", {
-        ['@Id'] = Data.ContactId,
-    })
+        Cb(true)
+    end)
 
-    Cb(true)
-end)
+    Callbacks:RegisterServerCallback("fw-phone:Server:Contacts:DeleteContact", function(Source, Cb, Data)
+        local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
+        local Char = Player:GetData('Character')
+        if Player == nil then return end
+        
+        local Result = exports['ghmattimysql']:executeSync("DELETE FROM `phone_contacts` WHERE `id` = @Id", {
+            ['@Id'] = Data.ContactId,
+        })
+
+        Cb(true)
+    end)
+end
 
 AddEventHandler("playerDropped", function(Reason)
     local Source = source
@@ -304,14 +337,14 @@ AddEventHandler("playerDropped", function(Reason)
         return
     end
 
-    local Caller = FW.Functions.GetPlayer(OngoingCalls[CallId].Caller)
+    local Caller = exports['bs_base']:FetchComponent('Fetch'):Source(OngoingCalls[CallId].Caller)
     if Caller then
         TriggerClientEvent("fw-phone:Client:UpdateNotification", OngoingCalls[CallId].Caller, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
         TriggerClientEvent('fw-phone:Client:Contacts:SetVoice', OngoingCalls[CallId].Caller, false, Caller.PlayerData.charinfo.phone, OngoingCalls[CallId].Target)
         CallerSources[OngoingCalls[CallId].Caller] = nil
     end
 
-    local Target = FW.Functions.GetPlayer(OngoingCalls[CallId].Target)
+    local Target = exports['bs_base']:FetchComponent('Fetch'):Source(OngoingCalls[CallId].Target)
     if Target then
         TriggerClientEvent("fw-phone:Client:UpdateNotification", OngoingCalls[CallId].Target, 'contacts-dial-' .. CallId, true, true, nil, 'Verbinding verbroken!', true, false)
         TriggerClientEvent('fw-phone:Client:Contacts:SetVoice', OngoingCalls[CallId].Target, false, Target.PlayerData.charinfo.phone, OngoingCalls[CallId].Target)

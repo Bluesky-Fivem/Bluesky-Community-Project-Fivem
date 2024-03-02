@@ -3,10 +3,9 @@ game 'gta5'
 
 lua54 'yes'
 
-ui_page 'http://localhost:5000'
 
 
---ui_page 'web/public/index.html'
+ui_page 'web/public/index.html'
 
 files {
     'web/public/**/*'

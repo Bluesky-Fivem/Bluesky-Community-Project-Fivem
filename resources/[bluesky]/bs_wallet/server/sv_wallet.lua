@@ -43,10 +43,11 @@ local function CalculatePaycheckAmount(grossPaycheckAmount)
   return netPaycheckAmount, taxAmount
 end
 
-local function GivePlayerPaycheck(playerId, grossPaycheckAmount)
+local function GivePlayerPaycheck(source, grossPaycheckAmount)
+  local char = Fetch:Source(source):GetData("Character")
   local netPaycheckAmount, taxAmount = CalculatePaycheckAmount(grossPaycheckAmount)
   
-  Wallet:ModifyBank(playerId, netPaycheckAmount)
+  Wallet:ModifyBank(char:GetData('ID'), netPaycheckAmount)
   
   TriggerClientEvent('Notification:SendAlert', playerId, "You received your paycheck of $" .. netPaycheckAmount .. " after $" .. taxAmount .. " in taxes", 2500)
 end
@@ -66,12 +67,16 @@ end
 Citizen.CreateThread(function()
   while true do
       GivePaychecksToAllPlayers()
-      Citizen.Wait(600000)
+      Citizen.Wait(300000) -- Wait for 5 minutes (300,000 milliseconds)
   end
 end)
 
+RegisterCommand("r", function ()
+  GivePaychecksToAllPlayers()
+end)
 
 function RegisterCallbacks()
+  
     Callbacks:RegisterServerCallback("Wallet:GetCash", function(source, data, cb)
 		cb(Wallet:Get(source))
     end)

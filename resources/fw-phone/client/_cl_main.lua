@@ -1,5 +1,26 @@
 LoggedIn, PlayerJob = true, {}
 
+AddEventHandler('Phone:Shared:DependencyUpdate', RetrieveComponents)
+function RetrieveComponents()
+    Callbacks = exports['bs_base']:FetchComponent('Callbacks')
+    Notification = exports["bs_base"]:FetchComponent("Notification")
+    Keybinds = exports["bs_base"]:FetchComponent("Keybinds")
+    Game = exports["bs_base"]:FetchComponent("Game")
+end
+
+AddEventHandler('Core:Shared:Ready', function()
+    exports['bs_base']:RequestDependencies('Phone', {
+        'Callbacks',
+        "Notification",
+        'Keybinds', 
+        'Game'
+    }, function(error)  
+        if #error > 0 then return; end
+        RetrieveComponents()
+        RegisterKeybinds()
+    end)
+end)
+
 RegisterNetEvent('Characters:Client:Spawn')
 AddEventHandler('Characters:Client:Spawn', function()
     PlayerJob = exports['bs_base']:FetchComponent('Player').LocalPlayer:GetData('Character'):GetData('Job').job
@@ -73,7 +94,7 @@ end
 --     RequestModel("csb_sol")
 --     while not HasModelLoaded("csb_sol") do Citizen.Wait(4) end
 
---     local PedCoords = FW.SendCallback("fw-heists:Server:GetPedCoords", "PublicHotspot")
+--     local PedCoords = Callbacks:ServerCallback("fw-heists:Server:GetPedCoords", "PublicHotspot")
 --     local TempPed = CreatePed(-1, "csb_sol", PedCoords.x, PedCoords.y, PedCoords.z, PedCoords.w, false, true)
 --     SetEntityHeading(TempPed, PedCoords.w)
 --     FreezeEntityPosition(TempPed, true)
@@ -137,12 +158,12 @@ RegisterNUICallback("Notifications/Click", function(Data, Cb)
 end)
 
 RegisterNUICallback("Network/GetNetworks", function(Data, Cb)
-    local Result = FW.SendCallback("fw-phone:Server:Networks:GetNetworks")
+    local Result = Callbacks:ServerCallback("fw-phone:Server:Networks:GetNetworks")
     Cb(Result)
 end)
 
 RegisterNUICallback("Network/Connect", function(Data, Cb)
-    local Result = FW.SendCallback("fw-phone:Server:Networks:Connect", Data)
+    local Result = Callbacks:ServerCallback("fw-phone:Server:Networks:Connect", Data)
     if Result.Success then
         CurrentNetwork = Data.Network
         SendNUIMessage({
@@ -230,23 +251,17 @@ function InitPhone(Crashed)
     InitTwitter()
     InitDocuments()
 
-    
-
-    local HasUnreadConversations = FW.SendCallback("fw-phone:Server:HasUnreadConversations")
+    local HasUnreadConversations = Callbacks:ServerCallback("fw-phone:Server:HasUnreadConversations")
     if HasUnreadConversations then
         SetAppUnread("messages")
         FW.Functions.Notify("Je hebt ongelezen berichten.")
     end
 
-    if Crashed then
-        TriggerEvent("fw-hud:Client:ReloadPreferences")
-    end
-
-    IsNetworkEnabled = FW.SendCallback("fw-phone:Server:GetNetworkState")
+    IsNetworkEnabled = Callbacks:ServerCallback("fw-phone:Server:GetNetworkState")
 end
 
 function GetNearNetwork()
-    local IsNearNetwork = FW.SendCallback("fw-phone:Server:Networks:IsNearNetwork")
+    local IsNearNetwork = Callbacks:ServerCallback("fw-phone:Server:Networks:IsNearNetwork")
     return IsNearNetwork
 end
 
@@ -334,7 +349,7 @@ function OpenPhone(IsPressed, IsBurner)
         HasPDRacingUsb = HasPDRacingUsb,
         RacingAlias = RacingAlias,
         Weather = "EXTRASUNNY",
-        Time = {12, 12},
+        Time = {12,12},
         IsNearNetwork = false, --GetNearNetwork(),
         IsNetworkEnabled = IsNetworkEnabled,
         PlayerData = {

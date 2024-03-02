@@ -4,7 +4,7 @@ Twitter = {
 }
 
 
-function RegisterCallbacks()
+function RegisterCallbackss()
     
 
     Callbacks:RegisterServerCallback("fw-phone:Server:Twitter:GetTweets", function(Source, Data, Cb)

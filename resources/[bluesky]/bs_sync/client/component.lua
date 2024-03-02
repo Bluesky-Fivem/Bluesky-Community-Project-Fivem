@@ -69,6 +69,9 @@ SYNC = {
     end,
 }
 
+
+
+
 AddEventHandler('Proxy:Shared:RegisterReady', function()
     exports['bs_base']:RegisterComponent('Sync', SYNC)
 end)

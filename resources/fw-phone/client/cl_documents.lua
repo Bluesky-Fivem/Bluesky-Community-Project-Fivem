@@ -2,60 +2,72 @@ local DroppedNotes = {}
 local ShowingInteraction = false
 
 function InitDocuments()
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:GetDroppedNotes")
-    DroppedNotes = Result
+    Callbacks:ServerCallback("fw-phone:Server:Documents:GetDroppedNotes", {}, function(Result)
+        DroppedNotes = Result
+    end)
 end
 
+
 RegisterNUICallback("Documents/GetDocuments", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:GetDocuments", Data)
-    print(json.encode(Data))
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:GetDocuments", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/SaveDocument", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:SaveDocument", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:SaveDocument", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/Finalize", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:Finalize", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:Finalize", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/GetDocumentSignatures", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:GetDocumentSignatures", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:GetDocumentSignatures", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/RequestSignature", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:RequestSignature", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:RequestSignature", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/SignDocument", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:SignDocument", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:SignDocument", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/ShareLocal", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:ShareLocal", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:ShareLocal", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/AddSharee", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:AddSharee", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:AddSharee", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/DeleteDocument", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:DeleteDocument", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:DeleteDocument", Data, function(Result)
+        Cb(Result)
+    end)
 end)
 
 RegisterNUICallback("Documents/DropQRCode", function(Data, Cb)
-    local Result = Callbacks:ServerCallback("fw-phone:Server:Documents:DropQRCode", Data)
-    Cb(Result)
+    Callbacks:ServerCallback("fw-phone:Server:Documents:DropQRCode", Data, function(Result)
+        Cb(Result)
+    end)
 end)
+
 
 RegisterNetEvent("fw-phone:Client:Documents:ForceDocument")
 AddEventHandler("fw-phone:Client:Documents:ForceDocument", function(Data)

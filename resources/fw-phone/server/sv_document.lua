@@ -1,6 +1,6 @@
 local DroppedNotes = {}
 
-function RegisterCallbacks()
+function RegisterCallbacks3()
     
     Callbacks:RegisterServerCallback("fw-phone:Server:Documents:GetDocuments", function(Source, Data, Cb)
         local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
@@ -23,7 +23,7 @@ function RegisterCallbacks()
     
     Callbacks:RegisterServerCallback("fw-phone:Server:Documents:SaveDocument", function(Source, Data, Cb)
         local Player = exports['bs_base']:FetchComponent('Fetch'):Source(Source)
-            local Char = Player:GetData('Character')
+        local Char = Player:GetData('Character')
         if Player == nil then return end
     
         local Query = "INSERT INTO `phone_documents` (`citizenid`, `type`, `title`, `content`, `signatures`) VALUES (@Cid, @Type, @Title, @Content, '[]')"
