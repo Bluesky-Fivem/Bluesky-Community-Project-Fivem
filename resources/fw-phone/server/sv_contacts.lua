@@ -9,7 +9,7 @@ AddEventHandler("fw-phone:Server:GiveContactDetails", function(Data)
     local Char = Player:GetData('Character')
     if Player == nil then return end
     
-    for k, v in pairs(players()) do
+    for k, v in pairs(players) do
         if v.ServerId ~= Source and #(MyCoords - v.Coords) <= 3.0 then
             TriggerClientEvent('fw-phone:Client:AddContactSuggestion', v.ServerId, {
                 Name = Char:GetData('First') .. ' ' .. Char:GetData('Last'),
