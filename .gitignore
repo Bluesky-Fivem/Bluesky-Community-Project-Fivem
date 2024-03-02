@@ -1,2 +1,2 @@
-citizen/system_resources/
-cache/
+**/node_modules/
+.vscode/
