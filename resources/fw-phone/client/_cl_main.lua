@@ -356,7 +356,11 @@ function OpenPhone(IsPressed, IsBurner)
             Id = PlayerData:GetData("Source"),
             Cid = PlayerData:GetData("ID"),
             PhoneNumber = PlayerData:GetData("Phone"),
-            Job = PlayerData:GetData("Job").job
+            Job = PlayerData:GetData("Job").job,
+            Crypto =  {
+                GNE =  10,
+                SHUNG = -500
+            }
         },
     })
 
