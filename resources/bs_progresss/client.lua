@@ -227,11 +227,11 @@ local myIdentifiers = {}
 
 Citizen.CreateThread(function()
     Wait(10000)
-    TriggerServerEvent("np-taskbar:setIdentifiers")
+    TriggerServerEvent("bs_progress:setIdentifiers")
 end)
 
-RegisterNetEvent("np-taskbar:setIdentifiersClient")
-AddEventHandler("np-taskbar:setIdentifiersClient", function(identifiers)
+RegisterNetEvent("bs_progress:setIdentifiersClient")
+AddEventHandler("bs_progress:setIdentifiersClient", function(identifiers)
     myIdentifiers = identifiers
 end)
   

@@ -81,7 +81,7 @@ AddEventHandler("AttachWeapons", function()
 	local sheathed = false
 	DeleteAttached()
 	for i = 1, #w do
-		if exports["np-inventory"]:getQuantity(w[i]["id"]) > 0 then
+		if exports["bs_inventory"]:getQuantity(w[i]["id"]) > 0 then
 			local mdl = GetHashKey(w[i]["model"])
 			loadmodel(mdl)
 			if w[i]["type"] == 1 and #ag < gunLimit and curw ~= tonumber(w[i]["id"]) then

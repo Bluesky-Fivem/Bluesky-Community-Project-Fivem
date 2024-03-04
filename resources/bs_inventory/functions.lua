@@ -2214,7 +2214,7 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon, pa
     end
 
     if itemid == "franksflute" then
-      TriggerServerEvent("np-inventory:franksFlute", GetEntityCoords(PlayerPedId()))
+      TriggerServerEvent("bs_inventory:franksFlute", GetEntityCoords(PlayerPedId()))
       franksFluteCount = franksFluteCount + 1
       if franksFluteCount == 3 then
         franksFluteCount = 0
@@ -2328,8 +2328,8 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon, pa
         notepadPageUsed(passedItemInfo)
     end
 
-    TriggerEvent("np-inventory:itemUsed", itemid, passedItemInfo, inventoryName, slot)
-    TriggerServerEvent("np-inventory:itemUsed", itemid, passedItemInfo, inventoryName, slot)
+    TriggerEvent("bs_inventory:itemUsed", itemid, passedItemInfo, inventoryName, slot)
+    TriggerServerEvent("bs_inventory:itemUsed", itemid, passedItemInfo, inventoryName, slot)
 
     if remove then
         local info = json.decode(passedItemInfo)
@@ -2383,7 +2383,7 @@ function AttachPropAndPlayAnimation(dictionary,animation,typeAnim,timer,message,
     return success
 end
 
-AddEventHandler("np-inventory:attachPropPlayAnim", function(pType)
+AddEventHandler("bs_inventory:attachPropPlayAnim", function(pType)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local success = false
     if pType == "sandwich" then
@@ -2572,7 +2572,7 @@ AddEventHandler('np-business:repairItem', function()
     local Quality = info.quality
     local QualityCheck = (Quality < 80 and Quality or false)
     local PercentRepair = 80 - Quality
-    local itemListInfo = json.decode(exports["np-inventory"]:itemListInfo(info.item_id))
+    local itemListInfo = json.decode(exports["bs_inventory"]:itemListInfo(info.item_id))
     local allowed = true
 
     itemListInfo = itemListInfo.craft ~= nil and itemListInfo.craft or false
@@ -2613,7 +2613,7 @@ AddEventHandler('np-business:examineItem', function()
     local Quality = info.quality
     local PercentRepair = 80 - Quality
     local QualityCheck = (Quality < 80 and Quality or false)
-    local itemListInfo = json.decode(exports["np-inventory"]:itemListInfo(info.item_id))
+    local itemListInfo = json.decode(exports["bs_inventory"]:itemListInfo(info.item_id))
 
     itemListInfo = itemListInfo.craft ~= nil and itemListInfo.craft or false
 
@@ -2865,10 +2865,10 @@ function checkForItems()
 
         if hasItem and not PreviousItemCheck[item] then
             PreviousItemCheck[item] = true
-            TriggerEvent('np-inventory:itemCheck', item, true, quantity)
+            TriggerEvent('bs_inventory:itemCheck', item, true, quantity)
         elseif not hasItem and PreviousItemCheck[item] then
             PreviousItemCheck[item] = false
-            TriggerEvent('np-inventory:itemCheck', item, false, quantity)
+            TriggerEvent('bs_inventory:itemCheck', item, false, quantity)
         end
     end
 end
@@ -3340,7 +3340,7 @@ AddEventHandler('animation:repair', function(veh)
 end)
 
 function getInformationFromFirstItem(itemToFind)
-  local foundItem = exports["np-inventory"]:GetInfoForFirstItemOfName(itemToFind)
+  local foundItem = exports["bs_inventory"]:GetInfoForFirstItemOfName(itemToFind)
   return foundItem and json.decode(foundItem.information or '{}') or nil
 end
 exports("getInformationFromFirstItem", getInformationFromFirstItem)
@@ -3355,7 +3355,7 @@ local poisonedThings = {
   ["poisonedsandwich"] = true,
   ["poisonedwater"] = true,
 }
-AddEventHandler("np-inventory:itemUsed", function(name, info)
+AddEventHandler("bs_inventory:itemUsed", function(name, info)
   if not info then return end
   local info = json.decode(info)
   if not info then return end

@@ -384,7 +384,7 @@ on('__cfx_nui:dropIncorrectItems', (data, cb) => {
     cb({});
 });
 
-//  $.post("http://np-inventory/SlotJustUsed", JSON.stringify({target: targetSlot, origin: originSlot, itemid: itemidsent }));
+//  $.post("http://bs_inventory/SlotJustUsed", JSON.stringify({target: targetSlot, origin: originSlot, itemid: itemidsent }));
 let recentused = [];
 RegisterNuiCallbackType('SlotJustUsed');
 on('__cfx_nui:SlotJustUsed', (data, cb) => {
@@ -888,7 +888,7 @@ on('__cfx_nui:ServerCloseInventory', (data, cb) => {
     if (data.name != 'none') {
         emitNet('server-inventory-close', cid, data.name);
         emitNet("server-inventory-refresh", cid);
-        emit('np-inventory:closed', data.name);
+        emit('bs_inventory:closed', data.name);
     }
     cb({});
 });
@@ -908,8 +908,8 @@ on('__cfx_nui:removeCraftItems', (data, cb) => {
 RegisterNuiCallbackType('craftProgression');
 on('__cfx_nui:craftProgression', (data, cb) => {
     cb("ok");
-    emit("np-inventory:craftProgression", data);
-    emitNet("np-inventory:craftProgression", data);
+    emit("bs_inventory:craftProgression", data);
+    emitNet("bs_inventory:craftProgression", data);
 });
 
 RegisterNuiCallbackType('stack');
@@ -1381,7 +1381,7 @@ const Delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 exports('setPlayerWeight', (cid, weight) => {
     maxPlayerWeight = weight;
-    emitNet('np-inventory:server:weightChange', cid, weight);
+    emitNet('bs_inventory:server:weightChange', cid, weight);
     SendNuiMessage(JSON.stringify({ response: 'playerWeight', personalMaxWeight: weight }));
 });
 

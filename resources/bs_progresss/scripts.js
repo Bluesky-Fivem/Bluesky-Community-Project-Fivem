@@ -34,7 +34,7 @@ $(document).ready(function(){
 
     if(item.closeFail === true) {
       closeMain()
-      $.post('http://np-taskbar/taskCancel', JSON.stringify({tasknum: curTask}));
+      $.post('http://bs_progress/taskCancel', JSON.stringify({tasknum: curTask}));
     }
 
     if(item.closeProgress === true) {
