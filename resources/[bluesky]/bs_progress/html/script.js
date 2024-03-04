@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         },
 
         postAction: function (action) {
-            fetch(`https://progressbar/${action}`, {
+            fetch(`https://bs_progress/${action}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
