@@ -9,7 +9,7 @@ local franksFluteCount = 0
 local myJob = "none"
 local isKatanaEquipped = false
 local preventspam = 0
-Callbacks = nil
+
 
 
 local BuddhaIsItemFound1 = false
@@ -18,14 +18,15 @@ local BuddhaIsItemFound3 = false
 
 AddEventHandler('Inventory:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
-    Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     TaskBar = exports['bs_base']:FetchComponent('TaskBar')
+    Callbacks = exports['bs_base']:FetchComponent('Callbacks')
 end
 
 AddEventHandler('Core:Shared:Ready', function()
     exports['bs_base']:RequestDependencies('Inventory', {
+        'TaskBar',
         'Callbacks',
-        'TaskBar'
+        
     }, function(error)  
         if #error > 0 then return; end
         RetrieveComponents()
@@ -39,7 +40,9 @@ function RegisterCallbackss()
     end)
 end
 
-
+RegisterCommand('Test', function()
+    TriggerEvent("Core:Shared:Ready")
+end)
 
 
 local randomDrivingActions = {

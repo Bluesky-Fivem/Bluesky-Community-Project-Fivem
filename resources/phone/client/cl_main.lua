@@ -8,7 +8,7 @@ function RetrieveComponents()
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Notification = exports["bs_base"]:FetchComponent("Notification")
     Keybinds = exports["bs_base"]:FetchComponent("Keybinds")
-    RPC = exports["bs_base"]:FetchComponent("RPC")
+    RegisterKeybinds()
 end
 
 AddEventHandler('Core:Shared:Ready', function()
@@ -16,7 +16,6 @@ AddEventHandler('Core:Shared:Ready', function()
         'Callbacks',
         "Notification",
         'Keybinds', 
-        'RPC'
     }, function(error)  
         if #error > 0 then return; end
         RetrieveComponents()
@@ -138,7 +137,6 @@ Citizen.CreateThread(function()
   end
 end)
 
--- Move to global keybinds, and make it into an event
-exports["pnp-binds"]:registerKeyMapping("", "Phone", "Open", "+generalPhone", "-generalPhone", "P")
-RegisterCommand('+generalPhone', generalPhone, false)
-RegisterCommand('-generalPhone', function() end, false)
+function RegisterKeybinds()
+  Keybinds.AddKeybind("openMobile", "Phone", "Open", "P", generalPhone)
+end
