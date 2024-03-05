@@ -8,7 +8,6 @@ function RetrieveComponents()
     Callbacks = exports['bs_base']:FetchComponent('Callbacks')
     Notification = exports["bs_base"]:FetchComponent("Notification")
     Keybinds = exports["bs_base"]:FetchComponent("Keybinds")
-    RegisterKeybinds()
 end
 
 AddEventHandler('Core:Shared:Ready', function()
@@ -19,7 +18,7 @@ AddEventHandler('Core:Shared:Ready', function()
     }, function(error)  
         if #error > 0 then return; end
         RetrieveComponents()
-        --RegisterKeybinds()
+        RegisterKeybinds()
     end)
 end)
 
